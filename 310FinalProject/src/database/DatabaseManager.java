@@ -19,22 +19,6 @@ package database;
 
 public final class DatabaseManager {
 	
-	//This is for the predefined special commands, could be read in from a file if extra time
-	private static final String[] customCommands = { 
-		"jdb-show-related-tables",
-		"jdb-show-all-primary-keys",
-		"jdb-find-column",
-		"jdb-search-path",
-		"jdb-search-and-join",
-		"jdb-get-view",
-		"jdb-stat",
-		"jdb-get-addresses",
-		"jdb-get-region-info",
-		"jdb-get-info-by-name",
-		"jdb-get-schedule",
-		"jdb-locate-store"
-	};
-	
 	//A container to hold our 20 common queries (TODO:implement for part 3)
 	private static HashMap<String, String> commonCommands = new HashMap<String, String>();
 	private static Connection db = null;
@@ -124,7 +108,6 @@ public final class DatabaseManager {
 		
 		ResultSet rs;
 		output = "\n";
-		
 		
 		//PLACEHOLDER SWITCH TABLE TO CHOOSE COMMAND TO EXECUTE
 		switch(parsedValues[0]) {
