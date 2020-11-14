@@ -22,6 +22,7 @@ public final class DatabaseManager {
 	//A container to hold our 20 common queries (TODO:implement for part 3)
 	private static HashMap<String, String> commonCommands = new HashMap<String, String>();
 	private static Connection db = null;
+	private static String[] customCommands;
 	
 	public DatabaseManager() {
 		try {
