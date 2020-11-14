@@ -1,1 +1,4 @@
 /bin/
+/src/main/.metadata
+/src/main/*.class
+
