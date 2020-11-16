@@ -28,7 +28,7 @@ public class CommandInterface {
 	
 	public static void main(String[]args) {
 		DatabaseManager.openConnection();
-		DatabaseManager.queryDatabase("use adventureworks;");
+		DatabaseManager.queryDatabase("use weatherdb;");
 		System.out.println("For more information type 'help'.");
 		Scanner input = new Scanner(System.in);
 		while(!userline.equalsIgnoreCase("quit")&&!userline.equalsIgnoreCase("exit")) {
