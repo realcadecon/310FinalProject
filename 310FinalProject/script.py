@@ -39,13 +39,13 @@ CREATE TABLE storm (
     PRIMARY KEY(EventID)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS location (
+CREATE TABLE location (
     EventID INT NOT NULL,
     LocationIndex INT,
     EpisodeID INT,
-    Longitude FLOAT,
     Town VARCHAR(20),
     Latitude FLOAT,
+    Longitude FLOAT,
     PRIMARY KEY(EventID, LocationIndex),
     FOREIGN KEY (EventID) REFERENCES storm(EventID)
 ) ENGINE=InnoDB;
@@ -80,19 +80,18 @@ CREATE TABLE fatality (
     Time DATE,
     Location VARCHAR(5),
     Type VARCHAR(5),
-    PRIMARY KEY(EventID),
+    PRIMARY KEY(FatalityID),
     FOREIGN KEY (EventID) REFERENCES storm(EventID)
 ) ENGINE=InnoDB;
 
 """
-
-insertStr+="INSERT INTO storm VALUES "
+# storm table
 with open('data_files/Storm_2020.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     i = 0
     for row in csv_reader:
-        if(i==5000):
-            break
+        # if(i==1000):
+        #     break
         if(i!=0):
             #Date Start Formatting: 'YYYY-MM-DD'
             dateStart = row[3].split("/")
@@ -136,12 +135,72 @@ with open('data_files/Storm_2020.csv') as csv_file:
             magnitude = 0.0
             if(row[12]!=""):
                 magnitude = row[12]
-
+            
+            insertStr+="INSERT INTO storm VALUES "
             insertStr += "("+row[0]+","+row[1]+",\""+row[2]+"\",\""+dateStartStr+"\",\""+dateEndStr+"\",\""\
                         +row[5]+"\","+str(propDMG)+","+str(cropDMG)+","+str(row[8])+","+str(row[10])+","+str(magnitude)+",\""\
-                        +row[13]+"\",\""+row[14]+"\",\""+row[15]+"\"),\n"
+                        +row[13]+"\",\""+row[14]+"\",\""+row[15]+"\");\n"
         i+=1
-insertStr = insertStr[0:-2] + ";"
+
+# location table
+with open('data_files/Locations_2020.csv') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    i = 0
+    for row in csv_reader:
+        if(i!=0): 
+            insertStr+="INSERT INTO location VALUES ("+row[0]+","+row[1]+","+row[2]+",\""+row[3]+"\","+str(row[4])+","+str(row[5])+");\n"
+        i+=1
+
+# stormPath table
+with open('data_files/StormPath_2020.csv') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    i = 0
+    for row in csv_reader:
+        if(i!=0): 
+            begin_range = 0
+            if(row[38]!=""):
+                begin_range = row[38]
+
+            begin_lat = 0.0
+            if(row[44]!=""):
+                begin_lat = row[44]
+
+            begin_lon = 0.0
+            if(row[45]!=""):
+                begin_lon = row[45]
+
+            end_lat = 0.0
+            if(row[36]!=""):
+                end_lat = row[46]
+
+            end_lon = 0.0
+            if(row[47]!=""):
+                end_lon = row[47]
+
+            insertStr+="INSERT INTO stormPath VALUES ("+row[7]+","+str(begin_range)+",\""+row[39]+"\",\""+row[40]+"\","+str(begin_lat)+","+str(begin_lon)+","+str(end_lat)+","+str(end_lon)+");\n"
+        i+=1
+
+# tornadoDetails table
+with open('data_files/TornadoDetails_2020.csv') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    i = 0
+    for row in csv_reader:
+        tor_f_scale = "N/A"
+        if(row[31]!=""):
+            tor_f_scale = row[31]
+
+        tor_length = 0
+        if(row[32]!=""):
+            tor_length = row[32]
+
+        tor_width = 0
+        if(row[33]!=""):
+            tor_width = row[33]
+
+        if(i!=0 and tor_f_scale != "N/A"): 
+            insertStr+="INSERT INTO tornadoDetails VALUES ("+row[7]+",\""+tor_f_scale+"\","+str(tor_length)+","+str(tor_width)+");\n"
+        i+=1
+
 f = open("weatherDB.sql", "w+")
 f.write(insertStr)
 f.close()

@@ -85,12 +85,14 @@ CREATE TABLE fatality (
 ) ENGINE=InnoDB;
 
 """
+
+insertStr+="INSERT INTO storm VALUES "
 with open('data_files/Storm_2020.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     i = 0
     for row in csv_reader:
-        # if(i==1000):
-        #     break
+        if(i==5000):
+            break
         if(i!=0):
             #Date Start Formatting: 'YYYY-MM-DD'
             dateStart = row[3].split("/")
@@ -134,11 +136,12 @@ with open('data_files/Storm_2020.csv') as csv_file:
             magnitude = 0.0
             if(row[12]!=""):
                 magnitude = row[12]
-            insertStr+="INSERT INTO storm VALUES "
+
             insertStr += "("+row[0]+","+row[1]+",\""+row[2]+"\",\""+dateStartStr+"\",\""+dateEndStr+"\",\""\
                         +row[5]+"\","+str(propDMG)+","+str(cropDMG)+","+str(row[8])+","+str(row[10])+","+str(magnitude)+",\""\
-                        +row[13]+"\",\""+row[14]+"\",\""+row[15]+"\");\n"
+                        +row[13]+"\",\""+row[14]+"\",\""+row[15]+"\"),\n"
         i+=1
+insertStr = insertStr[0:-2] + ";"
 f = open("weatherDB.sql", "w+")
 f.write(insertStr)
 f.close()
