@@ -72,7 +72,7 @@ CREATE TABLE tornadoDetails (
     FOREIGN KEY (EventID) REFERENCES storm(EventID)
 ) ENGINE=InnoDB;
 
-CREATE TABLE fatality (
+CREATE TABLE fatalities (
     FatalityID INT NOT NULL,
     EventID INT,
     Age INT,
@@ -156,7 +156,7 @@ with open('data_files/StormPath_2020.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     i = 0
     for row in csv_reader:
-        if(i!=0): 
+        if(i!=0 and row[44]!=""): 
             begin_range = 0
             if(row[38]!=""):
                 begin_range = row[38]
@@ -200,6 +200,31 @@ with open('data_files/TornadoDetails_2020.csv') as csv_file:
         if(i!=0 and tor_f_scale != "N/A"): 
             insertStr+="INSERT INTO tornadoDetails VALUES ("+row[7]+",\""+tor_f_scale+"\","+str(tor_length)+","+str(tor_width)+");\n"
         i+=1
+
+# fatalities table
+with open('data_files/Fatalities_2020.csv') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    i = 0
+    for row in csv_reader:
+        if(i!=0): 
+            age = -1
+            if(row[2]!=""):
+                age = row[2]
+
+            #DATE formatting
+            dateStr = "N/A"
+            date = row[4].split("/")
+            day = date[1]
+            if(len(day) == 1):
+                day = "0"+day
+            month = date[0]
+            if(len(month) == 1):
+                month = "0"+month
+            dateStr = date[2]+"-"+month+"-"+day
+
+            insertStr+="INSERT INTO fatalities VALUES ("+row[0]+","+row[1]+","+str(age)+",\""+row[3]+"\",\""+dateStr+"\",\""+row[5]+"\",\""+row[6]+"\");\n"
+        i+=1
+
 
 f = open("weatherDB.sql", "w+")
 f.write(insertStr)
