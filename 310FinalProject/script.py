@@ -1,10 +1,9 @@
 import csv
 print("hello")
-outputStr = """-- MySQL Administrator dump 1.4
+insertStr = """-- MySQL Administrator dump 1.4
     --
     -- ------------------------------------------------------
     -- Server version	5.1.38-community
-
 
     /*!40101 SET @OLD_CHARACTER_SET_CLIENT= @@CHARACTER_SET_CLIENT */;
     /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,7 +13,6 @@ outputStr = """-- MySQL Administrator dump 1.4
     /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
     /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
     /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-
 
     --
     -- Create schema weatherdb
@@ -27,11 +25,11 @@ CREATE TABLE storm (
     EventID INT NOT NULL,
     EpisodeID INT,
     StormType VARCHAR(20),
-    BeginDate DATETIME,
-    EndDate DATETIME,
+    BeginDate DATE,
+    EndDate DATE,
     State VARCHAR(20),
-    PropertyDamage INT,
-    CropDamage INT,
+    PropertyDamage FLOAT,
+    CropDamage FLOAT,
     InjuriesDirect INT,
     DeathsDirect INT, 
     Magnitude FLOAT,
@@ -85,13 +83,63 @@ CREATE TABLE fatality (
     PRIMARY KEY(EventID),
     FOREIGN KEY (EventID) REFERENCES storm(EventID)
 ) ENGINE=InnoDB CHARSET=utf8;
-"""
-with open('data_files/StormEvents_details_2020.csv') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    outputStr+="NSERT INTO `adventureworks`.`address` VALUES  (1,'1970 Napa Ct.',NULL,'Bothell',79,'98011',0x0DCBAD9ACF363F4884D8585C2D4EC6E9,'1998-01-04 00:00:00'),"
-    for row in csv_reader:
-        outputStr +="";
 
+"""
+
+insertStr+="INSERT INTO storm VALUES "
+with open('data_files/Storm_2020.csv') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    i = 0
+    for row in csv_reader:
+        if(i!=0):
+            #Date Start Formatting: 'YYYY-MM-DD'
+            dateStart = row[3].split("/")
+            dayStartVal = dateStart[1]
+            if(len(dayStartVal) == 1):
+                dayStartVal = "0"+dayStartVal
+            monthStartVal = dateStart[0]
+            if(len(monthStartVal) == 1):
+                monthStartVal = "0"+monthStartVal
+            dateStartStr = dateStart[2]+"-"+monthStartVal+"-"+dayStartVal
+
+            #Date End Formatting: 'YYYY-MM-DD'
+            dateEnd = row[4].split("/")
+            dayEndVal = dateEnd[1]
+            if(len(dayEndVal) == 1):
+                dayEndVal = "0"+dayEndVal
+            monthEndVal = dateEnd[0]
+            if(len(monthEndVal) == 1):
+                monthEndVal = "0"+monthEndVal
+            dateEndStr = dateEnd[2]+"-"+monthEndVal+"-"+dayEndVal
+            
+            #propDMG Formatting:
+            propDMG = 0.0
+            if(row[6]==""):
+                continue
+            elif(row[6][-1] == 'M'):
+                propDMG = float(row[6][0:-1]) * 1000000
+            elif(row[6][-1] == 'K'):
+                propDMG = float(row[6][0:-1]) * 100000
+            
+            #cropDMG Formatting:
+            cropDMG = 0.0
+            if(row[7] == ""):
+                continue
+            elif(row[7][len(row[7])-1] == 'M'):
+                propDMG = float(row[7][0:-1]) * 1000000
+            elif(row[7][len(row[7])-1] == 'K'):
+                propDMG = float(row[7][0:-1]) * 100000
+            
+            #magnitude formatting
+            magnitude = 0.0
+            if(row[12]!=""):
+                magnitude = row[12]
+
+            insertStr += "("+row[0]+","+row[1]+",\""+row[2]+"\",\""+dateStartStr+"\",\""+dateEndStr+"\",\""\
+                        +row[5]+"\","+str(propDMG)+","+str(cropDMG)+","+str(row[8])+","+str(row[10])+","+str(magnitude)+",\""\
+                        +row[13]+"\",\""+row[14]+"\",\""+row[15]+"\"),\n"
+        i+=1
+insertStr = insertStr[0:-2] + ";"
 f = open("weatherDB.sql", "w+")
-f.write(outputStr)
+f.write(insertStr)
 f.close()
