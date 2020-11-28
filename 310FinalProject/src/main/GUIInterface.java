@@ -25,13 +25,20 @@ package main;
 	import java.awt.event.WindowAdapter;
 	import java.awt.event.WindowEvent;
 	import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 //Swing Imports
 	import javax.swing.JComboBox;
+	import javax.swing.JButton;
 	import javax.swing.JFrame;
+	import javax.swing.JLabel;
 	import javax.swing.JPanel;
-	import javax.swing.UIManager;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.UIManager;
 	import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
 
 //Manager Imports
 	import database.DatabaseManager;
@@ -39,6 +46,9 @@ package main;
 
 
 public class GUIInterface extends JPanel implements MouseListener, MouseWheelListener, KeyListener, ItemListener {
+	//SWING Variables
+	private static JButton buttonEX;
+	private static JLabel labelLB;
 	
 	JPanel cards; //a panel that uses CardLayout
     final static String FUNCTIONS = "JDBC Functions";
@@ -108,7 +118,13 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     public static void createFunctionsPage(JPanel card) {
     	card.setLayout(null);
     	card.setPreferredSize(new Dimension(810, 650));
-    	
+    	labelLB = new JLabel("jdb-get-view:");
+		labelLB.setBounds(10, 450, 100, 25);
+		buttonEX = new JButton("jdb-get-view");
+		buttonEX.setBounds(10, 480, 200, 25);
+		buttonEX.addMouseListener(new GUIInterface());
+		card.add(labelLB);
+		card.add(buttonEX);
     }
     
     public static void createAdminPage(JPanel card) {
@@ -120,7 +136,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     public static void createUserPage(JPanel card) {
     	card.setLayout(null);
     	card.setPreferredSize(new Dimension(810, 650));
-    	
     }
 	
 	public static void main(String[]args) {
@@ -166,6 +181,56 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	@Override
 	public void mouseClicked(MouseEvent mouse) {
 		//this is where we do all functions
+		if (mouse.getSource() == buttonEX) {
+			JFrame frame = new JFrame();
+			frame.setVisible(true);
+			GUIInterface panel = new GUIInterface();
+			DefaultTableModel model = new DefaultTableModel();
+			frame.setSize(800, 600);
+			frame.add(panel);
+			frame.setTitle("test");
+			frame.setLocationRelativeTo(null);
+
+			JTable table = new JTable(model);
+			table.setShowGrid(true);
+			table.setGridColor(Color.black);
+			JScrollPane sp = new JScrollPane(table);
+			
+			//create ArrayList and HashMap here for the parameters of handleStormSearch
+			ArrayList<String> columns = null;
+			HashMap<String, String> parameters = null;
+			
+			
+			
+			String tableName = "test";
+			String output = DatabaseManager.handleStormSearch(columns, parameters);
+			String line[] = output.split("\n");
+			String headers[] = line[1].split(",");
+
+			System.out.println("---------------------");
+			for(int i=0; i<headers.length; i++) {
+				if(headers[i].indexOf("=") != -1) {
+					System.out.println(headers[i].substring(0, headers[i].indexOf("=")));
+					model.addColumn(headers[i].substring(0, headers[i].indexOf("=")));
+				}
+			}
+			sp.setPreferredSize(new Dimension(headers.length * 70, 300));
+			System.out.println("---------------------");
+			for (String token : line) {
+				if(!token.isEmpty()) {
+					token = token.replace("{", "");
+					token = token.replace("}", "");
+					String row[] = token.split(","); //FIXME: not work for column has , in their data. can fix by split using regex
+					ArrayList<String> single_row = new ArrayList<String>();
+					for (String rowToken : row) {
+						String elem[] = rowToken.split("=");
+						single_row.add(elem[1]);
+					}
+					model.addRow(single_row.toArray());
+				}
+			}
+			panel.add(sp);
+		}
 	}
 
 	@Override
