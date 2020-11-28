@@ -125,7 +125,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	DatabaseManager.openConnection();
-        		DatabaseManager.queryDatabase("use adventureworks;");
+        		DatabaseManager.queryDatabase("use weatherdb;");
                 createAndShowGUI();
             }
         });

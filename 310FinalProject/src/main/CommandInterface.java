@@ -44,7 +44,7 @@ public class CommandInterface {
 	
 	final static String parseLine(String line) {
 		try{
-			if(!line.substring(0,3).equals("jdb")) {
+			if(!line.equals("help") || !line.substring(0,3).equals("jdb")) {
 				return DatabaseManager.handleSQLCommand(line);
 			}
 			else {
@@ -52,7 +52,8 @@ public class CommandInterface {
 			}
 		}
 		catch(StringIndexOutOfBoundsException e) {
-			return ErrorManager.getErrorMessage(0); //TODO: Fix Error Codes, or come up with a better way to do this.
+//			return ErrorManager.getErrorMessage(0); //TODO: Fix Error Codes, or come up with a better way to do this.
+			return "Error: Invalid Commmand";
 		}
 	}
 	

@@ -24,7 +24,7 @@ USE weatherdb;
 CREATE TABLE storm (
     EventID INT NOT NULL,
     EpisodeID INT,
-    StormType VARCHAR(20),
+    StormType VARCHAR(100),
     BeginDate DATE,
     EndDate DATE,
     State VARCHAR(20),
@@ -34,8 +34,8 @@ CREATE TABLE storm (
     DeathsDirect INT, 
     Magnitude FLOAT,
     MagnitudeType VARCHAR(5),
-    event_narrative VARCHAR(500),
-    episode_narrative VARCHAR(500),
+    event_narrative VARCHAR(3000),
+    episode_narrative VARCHAR(3000),
     PRIMARY KEY(EventID)
 ) ENGINE=InnoDB;
 
@@ -78,7 +78,7 @@ CREATE TABLE fatalities (
     Age INT,
     Gender VARCHAR(20),
     Time DATE,
-    Location VARCHAR(5),
+    Location VARCHAR(30),
     Type VARCHAR(5),
     PRIMARY KEY(FatalityID),
     FOREIGN KEY (EventID) REFERENCES storm(EventID)

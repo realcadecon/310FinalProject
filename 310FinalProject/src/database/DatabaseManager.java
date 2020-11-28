@@ -22,7 +22,7 @@ public final class DatabaseManager {
 	//A container to hold our 20 common queries (TODO:implement for part 3)
 	private static HashMap<String, String> commonCommands = new HashMap<String, String>();
 	private static Connection db = null;
-	private static String[] customCommands;
+	private static String[] customCommands = {"custom1","custom2","custom3"};
 	
 	public DatabaseManager() {
 		try {
@@ -103,16 +103,21 @@ public final class DatabaseManager {
 		if(!validCommandPrefix) {
 			return "ERROR: Invalid command \"" + parsedValues[0] + "\"";
 		}
-	
-		//ArrayList<HashMap <String, Object>> all_tables = interpretResultSet(queryDatabase("show tables;"));
 		String output = "";
 		
 		ResultSet rs;
 		output = "\n";
-		
+		ArrayList<HashMap <String, Object>> results;
 		//PLACEHOLDER SWITCH TABLE TO CHOOSE COMMAND TO EXECUTE
 		switch(parsedValues[0]) {
-			
+			case "custom1":
+				results = interpretResultSet(queryDatabase("show tables;"));
+				output = results.toString();
+				break;
+			case "custom2":
+				break;
+			case "custom3":
+				break;
 		}
 		return output;
 	}
@@ -165,7 +170,7 @@ public final class DatabaseManager {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance(); 
 			System.out.println("Connection Opened.");
-			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=password"); //TODO: make sure this url is right
+			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=Ammouri2"); //TODO: make sure this url is right
 			
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
