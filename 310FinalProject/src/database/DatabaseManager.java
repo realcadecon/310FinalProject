@@ -125,20 +125,6 @@ public final class DatabaseManager {
 	
 	
 	public static String handleSQLCommand(String command) {
-		if(command.equals("jdb")) {
-			System.out.println("Command: " + command);
-			ArrayList<HashMap <String, Object>> tables = interpretResultSet(queryDatabase("show tables;"));
-			for(int i=0; i<tables.size(); i++) {
-				System.out.println(tables.get(i));
-				String tableName = tables.get(i).get("TABLE_NAME").toString(); 
-				ArrayList <HashMap <String, Object>> attributes = interpretResultSet(queryDatabase("show columns from "+tableName+";"));
-				for(int j=0; j<attributes.size(); j++) {
-					System.out.println(attributes.get(j));
-				}
-			}
-		}
-		String test = ""; //example query to test
-		System.out.println("Command: " + test);
 		String output = "";
 		if(command.equals("help")) {
 			output+="Available Commands :: \n";
@@ -170,7 +156,7 @@ public final class DatabaseManager {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance(); 
 			System.out.println("Connection Opened.");
-			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=Ammouri2"); //TODO: make sure this url is right
+			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password="); //TODO: make sure this url is right
 			
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block

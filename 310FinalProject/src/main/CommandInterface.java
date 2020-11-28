@@ -35,6 +35,7 @@ public class CommandInterface {
 			System.out.print("jdb > ");
 			userline = input.nextLine();
 			if(!userline.equalsIgnoreCase("quit")&&!userline.equalsIgnoreCase("exit")) {
+				System.out.println("start of parse line");
 				System.out.println(parseLine(userline)); //Formatting could either be done here w/ function or in the dbmanager.
 			}
 		}
@@ -43,12 +44,15 @@ public class CommandInterface {
 	}
 	
 	final static String parseLine(String line) {
+		System.out.println("start of parse line");
 		try{
-			if(!line.equals("help") || !line.substring(0,3).equals("jdb")) {
-				return DatabaseManager.handleSQLCommand(line);
+			if(line.substring(0,3).equals("jdb")) {
+				System.out.println("Calling custom command");
+				return DatabaseManager.handleCustomCommand(line);
 			}
 			else {
-				return DatabaseManager.handleCustomCommand(line);
+				System.out.println("test");
+				return DatabaseManager.handleSQLCommand(line);
 			}
 		}
 		catch(StringIndexOutOfBoundsException e) {
