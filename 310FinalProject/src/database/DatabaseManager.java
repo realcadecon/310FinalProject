@@ -22,7 +22,7 @@ public final class DatabaseManager {
 	//A container to hold our 20 common queries (TODO:implement for part 3)
 	private static HashMap<String, String> commonCommands = new HashMap<String, String>();
 	private static Connection db = null;
-	private static String[] customCommands = {"custom1","custom2","custom3"};
+	private static String[] customCommands = {"jdb-searchStorm","custom2"};
 	
 	public DatabaseManager() {
 		try {
@@ -83,7 +83,26 @@ public final class DatabaseManager {
 		return null;
 	}
 	
-	
+	public static String handleStormSearch(ArrayList<String> columns, HashMap<String, String> parameters) {
+		String query = "";
+		String columnsList = "";
+		for(int i=0; i< columns.size(); i++) {
+			if(i!=columns.size()-1) {
+				columnsList+= columns.get(i)+", ";
+			}
+			else {
+				columnsList+= columns.get(i);
+			}
+		}
+		
+		String parameterList = "where ";
+		String stateParams;
+		if((stateParams = parameters.get("State")) != null) {
+			parameterList += "State = " + stateParams;
+		}
+		
+		return query;
+	}
 	
 	//Could also send it straight here to some intermediate function like "handleline" which makes the decision instead of main
 	public static String handleCustomCommand(String command) {
@@ -108,11 +127,18 @@ public final class DatabaseManager {
 		ResultSet rs;
 		output = "\n";
 		ArrayList<HashMap <String, Object>> results;
+		HashMap<String, Object> curr_row;
+		String eventID = "";
 		//PLACEHOLDER SWITCH TABLE TO CHOOSE COMMAND TO EXECUTE
 		switch(parsedValues[0]) {
-			case "custom1":
-				results = interpretResultSet(queryDatabase("show tables;"));
-				output = results.toString();
+			case "jdb-searchStorm":
+				String searchType = parsedValues[1];	//column name
+				String search = parsedValues[2];
+				results = interpretResultSet(queryDatabase("select * from storm where "+searchType+" = \'"+search.toUpperCase()+"\';"));
+				for(int i=0; i<results.size(); i++) {
+					curr_row = results.get(i);
+					output+=results.get(i)+"\n";
+				}
 				break;
 			case "custom2":
 				break;
@@ -156,7 +182,7 @@ public final class DatabaseManager {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance(); 
 			System.out.println("Connection Opened.");
-			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password="); //TODO: make sure this url is right
+			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=Ammouri2"); //TODO: make sure this url is right
 			
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
