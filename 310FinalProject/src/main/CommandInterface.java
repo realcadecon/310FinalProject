@@ -44,11 +44,11 @@ public class CommandInterface {
 	
 	final static String parseLine(String line) {
 		try{
-			if(!line.equals("help") || !line.substring(0,3).equals("jdb")) {
-				return DatabaseManager.handleSQLCommand(line);
+			if(line.substring(0,3).equals("jdb")) {
+				return DatabaseManager.handleCustomCommand(line);
 			}
 			else {
-				return DatabaseManager.handleCustomCommand(line);
+				return DatabaseManager.handleSQLCommand(line);
 			}
 		}
 		catch(StringIndexOutOfBoundsException e) {

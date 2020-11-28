@@ -125,20 +125,6 @@ public final class DatabaseManager {
 	
 	
 	public static String handleSQLCommand(String command) {
-		if(command.equals("jdb")) {
-			System.out.println("Command: " + command);
-			ArrayList<HashMap <String, Object>> tables = interpretResultSet(queryDatabase("show tables;"));
-			for(int i=0; i<tables.size(); i++) {
-				System.out.println(tables.get(i));
-				String tableName = tables.get(i).get("TABLE_NAME").toString(); 
-				ArrayList <HashMap <String, Object>> attributes = interpretResultSet(queryDatabase("show columns from "+tableName+";"));
-				for(int j=0; j<attributes.size(); j++) {
-					System.out.println(attributes.get(j));
-				}
-			}
-		}
-		String test = ""; //example query to test
-		System.out.println("Command: " + test);
 		String output = "";
 		if(command.equals("help")) {
 			output+="Available Commands :: \n";

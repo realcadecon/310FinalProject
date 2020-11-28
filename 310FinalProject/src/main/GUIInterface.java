@@ -43,11 +43,13 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	JPanel cards; //a panel that uses CardLayout
     final static String FUNCTIONS = "JDBC Functions";
     final static String DASHBOARD = "Dashboard";
+    final static String ADMIN = "Admin";
+    final static String USER = "User";
     
     public void addComponentToPane(Container pane) {
         //Put the JComboBox in a JPanel to get a nicer look.
         JPanel menu = new JPanel(); //use FlowLayout, could maybe add more things to this
-        String pages[] = { DASHBOARD, FUNCTIONS };
+        String pages[] = { DASHBOARD, FUNCTIONS, ADMIN, USER };
         JComboBox cb = new JComboBox(pages);
         cb.setEditable(false);
         cb.addItemListener(this);
@@ -58,11 +60,17 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         createFunctionsPage(card1);
         JPanel card2 = new JPanel();
         createDashboardPage(card2);
+        JPanel card3 = new JPanel();
+        createAdminPage(card3);
+        JPanel card4 = new JPanel();
+        createUserPage(card4);
          
         //Create the panel that contains the "cards".
         cards = new JPanel(new CardLayout());
-        cards.add(card2, DASHBOARD);
         cards.add(card1, FUNCTIONS);
+        cards.add(card2, DASHBOARD);
+        cards.add(card3, ADMIN);
+        cards.add(card4, USER);
          
         pane.add(menu, BorderLayout.PAGE_START);
         pane.add(cards, BorderLayout.CENTER);
@@ -75,7 +83,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     
     private static void createAndShowGUI() {
         //Create and set up the window.
-        JFrame frame = new JFrame("CSCE 315 Project 2 - SAW (Simplifying Adventure Works) GUI Interface");
+        JFrame frame = new JFrame("CSCE 310 Final Project");
         frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				frame.dispose();
@@ -98,6 +106,18 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     }
     
     public static void createFunctionsPage(JPanel card) {
+    	card.setLayout(null);
+    	card.setPreferredSize(new Dimension(810, 650));
+    	
+    }
+    
+    public static void createAdminPage(JPanel card) {
+    	card.setLayout(null);
+    	card.setPreferredSize(new Dimension(810, 650));
+    	
+    }
+    
+    public static void createUserPage(JPanel card) {
     	card.setLayout(null);
     	card.setPreferredSize(new Dimension(810, 650));
     	
