@@ -26,6 +26,7 @@ package main;
 	import java.awt.event.WindowEvent;
 	import java.text.NumberFormat;
 
+import javax.swing.JButton;
 //Swing Imports
 	import javax.swing.JComboBox;
 	import javax.swing.JFrame;
@@ -115,11 +116,19 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	card.setLayout(null);
     	card.setPreferredSize(new Dimension(810, 650));
     	
+    	card.add(new JButton("Button 1 - Card 1"));
+        card.add(new JButton("Button 2 - Card 1"));
+        card.setBackground(Color.blue);
+    	
     }
     
     public static void createUserPage(JPanel card) {
     	card.setLayout(null);
     	card.setPreferredSize(new Dimension(810, 650));
+    	JButton OKButton = new JButton("OK");
+    	OKButton.setPreferredSize(new Dimension(10, 10));
+    	//OKButton.addActionListener();
+    	card.add(OKButton);
     	
     }
 	
