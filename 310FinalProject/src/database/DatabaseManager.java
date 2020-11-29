@@ -87,25 +87,45 @@ public final class DatabaseManager {
 	public static String handleStormSearch(ArrayList<String> columns, HashMap<String, String> parameters) {
 		String query = "";
 		String columnsList = "";
+		
+		// flag to check if location has been joined yet
+		boolean locationAdded = false;
+		String tableList = " from storm ";
+		
 		for(int i=0; i< columns.size(); i++) {
-			if(i!=columns.size()-1) {
-				columnsList+= columns.get(i)+", ";
-			}
-			else {
-				columnsList+= columns.get(i);
+			// special case for city, must join location table and use 'town' instead of 'city'
+			if(columns.get(i).equalsIgnoreCase("city")) {
+				tableList += "natural join location";
+				locationAdded = true;
+				columnsList+= "Town, ";
+			}else {
+				if(i!=columns.size()-1) {
+					columnsList+= columns.get(i)+", ";
+				}
+				else {
+					columnsList+= columns.get(i);
+				}
 			}
 		}
-		
+				
+		//Fatal Parameter
+		String parameterList = " where ";
 		boolean paramFound = false;
 		
-		String parameterList = "";
 		//State Parameter
 		if(!parameters.get("State").equals("N/A")) {
 			parameterList += "State = \'" + parameters.get("State")+"\' AND ";
 			paramFound = true;
 		}
 		
-		//Fatal Parameter
+		//search by State
+		String stateParams;
+		if((stateParams = parameters.get("State")) != null) {
+			parameterList += "State = " + "\'" + stateParams + "\'" + " AND";
+			paramFound = true;
+		}
+		
+		// search by fatal or not
 		String fatalParams;
 		if((fatalParams = parameters.get("Fatal")) != null) {
 			if(fatalParams.equalsIgnoreCase("yes")) {
@@ -121,7 +141,10 @@ public final class DatabaseManager {
 		//City Parameter 
 		String cityParams;
 		if((cityParams = parameters.get("City")) != null) {
-			parameterList += "Town = \'" + cityParams + "\' AND";
+			parameterList += "Town = " + "\'" + cityParams + "\'" + " AND";
+			if(!locationAdded) {
+				tableList += "natural join location ";
+			}
 			paramFound = true;
 		}
 		
@@ -168,12 +191,15 @@ public final class DatabaseManager {
 		}
 		
 		//Creates query statement
+		
+		// any parameters found -- add where clause to sql
 		if(paramFound) {
+			// strips the final 'AND' from the parameter statement
 			parameterList = parameterList.substring(0, parameterList.length()-4);
-			query = "select "+columnsList+" from ..."+" where "+parameterList+";";
-		}
+			query = "select " + columnsList + tableList + parameterList + ";";
+		} // no parameters found -- skip where clause
 		else {
-			query = "select "+columnsList + " from ...;";
+			query = "select " + columnsList + tableList + ";";
 		}
 		
 		
@@ -211,13 +237,20 @@ public final class DatabaseManager {
 		//PLACEHOLDER SWITCH TABLE TO CHOOSE COMMAND TO EXECUTE
 		switch(parsedValues[0]) {
 			case "jdb-searchStorm":
-				String searchType = parsedValues[1];	//column name
-				String search = parsedValues[2];
-				results = interpretResultSet(queryDatabase("select * from storm where "+searchType+" = \'"+search.toUpperCase()+"\';"));
-				for(int i=0; i<results.size(); i++) {
-					curr_row = results.get(i);
-					output+=results.get(i)+"\n";
-				}
+				ArrayList<String> arr = new ArrayList<String>();
+				arr.add("State");
+				arr.add("City");
+				HashMap<String, String> hm = new HashMap<String, String>();
+				hm.put("State", "CALIFORNIA");
+				//hm.put("City", "Athens");
+				output += handleStormSearch(arr, hm);
+				//String searchType = parsedValues[1];	//column name
+				//String search = parsedValues[2];
+				//results = interpretResultSet(queryDatabase("select * from storm where "+searchType+" = \'"+search.toUpperCase()+"\';"));
+				//for(int i=0; i<results.size(); i++) {
+				//	curr_row = results.get(i);
+				//	output+=results.get(i)+"\n";
+				//}
 				break;
 			case "custom2":
 				break;
