@@ -144,25 +144,26 @@ public final class DatabaseManager {
 		if(stormParams == "Tornado") {
 			String torScale = parameters.get("torScale");
 			if(torScale != null) {
-				parameterList += "tor_f_scale = \'" + torScale + "\' AND";
+				parameterList += "tor_f_scale = \'" + torScale + "\' AND ";
 				paramFound = true;
 			}
 			String torWidth = parameters.get("torWidth");
 			if(torScale != null) {
-				parameterList += "tor_width = " + torWidth + " AND";
+				parameterList += "tor_width = " + torWidth + " AND ";
 				paramFound = true;
 			}
 			String torLength = parameters.get("torLength");
 			if(torScale != null) {
-				parameterList += "tor_length = " + torLength + " AND";
+				parameterList += "tor_length = " + torLength + " AND ";
 				paramFound = true;
 			}
 		}
 		
-		//Date Parameter (dd-mm-yyyy)
+		//Date Parameter (yyyy-mm-dd)
 		if(parameters.get("beginningDate") != null) {
-			String beginningDate[] = parameters.get("beginningDate").split("-");
-			parameterList += "tor_f_scale = \'" + torScale + "\' AND";
+			String beginningDate = parameters.get("beginningDate");
+			String endDate = parameters.get("endDate");
+			parameterList += "BeginDate > \'" + beginningDate + "\' AND EndDate < \'" + endDate + "\' AND ";
 			paramFound = true;
 		}
 		
