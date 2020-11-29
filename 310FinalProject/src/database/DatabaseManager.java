@@ -29,7 +29,7 @@ public final class DatabaseManager {
 			//FIXME: I really don't think this is a good way to do it, but online tutorials do it?
 			Class.forName("com.mysql.jdbc.Driver").newInstance(); 	
 			System.out.println("DatabaseManager is being called here.");
-			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=password"); //TODO: make sure this url is right
+			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password="); //TODO: make sure this url is right
 			
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
@@ -98,11 +98,44 @@ public final class DatabaseManager {
 		String parameterList = "";
 		//search by State
 		String stateParams;
+		boolean paramFound = false;
 		if((stateParams = parameters.get("State")) != null) {
-			parameterList += "State = " + stateParams;
+			parameterList += "State = " + stateParams + " AND";
+			paramFound = true;
+		}
+		String fatalParams;
+		if((fatalParams = parameters.get("Fatal")) != null) {
+			if(fatalParams.equalsIgnoreCase("yes")) {
+				parameterList += "DeathsDirect > 1 AND ";
+				paramFound = true;
+			}
+			else if(fatalParams.equalsIgnoreCase("no")) {
+				parameterList += "State = " + stateParams + " AND";
+				paramFound = true;
+			}
+			parameterList += "State = " + stateParams + " AND";
 		}
 		
-		query = "select "+columnsList+" where "+parameterList+";";
+		String cityParams;
+		if((cityParams = parameters.get("City")) != null) {
+			parameterList += "Town = " + cityParams + " AND";
+			paramFound = true;
+		}
+		
+		String stormParams;
+		if((stormParams = parameters.get("StormType")) != null) {
+			parameterList += "StormType = " + stormParams + " AND";
+			paramFound = true;
+		}
+		
+		if(paramFound) {
+			parameterList = parameterList.substring(0, parameterList.length()-4);
+			query = "select "+columnsList+" from ..."+" where "+parameterList+";";
+		}
+		else {
+			query = "select "+columnsList + " from ...;";
+		}
+		
 		ArrayList<HashMap<String, Object>> results = interpretResultSet(queryDatabase(query));
 		String output = results.toString();
 		
