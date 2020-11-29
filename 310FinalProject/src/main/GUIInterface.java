@@ -68,8 +68,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         //Create the "cards". TODO: maybe add a menu card
         JPanel card1 = new JPanel();
         createFunctionsPage(card1);
-        JPanel card2 = new JPanel();
-        createDashboardPage(card2);
         JPanel card3 = new JPanel();
         createAdminPage(card3);
         JPanel card4 = new JPanel();
@@ -78,7 +76,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         //Create the panel that contains the "cards".
         cards = new JPanel(new CardLayout());
         cards.add(card1, FUNCTIONS);
-        cards.add(card2, DASHBOARD);
         cards.add(card3, ADMIN);
         cards.add(card4, USER);
          

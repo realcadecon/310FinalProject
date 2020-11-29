@@ -244,13 +244,6 @@ public final class DatabaseManager {
 				hm.put("State", "CALIFORNIA");
 				//hm.put("City", "Athens");
 				output += handleStormSearch(arr, hm);
-				//String searchType = parsedValues[1];	//column name
-				//String search = parsedValues[2];
-				//results = interpretResultSet(queryDatabase("select * from storm where "+searchType+" = \'"+search.toUpperCase()+"\';"));
-				//for(int i=0; i<results.size(); i++) {
-				//	curr_row = results.get(i);
-				//	output+=results.get(i)+"\n";
-				//}
 				break;
 			case "custom2":
 				break;
