@@ -39,6 +39,10 @@ package main;
 	import javax.swing.UIManager;
 	import javax.swing.UnsupportedLookAndFeelException;
 	import javax.swing.table.DefaultTableModel;
+	import javax.swing.JTextField;
+	import javax.swing.JTextArea;
+	import javax.swing.ButtonGroup;
+	import javax.swing.JRadioButton;
 
 //Manager Imports
 	import database.DatabaseManager;
@@ -49,6 +53,27 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	//SWING Variables
 	private static JButton buttonEX;
 	private static JLabel labelLB;
+	
+	// Admin Search Variables
+	private static JLabel adminQueryLabel;
+	private static JTextArea adminQuery;
+	private static JButton adminQuerySubmit;
+	
+	// Admin Table Select Variables
+	private static ButtonGroup adminTableSelectGroup;
+	private static JRadioButton adminStormTable;
+	private static JRadioButton adminLocationTable;
+	private static JRadioButton adminFatalityTable;
+	private static JRadioButton adminTornadoDetailsTable;
+	private static JRadioButton adminStormPathTable;
+	
+	// Admin Add or Update
+	/*
+	private static JLabel adminEventIdLabel;
+	private static JTextField adminEventId;
+	private static JButton admin
+	*/
+	
 	
 	JPanel cards; //a panel that uses CardLayout
     final static String FUNCTIONS = "JDBC Functions";
@@ -131,6 +156,30 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     public static void createAdminPage(JPanel card) {
     	card.setLayout(null);
     	card.setPreferredSize(new Dimension(810, 650));
+    	
+    	// Admin Search
+    	adminQueryLabel = new JLabel("Search Query");
+    	adminQueryLabel.setBounds(10, 10, 100, 25);
+    	adminQuery = new JTextArea("Enter Valid SQL Query");
+    	adminQuery.setBounds(10, 40, 300, 100);
+    	adminQuery.setLineWrap(true);
+    	adminQuerySubmit = new JButton("Search Query");
+    	adminQuerySubmit.setBounds(10, 150, 150, 25);
+    	adminQuerySubmit.addMouseListener(new GUIInterface());
+    	
+    	card.add(adminQueryLabel);
+    	card.add(adminQuery);
+    	card.add(adminQuerySubmit);
+    	
+    	/*
+    	// Admin Table Select Variables
+    	private static ButtonGroup adminTableSelectGroup;
+    	private static JRadioButton adminStormTable;
+    	private static JRadioButton adminLocationTable;
+    	private static JRadioButton adminFatalityTable;
+    	private static JRadioButton adminTornadoDetailsTable;
+    	private static JRadioButton adminStormPathTable;
+    	*/
     	
     }
     
@@ -231,6 +280,12 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 				}
 			}
 			panel.add(sp);
+		}
+		
+		else if (mouse.getSource() == adminQuerySubmit) {
+			String contents = adminQuery.getText();
+			System.out.println(DatabaseManager.handleSQLCommand(contents));
+			System.out.println(contents);
 		}
 	}
 
