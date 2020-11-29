@@ -83,7 +83,7 @@ public final class DatabaseManager {
 		return null;
 	}
 	
-	//test input: 
+	
 	public static String handleStormSearch(ArrayList<String> columns, HashMap<String, String> parameters) {
 		String query = "";
 		String columnsList = "";
@@ -96,26 +96,20 @@ public final class DatabaseManager {
 			}
 		}
 		
+		boolean paramFound = false;
+		
 		String parameterList = "";
 		//State Parameter
 		if(!parameters.get("State").equals("N/A")) {
-			parameterList += "State = \'" + parameters.get("State")+"\' and ";
+			parameterList += "State = \'" + parameters.get("State")+"\' AND ";
+			paramFound = true;
 		}
 		
 		//Fatal Parameter
-		if(parameters.get("Fatal").equals("true")) {
-			parameterList +=  "DeathsDirect > 0  and ";
-		}
-		else {
-			parameterList +=  "DeathsDirect = 0  and ";
-		}
-		
-		boolean paramFound = false;
-		
 		String fatalParams;
 		if((fatalParams = parameters.get("Fatal")) != null) {
 			if(fatalParams.equalsIgnoreCase("yes")) {
-				parameterList += "DeathsDirect > 1 AND ";
+				parameterList += "DeathsDirect > 0 AND ";
 				paramFound = true;
 			}
 			else if(fatalParams.equalsIgnoreCase("no")) {
@@ -127,14 +121,48 @@ public final class DatabaseManager {
 		//City Parameter 
 		String cityParams;
 		if((cityParams = parameters.get("City")) != null) {
-			parameterList += "Town = " + cityParams + " AND";
+			parameterList += "Town = \'" + cityParams + "\' AND";
 			paramFound = true;
 		}
 		
 		//Storm Type Parameter
 		String stormParams;
 		if((stormParams = parameters.get("StormType")) != null) {
-			parameterList += "StormType = " + stormParams + " AND";
+			parameterList += "StormType = \'" + stormParams + "\' AND";
+			paramFound = true;
+		}
+		
+		//Damage Parameter
+		String damageParams[];
+		if(parameters.get("Damage") != null) {
+			damageParams = parameters.get("Damage").split("-");
+			parameterList += "PropertyDamage + CropDamage > " + damageParams[0] + " AND PropertyDamage + CropDamage < " + damageParams[1] + " AND ";
+			paramFound = true;
+		}
+		
+		//Tornado Parameters
+		if(stormParams == "Tornado") {
+			String torScale = parameters.get("torScale");
+			if(torScale != null) {
+				parameterList += "tor_f_scale = \'" + torScale + "\' AND";
+				paramFound = true;
+			}
+			String torWidth = parameters.get("torWidth");
+			if(torScale != null) {
+				parameterList += "tor_width = " + torWidth + " AND";
+				paramFound = true;
+			}
+			String torLength = parameters.get("torLength");
+			if(torScale != null) {
+				parameterList += "tor_length = " + torLength + " AND";
+				paramFound = true;
+			}
+		}
+		
+		//Date Parameter (dd-mm-yyyy)
+		if(parameters.get("beginningDate") != null) {
+			String beginningDate[] = parameters.get("beginningDate").split("-");
+			parameterList += "tor_f_scale = \'" + torScale + "\' AND";
 			paramFound = true;
 		}
 		
