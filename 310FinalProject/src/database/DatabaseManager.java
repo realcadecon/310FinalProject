@@ -90,42 +90,35 @@ public final class DatabaseManager {
 		
 		// flag to check if location has been joined yet
 		boolean locationAdded = false;
-		String tableList = " from storm ";
+		String tableList = "storm ";
 		
 		for(int i=0; i< columns.size(); i++) {
 			// special case for city, must join location table and use 'town' instead of 'city'
-			if(columns.get(i).equalsIgnoreCase("city")) {
-				tableList += "natural join location";
-				locationAdded = true;
-				columnsList+= "Town, ";
-			}else {
-				if(i!=columns.size()-1) {
-					columnsList+= columns.get(i)+", ";
-				}
-				else {
-					columnsList+= columns.get(i);
-				}
+//			if(columns.get(i).equalsIgnoreCase("city")) {
+//				tableList += "natural join location";
+//				locationAdded = true;
+//				columnsList+= "Town, ";
+//			}else {
+			if(i!=columns.size()-1) {
+				columnsList+= columns.get(i)+", ";
 			}
+			else {
+				columnsList+= columns.get(i);
+			}
+			//}
 		}
 				
-		//Fatal Parameter
-		String parameterList = " where ";
+		String parameterList = "";
 		boolean paramFound = false;
 		
 		//State Parameter
-		if(!parameters.get("State").equals("N/A")) {
+		if(!parameters.get("State").equalsIgnoreCase("N/A")) {
 			parameterList += "State = \'" + parameters.get("State")+"\' AND ";
 			paramFound = true;
 		}
 		
-		//search by State
-		String stateParams;
-		if((stateParams = parameters.get("State")) != null) {
-			parameterList += "State = " + "\'" + stateParams + "\'" + " AND";
-			paramFound = true;
-		}
 		
-		// search by fatal or not
+		//Fatal Parameter
 		String fatalParams;
 		if((fatalParams = parameters.get("Fatal")) != null) {
 			if(fatalParams.equalsIgnoreCase("yes")) {
@@ -133,17 +126,17 @@ public final class DatabaseManager {
 				paramFound = true;
 			}
 			else if(fatalParams.equalsIgnoreCase("no")) {
-				parameterList += "DeathsDirect < 1 AND ";
+				parameterList += "DeathsDirect = 0 AND ";
 				paramFound = true;
 			}
 		}
 		
-		//City Parameter 
-		String cityParams;
-		if((cityParams = parameters.get("City")) != null) {
-			parameterList += "Town = " + "\'" + cityParams + "\'" + " AND";
+		//Town Parameter 
+		String townParams;
+		if((townParams = parameters.get("Town")) != null) {
+			parameterList += "Town = " + "\'" + townParams + "\'" + " AND ";
 			if(!locationAdded) {
-				tableList += "natural join location ";
+				tableList += "join location on location.EventID = storm.EventID";
 			}
 			paramFound = true;
 		}
@@ -151,7 +144,7 @@ public final class DatabaseManager {
 		//Storm Type Parameter
 		String stormParams;
 		if((stormParams = parameters.get("StormType")) != null) {
-			parameterList += "StormType = \'" + stormParams + "\' AND";
+			parameterList += "StormType = \'" + stormParams + "\' AND ";
 			paramFound = true;
 		}
 		
@@ -159,7 +152,7 @@ public final class DatabaseManager {
 		String damageParams[];
 		if(parameters.get("Damage") != null) {
 			damageParams = parameters.get("Damage").split("-");
-			parameterList += "PropertyDamage + CropDamage > " + damageParams[0] + " AND PropertyDamage + CropDamage < " + damageParams[1] + " AND ";
+			parameterList += "PropertyDamage + CropDamage >= " + damageParams[0] + " AND PropertyDamage + CropDamage <= " + damageParams[1] + " AND ";
 			paramFound = true;
 		}
 		
@@ -183,31 +176,33 @@ public final class DatabaseManager {
 		}
 		
 		//Date Parameter (yyyy-mm-dd)
-		if(parameters.get("beginningDate") != null) {
-			String beginningDate = parameters.get("beginningDate");
-			String endDate = parameters.get("endDate");
-			parameterList += "BeginDate > \'" + beginningDate + "\' AND EndDate < \'" + endDate + "\' AND ";
+		if(parameters.get("BeginDate") != null) {
+			String beginDate = parameters.get("BeginDate");
+			String endDate = parameters.get("EndDate");
+			parameterList += "BeginDate > \'" + beginDate + "\' AND EndDate < \'" + endDate + "\' AND ";
 			paramFound = true;
 		}
 		
 		//Creates query statement
-		
-		// any parameters found -- add where clause to sql
-		if(paramFound) {
-			// strips the final 'AND' from the parameter statement
+		if(paramFound) { // strips the final 'AND' from the parameter statement
 			parameterList = parameterList.substring(0, parameterList.length()-4);
-			query = "select " + columnsList + tableList + parameterList + ";";
-		} // no parameters found -- skip where clause
-		else {
-			query = "select " + columnsList + tableList + ";";
+			query = "select " + columnsList + " from " + tableList +" where " +parameterList + ";";
 		}
+		else { // no parameters found -- skip where clause
+			query = "select " + columnsList + " from " + tableList + ";";
+		}
+		System.out.println(query);
 		
 		
 		ArrayList<HashMap<String, Object>> results = interpretResultSet(queryDatabase(query));
-		String output = results.toString();
+		String output = "";
+		for(int i=0; i<results.size(); i++) {
+			output+= results.get(i) +"\n";
+		}
 		
 		return output;
 	}
+	
 	
 	//Could also send it straight here to some intermediate function like "handleline" which makes the decision instead of main
 	public static String handleCustomCommand(String command) {
@@ -222,7 +217,7 @@ public final class DatabaseManager {
 			if(parsedValues[0].equals(customCommands[i])) {
 				validCommandPrefix = true;
 				break out;
-			}	
+			}
 		}
 		if(!validCommandPrefix) {
 			return "ERROR: Invalid command \"" + parsedValues[0] + "\"";
@@ -237,12 +232,18 @@ public final class DatabaseManager {
 		//PLACEHOLDER SWITCH TABLE TO CHOOSE COMMAND TO EXECUTE
 		switch(parsedValues[0]) {
 			case "jdb-searchStorm":
+				//test inputs
 				ArrayList<String> arr = new ArrayList<String>();
-				arr.add("State");
-				arr.add("City");
+					arr.add("StormType, PropertyDamage, State, Town");
 				HashMap<String, String> hm = new HashMap<String, String>();
-				hm.put("State", "CALIFORNIA");
-				//hm.put("City", "Athens");
+					hm.put("State", "TEXAS");
+					hm.put("Town", "MALTA");
+					hm.put("Fatal", "no");
+					hm.put("BeginDate", "2019-02-01");
+					hm.put("EndDate", "2020-09-01");
+					hm.put("Damage", "0-100000");
+					hm.put("StormType", "Flash Flood");
+				
 				output += handleStormSearch(arr, hm);
 				break;
 			case "custom2":
@@ -287,7 +288,7 @@ public final class DatabaseManager {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance(); 
 			System.out.println("Connection Opened.");
-			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password="); //TODO: make sure this url is right
+			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=Ammouri2"); //TODO: make sure this url is right
 			
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
