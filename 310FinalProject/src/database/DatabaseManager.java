@@ -83,6 +83,7 @@ public final class DatabaseManager {
 		return null;
 	}
 	
+	//test input: 
 	public static String handleStormSearch(ArrayList<String> columns, HashMap<String, String> parameters) {
 		String query = "";
 		String columnsList = "";
@@ -96,13 +97,21 @@ public final class DatabaseManager {
 		}
 		
 		String parameterList = "";
-		//search by State
-		String stateParams;
-		boolean paramFound = false;
-		if((stateParams = parameters.get("State")) != null) {
-			parameterList += "State = " + stateParams + " AND";
-			paramFound = true;
+		//State Parameter
+		if(!parameters.get("State").equals("N/A")) {
+			parameterList += "State = \'" + parameters.get("State")+"\' and ";
 		}
+		
+		//Fatal Parameter
+		if(parameters.get("Fatal").equals("true")) {
+			parameterList +=  "DeathsDirect > 0  and ";
+		}
+		else {
+			parameterList +=  "DeathsDirect = 0  and ";
+		}
+		
+		boolean paramFound = false;
+		
 		String fatalParams;
 		if((fatalParams = parameters.get("Fatal")) != null) {
 			if(fatalParams.equalsIgnoreCase("yes")) {
@@ -115,18 +124,21 @@ public final class DatabaseManager {
 			}
 		}
 		
+		//City Parameter 
 		String cityParams;
 		if((cityParams = parameters.get("City")) != null) {
 			parameterList += "Town = " + cityParams + " AND";
 			paramFound = true;
 		}
 		
+		//Storm Type Parameter
 		String stormParams;
 		if((stormParams = parameters.get("StormType")) != null) {
 			parameterList += "StormType = " + stormParams + " AND";
 			paramFound = true;
 		}
 		
+		//Creates query statement
 		if(paramFound) {
 			parameterList = parameterList.substring(0, parameterList.length()-4);
 			query = "select "+columnsList+" from ..."+" where "+parameterList+";";
@@ -134,6 +146,7 @@ public final class DatabaseManager {
 		else {
 			query = "select "+columnsList + " from ...;";
 		}
+		
 		
 		ArrayList<HashMap<String, Object>> results = interpretResultSet(queryDatabase(query));
 		String output = results.toString();
@@ -154,7 +167,7 @@ public final class DatabaseManager {
 			if(parsedValues[0].equals(customCommands[i])) {
 				validCommandPrefix = true;
 				break out;
-			}		
+			}	
 		}
 		if(!validCommandPrefix) {
 			return "ERROR: Invalid command \"" + parsedValues[0] + "\"";

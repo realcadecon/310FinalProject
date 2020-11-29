@@ -25,8 +25,8 @@ package main;
 	import java.awt.event.WindowAdapter;
 	import java.awt.event.WindowEvent;
 	import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
+	import java.util.ArrayList;
+	import java.util.HashMap;
 
 //Swing Imports
 	import javax.swing.JComboBox;
@@ -34,11 +34,11 @@ import java.util.HashMap;
 	import javax.swing.JFrame;
 	import javax.swing.JLabel;
 	import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.UIManager;
+	import javax.swing.JScrollPane;
+	import javax.swing.JTable;
+	import javax.swing.UIManager;
 	import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.table.DefaultTableModel;
+	import javax.swing.table.DefaultTableModel;
 
 //Manager Imports
 	import database.DatabaseManager;
@@ -59,7 +59,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     public void addComponentToPane(Container pane) {
         //Put the JComboBox in a JPanel to get a nicer look.
         JPanel menu = new JPanel(); //use FlowLayout, could maybe add more things to this
-        String pages[] = { DASHBOARD, FUNCTIONS, ADMIN, USER };
+        String pages[] = {FUNCTIONS, DASHBOARD, ADMIN, USER };
         JComboBox cb = new JComboBox(pages);
         cb.setEditable(false);
         cb.addItemListener(this);
@@ -112,7 +112,8 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     }
 
     public static void createDashboardPage(JPanel card) {
-    	Dashboard.runDash(card);
+    	card.setLayout(null);
+    	card.setPreferredSize(new Dimension(810, 650));
     }
     
     public static void createFunctionsPage(JPanel card) {
