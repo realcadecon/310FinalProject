@@ -110,10 +110,9 @@ public final class DatabaseManager {
 				paramFound = true;
 			}
 			else if(fatalParams.equalsIgnoreCase("no")) {
-				parameterList += "State = " + stateParams + " AND";
+				parameterList += "DeathsDirect < 1 AND ";
 				paramFound = true;
 			}
-			parameterList += "State = " + stateParams + " AND";
 		}
 		
 		String cityParams;
