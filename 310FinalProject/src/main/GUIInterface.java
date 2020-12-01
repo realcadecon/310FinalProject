@@ -28,6 +28,8 @@ package main;
 	import java.util.ArrayList;
 	import java.util.HashMap;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 //Swing Imports
 	import javax.swing.JComboBox;
 	import javax.swing.JButton;
@@ -37,6 +39,8 @@ package main;
 	import javax.swing.JScrollPane;
 	import javax.swing.JTable;
 	import javax.swing.UIManager;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
 	import javax.swing.UnsupportedLookAndFeelException;
 	import javax.swing.table.DefaultTableModel;
 
@@ -98,6 +102,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 				System.exit(0);
 			}
 		});
+        frame.setBounds(300,300,300,300);
         //Create and set up the content pane.
         GUIInterface demo = new GUIInterface();
         demo.addComponentToPane(frame.getContentPane());
@@ -129,9 +134,63 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	card.setLayout(null);
     	card.setPreferredSize(new Dimension(810, 650));
     	
+    	card.add(new JButton("Button 1 - Card 1"));
+        card.add(new JButton("Button 2 - Card 1"));
+        card.setBackground(Color.blue);
+    	
     }
     
     public static void createUserPage(JPanel card) {
+    	JCheckBox stormType = new JCheckBox("storm type"); 
+    	JCheckBox state = new JCheckBox("state"); 
+    	JCheckBox city = new JCheckBox("city"); 
+    	JCheckBox property = new JCheckBox("property damage"); 
+    	JCheckBox eventNar = new JCheckBox("event narrative"); 
+    	JCheckBox beginD = new JCheckBox("begin date"); 
+    	JCheckBox endD = new JCheckBox("end date"); 
+    	JCheckBox tScale = new JCheckBox("tornado scale"); 
+    	
+    	stormType.setBounds(0,30,0,0);  
+    	state.setBounds(0,60,0,0);  
+    	city.setBounds(0,90,0,0);  
+    	property.setBounds(0,120,0,0);  
+    	eventNar.setBounds(0,150,0,0);  
+    	endD.setBounds(0,180,0,0);  
+    	tScale.setBounds(0,210,0,0);  
+    	
+    	card.add(stormType);
+    	card.add(state);
+    	card.add(city);
+    	card.add(property);
+    	card.add(eventNar);
+    	card.add(beginD);
+    	card.add(endD);
+    	card.add(tScale);
+    	
+    	JTextField stateName = new JTextField(15);
+    	stateName.setBounds(100,100,100,100);
+    	
+    	card.add(stateName);
+    	
+    	JTextField cityName = new JTextField(15);
+    	cityName.setBounds(120,120,120,120);
+    	
+    	card.add(cityName);
+    	
+    	JCheckBox fatal = new JCheckBox("fatal (check if yes, leave blank if not)"); 
+    	card.add(fatal);
+    	
+ 
+    	
+    	String[] stormT = {"stormType1", "stormType2", "stormType3"};
+    	JComboBox stormTy = new JComboBox(stormT);
+    	stormTy.setSelectedIndex(2);
+    	stormTy.setBounds(0,100,95,30);  
+    	card.add(stormTy);
+    	
+    	/*JButton button = new JButton("button");
+    	button.setBounds(50,100,95,30);  
+    	card.add(button);
     	card.setLayout(null);
     	card.setPreferredSize(new Dimension(810, 650));
     }
