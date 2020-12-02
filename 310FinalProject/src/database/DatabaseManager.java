@@ -29,7 +29,8 @@ public final class DatabaseManager {
 			//FIXME: I really don't think this is a good way to do it, but online tutorials do it?
 			Class.forName("com.mysql.jdbc.Driver").newInstance(); 	
 			System.out.println("DatabaseManager is being called here.");
-			db = DriverManager.getConnection("jdbc:mysql://localhost:3308/?user=root&password=" + System.getenv("MYSQL_PASSWORD")); //TODO: make sure this url is right
+			//db = DriverManager.getConnection("jdbc:mysql://localhost:3308/?user=root&password=" + System.getenv("MYSQL_PASSWORD")); //TODO: make sure this url is right
+			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password="); //TODO: make sure this url is right
 			
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
@@ -83,76 +84,126 @@ public final class DatabaseManager {
 		return null;
 	}
 	
-	//test input: 
+	
 	public static String handleStormSearch(ArrayList<String> columns, HashMap<String, String> parameters) {
 		String query = "";
 		String columnsList = "";
+		
+		// flag to check if location has been joined yet
+		boolean locationAdded = false;
+		String tableList = "storm ";
+		
 		for(int i=0; i< columns.size(); i++) {
+			// special case for city, must join location table and use 'town' instead of 'city'
+//			if(columns.get(i).equalsIgnoreCase("city")) {
+//				tableList += "natural join location";
+//				locationAdded = true;
+//				columnsList+= "Town, ";
+//			}else {
 			if(i!=columns.size()-1) {
 				columnsList+= columns.get(i)+", ";
 			}
 			else {
 				columnsList+= columns.get(i);
 			}
+			//}
 		}
-		
+				
 		String parameterList = "";
-		//State Parameter
-		if(!parameters.get("State").equals("N/A")) {
-			parameterList += "State = \'" + parameters.get("State")+"\' and ";
-		}
-		
-		//Fatal Parameter
-		if(parameters.get("Fatal").equals("true")) {
-			parameterList +=  "DeathsDirect > 0  and ";
-		}
-		else {
-			parameterList +=  "DeathsDirect = 0  and ";
-		}
-		
 		boolean paramFound = false;
 		
+		//State Parameter
+		if(!parameters.get("State").equalsIgnoreCase("N/A")) {
+			parameterList += "State = \'" + parameters.get("State")+"\' AND ";
+			paramFound = true;
+		}
+		
+		
+		//Fatal Parameter
 		String fatalParams;
 		if((fatalParams = parameters.get("Fatal")) != null) {
 			if(fatalParams.equalsIgnoreCase("yes")) {
-				parameterList += "DeathsDirect > 1 AND ";
+				parameterList += "DeathsDirect > 0 AND ";
 				paramFound = true;
 			}
 			else if(fatalParams.equalsIgnoreCase("no")) {
-				parameterList += "DeathsDirect < 1 AND ";
+				parameterList += "DeathsDirect = 0 AND ";
 				paramFound = true;
 			}
 		}
 		
-		//City Parameter 
-		String cityParams;
-		if((cityParams = parameters.get("City")) != null) {
-			parameterList += "Town = " + cityParams + " AND";
+		//Town Parameter 
+		String townParams;
+		if((townParams = parameters.get("Town")) != null) {
+			parameterList += "Town = " + "\'" + townParams + "\'" + " AND ";
+			if(!locationAdded) {
+				tableList += "join location on location.EventID = storm.EventID";
+			}
 			paramFound = true;
 		}
 		
 		//Storm Type Parameter
 		String stormParams;
 		if((stormParams = parameters.get("StormType")) != null) {
-			parameterList += "StormType = " + stormParams + " AND";
+			parameterList += "StormType = \'" + stormParams + "\' AND ";
+			paramFound = true;
+		}
+		
+		//Damage Parameter
+		String damageParams[];
+		if(parameters.get("Damage") != null) {
+			damageParams = parameters.get("Damage").split("-");
+			parameterList += "PropertyDamage + CropDamage >= " + damageParams[0] + " AND PropertyDamage + CropDamage <= " + damageParams[1] + " AND ";
+			paramFound = true;
+		}
+		
+		//Tornado Parameters
+		if(stormParams == "Tornado") {
+			String torScale = parameters.get("torScale");
+			if(torScale != null) {
+				parameterList += "tor_f_scale = \'" + torScale + "\' AND ";
+				paramFound = true;
+			}
+			String torWidth = parameters.get("torWidth");
+			if(torScale != null) {
+				parameterList += "tor_width = " + torWidth + " AND ";
+				paramFound = true;
+			}
+			String torLength = parameters.get("torLength");
+			if(torScale != null) {
+				parameterList += "tor_length = " + torLength + " AND ";
+				paramFound = true;
+			}
+		}
+		
+		//Date Parameter (yyyy-mm-dd)
+		if(parameters.get("BeginDate") != null) {
+			String beginDate = parameters.get("BeginDate");
+			String endDate = parameters.get("EndDate");
+			parameterList += "BeginDate > \'" + beginDate + "\' AND EndDate < \'" + endDate + "\' AND ";
 			paramFound = true;
 		}
 		
 		//Creates query statement
-		if(paramFound) {
+		if(paramFound) { // strips the final 'AND' from the parameter statement
 			parameterList = parameterList.substring(0, parameterList.length()-4);
-			query = "select "+columnsList+" from ..."+" where "+parameterList+";";
+			query = "select " + columnsList + " from " + tableList +" where " +parameterList + ";";
 		}
-		else {
-			query = "select "+columnsList + " from ...;";
+		else { // no parameters found -- skip where clause
+			query = "select " + columnsList + " from " + tableList + ";";
 		}
+		System.out.println(query);
 		
 		
 		ArrayList<HashMap<String, Object>> results = interpretResultSet(queryDatabase(query));
-		String output = results.toString();
+		String output = "";
+		for(int i=0; i<results.size(); i++) {
+			output+= results.get(i) +"\n";
+		}
 		
 		return output;
 	}
+	
 	
 	//Could also send it straight here to some intermediate function like "handleline" which makes the decision instead of main
 	public static String handleCustomCommand(String command) {
@@ -167,7 +218,7 @@ public final class DatabaseManager {
 			if(parsedValues[0].equals(customCommands[i])) {
 				validCommandPrefix = true;
 				break out;
-			}	
+			}
 		}
 		if(!validCommandPrefix) {
 			return "ERROR: Invalid command \"" + parsedValues[0] + "\"";
@@ -182,13 +233,19 @@ public final class DatabaseManager {
 		//PLACEHOLDER SWITCH TABLE TO CHOOSE COMMAND TO EXECUTE
 		switch(parsedValues[0]) {
 			case "jdb-searchStorm":
-				String searchType = parsedValues[1];	//column name
-				String search = parsedValues[2];
-				results = interpretResultSet(queryDatabase("select * from storm where "+searchType+" = \'"+search.toUpperCase()+"\';"));
-				for(int i=0; i<results.size(); i++) {
-					curr_row = results.get(i);
-					output+=results.get(i)+"\n";
-				}
+				//test inputs
+				ArrayList<String> arr = new ArrayList<String>();
+					arr.add("StormType, PropertyDamage, State, Town");
+				HashMap<String, String> hm = new HashMap<String, String>();
+					hm.put("State", "TEXAS");
+					hm.put("Town", "MALTA");
+					hm.put("Fatal", "no");
+					hm.put("BeginDate", "2019-02-01");
+					hm.put("EndDate", "2020-09-01");
+					hm.put("Damage", "0-100000");
+					hm.put("StormType", "Flash Flood");
+				
+				output += handleStormSearch(arr, hm);
 				break;
 			case "custom2":
 				break;
@@ -232,7 +289,8 @@ public final class DatabaseManager {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance(); 
 			System.out.println("Connection Opened.");
-			db = DriverManager.getConnection("jdbc:mysql://localhost:3308/?user=root&password=" + System.getenv("MYSQL_PASSWORD")); //TODO: make sure this url is right
+			// db = DriverManager.getConnection("jdbc:mysql://localhost:3308/?user=root&password=" + System.getenv("MYSQL_PASSWORD")); //TODO: make sure this url is right
+			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password="); //TODO: make sure this url is right
 			
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
