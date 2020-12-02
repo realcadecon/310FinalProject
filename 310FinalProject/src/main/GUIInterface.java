@@ -39,8 +39,8 @@ import javax.swing.JCheckBox;
 	import javax.swing.JScrollPane;
 	import javax.swing.JTable;
 	import javax.swing.UIManager;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
+	import javax.swing.JTextField;
+	import javax.swing.UIManager;
 	import javax.swing.UnsupportedLookAndFeelException;
 	import javax.swing.table.DefaultTableModel;
 
@@ -188,7 +188,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	stormTy.setBounds(0,100,95,30);  
     	card.add(stormTy);
     	
-    	/*JButton button = new JButton("button");
+    	JButton button = new JButton("button");
     	button.setBounds(50,100,95,30);  
     	card.add(button);
     	card.setLayout(null);
