@@ -12,24 +12,22 @@ package main;
 	import java.io.IOException;
 	import java.awt.event.ItemEvent;
 	import java.awt.event.ItemListener;
+	
 //Standard Library Imports
 	import java.awt.event.KeyEvent;
 	import java.awt.event.KeyListener;
-
 	import java.awt.event.MouseEvent;
 	import java.awt.event.MouseListener;
-
 	import java.awt.event.MouseWheelEvent;
 	import java.awt.event.MouseWheelListener;
-
 	import java.awt.event.WindowAdapter;
 	import java.awt.event.WindowEvent;
 	import java.text.NumberFormat;
 	import java.util.ArrayList;
 	import java.util.HashMap;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
+	import javax.swing.JButton;
+	import javax.swing.JCheckBox;
+	
 //Swing Imports
 	import javax.swing.JComboBox;
 	import javax.swing.JButton;
@@ -81,14 +79,13 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	
 	JPanel cards; //a panel that uses CardLayout
     final static String FUNCTIONS = "JDBC Functions";
-    final static String DASHBOARD = "Dashboard";
     final static String ADMIN = "Admin";
     final static String USER = "User";
     
     public void addComponentToPane(Container pane) {
         //Put the JComboBox in a JPanel to get a nicer look.
         JPanel menu = new JPanel(); //use FlowLayout, could maybe add more things to this
-        String pages[] = {FUNCTIONS, DASHBOARD, ADMIN, USER };
+        String pages[] = {FUNCTIONS, ADMIN, USER };
         JComboBox cb = new JComboBox(pages);
         cb.setEditable(false);
         cb.addItemListener(this);
@@ -136,11 +133,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-    }
-
-    public static void createDashboardPage(JPanel card) {
-    	card.setLayout(null);
-    	card.setPreferredSize(new Dimension(810, 650));
     }
     
     public static void createFunctionsPage(JPanel card) {
@@ -225,7 +217,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	JCheckBox fatal = new JCheckBox("fatal (check if yes, leave blank if not)"); 
     	card.add(fatal);
     	
- 
     	
     	String[] stormT = {"stormType1", "stormType2", "stormType3"};
     	JComboBox stormTy = new JComboBox(stormT);
