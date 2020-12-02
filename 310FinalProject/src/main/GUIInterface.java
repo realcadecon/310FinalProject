@@ -12,24 +12,22 @@ package main;
 	import java.io.IOException;
 	import java.awt.event.ItemEvent;
 	import java.awt.event.ItemListener;
+	
 //Standard Library Imports
 	import java.awt.event.KeyEvent;
 	import java.awt.event.KeyListener;
-
 	import java.awt.event.MouseEvent;
 	import java.awt.event.MouseListener;
-
 	import java.awt.event.MouseWheelEvent;
 	import java.awt.event.MouseWheelListener;
-
 	import java.awt.event.WindowAdapter;
 	import java.awt.event.WindowEvent;
 	import java.text.NumberFormat;
 	import java.util.ArrayList;
 	import java.util.HashMap;
-
 	import javax.swing.JButton;
 	import javax.swing.JCheckBox;
+	
 //Swing Imports
 	import javax.swing.JComboBox;
 	import javax.swing.JButton;
@@ -110,11 +108,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-    }
-
-    public static void createDashboardPage(JPanel card) {
-    	card.setLayout(null);
-    	card.setPreferredSize(new Dimension(810, 650));
     }
     
     public static void createFunctionsPage(JPanel card) {
