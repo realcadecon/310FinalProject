@@ -28,8 +28,8 @@ package main;
 	import java.util.ArrayList;
 	import java.util.HashMap;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
+	import javax.swing.JButton;
+	import javax.swing.JCheckBox;
 //Swing Imports
 	import javax.swing.JComboBox;
 	import javax.swing.JButton;
@@ -56,14 +56,13 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	
 	JPanel cards; //a panel that uses CardLayout
     final static String FUNCTIONS = "JDBC Functions";
-    final static String DASHBOARD = "Dashboard";
     final static String ADMIN = "Admin";
     final static String USER = "User";
     
     public void addComponentToPane(Container pane) {
         //Put the JComboBox in a JPanel to get a nicer look.
         JPanel menu = new JPanel(); //use FlowLayout, could maybe add more things to this
-        String pages[] = {FUNCTIONS, DASHBOARD, ADMIN, USER };
+        String pages[] = {FUNCTIONS, ADMIN, USER };
         JComboBox cb = new JComboBox(pages);
         cb.setEditable(false);
         cb.addItemListener(this);
@@ -137,7 +136,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	card.add(new JButton("Button 1 - Card 1"));
         card.add(new JButton("Button 2 - Card 1"));
         card.setBackground(Color.blue);
-    	
     }
     
     public static void createUserPage(JPanel card) {
@@ -180,7 +178,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	JCheckBox fatal = new JCheckBox("fatal (check if yes, leave blank if not)"); 
     	card.add(fatal);
     	
- 
     	
     	String[] stormT = {"stormType1", "stormType2", "stormType3"};
     	JComboBox stormTy = new JComboBox(stormT);
