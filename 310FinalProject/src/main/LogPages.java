@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+
 public class LogPages
 {
 	JFrame frame = new JFrame();
@@ -28,12 +29,43 @@ public class LogPages
 	JTextField userField = new JTextField(50);
 	JPasswordField passField = new JPasswordField(50);
 	
+	java.util.Map<String, char[]> clients = new java.util.HashMap<>();
+	java.util.Map<String, char[]> admins = new java.util.HashMap<>();
+	
+	
+	public void client_proc() {
+		char[] exp = {'p', 'a', 's','s'};
+		String str = "client";
+		clients.put(str, exp);
+		char[] exp1 = {'c', 'h', 'a','r'};
+		String str1 = "sam";
+		clients.put(str1, exp1);
+	}
+	
+	public void admin_proc() {
+		char[] exp = {'p', 'a', 's','s'};
+		String str = "admin";
+		admins.put(str, exp);
+		char[] exp1 = {'c', 'h', 'a','r'};
+		String str1 = "sam";
+		admins.put(str1, exp1);
+	}
+	
 	private boolean clientAuth(String string, char[] cs) {
-		return string.equals("client") && (new String(cs)).equals("password");
+		if(clients.containsKey(string)) {
+			return (new String(clients.get(string))).equals(new String(cs));
+		} else {
+			return false;
+		}
 	}
 	
 	private boolean adminAuth(String string, char[] cs) {
-		return string.equals("admin") && (new String(cs)).equals("password");
+		if(admins.containsKey(string)) {
+			return (new String(admins.get(string))).equals(new String(cs));
+		} else {
+			//System.out.println("here");
+			return false;
+		}
 	}
 	
 	public void landingPage() {
@@ -77,8 +109,10 @@ public class LogPages
 		
 		if(client) {
 			titleLabel = new JLabel("Client Log-In");
+			client_proc();
 		} else {
 			titleLabel = new JLabel("Admin Log-In");
+			admin_proc();
 		}
 		titleLabel.setBounds(250, 50, 100, 40);
 		frame.add(titleLabel);

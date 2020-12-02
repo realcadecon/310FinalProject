@@ -2,7 +2,7 @@
 /bin/
 /bin/main
 *.class
-*.class
+.classpath
 310FinalProject/.metadata/.lock
 310FinalProject/.metadata/.log
 310FinalProject/.metadata/.mylyn/.taskListIndex/segments_1
@@ -78,3 +78,4 @@ bin/main/CommandInterface.class
 bin/main/GUIInterface$1.class
 bin/main/GUIInterface$2.class
 bin/main/GUIInterface.class
+*.class
