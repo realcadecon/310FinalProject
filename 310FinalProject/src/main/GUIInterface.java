@@ -75,7 +75,14 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	private static JTextField adminEventId;
 	private static JButton admin
 	*/
-	
+	private static JCheckBox stormType;
+	private static JCheckBox state;
+	private static JCheckBox city;
+	private static JCheckBox property;
+	private static JCheckBox eventNar;
+	private static JCheckBox beginD;
+	private static JCheckBox endD;
+	private static JCheckBox tScale;
 	
 	JPanel cards; //a panel that uses CardLayout
     final static String FUNCTIONS = "JDBC Functions";
@@ -178,22 +185,29 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     }
     
     public static void createUserPage(JPanel card) {
-    	JCheckBox stormType = new JCheckBox("storm type"); 
-    	JCheckBox state = new JCheckBox("state"); 
-    	JCheckBox city = new JCheckBox("city"); 
-    	JCheckBox property = new JCheckBox("property damage"); 
-    	JCheckBox eventNar = new JCheckBox("event narrative"); 
-    	JCheckBox beginD = new JCheckBox("begin date"); 
-    	JCheckBox endD = new JCheckBox("end date"); 
-    	JCheckBox tScale = new JCheckBox("tornado scale"); 
+    	stormType = new JCheckBox("storm type");
+    	stormType.setBounds(0, 30, 100, 40);  
     	
-    	stormType.setBounds(0,30,0,0);  
-    	state.setBounds(0,60,0,0);  
-    	city.setBounds(0,90,0,0);  
-    	property.setBounds(0,120,0,0);  
-    	eventNar.setBounds(0,150,0,0);  
-    	endD.setBounds(0,180,0,0);  
-    	tScale.setBounds(0,210,0,0);  
+    	state = new JCheckBox("state"); 
+    	state.setBounds(0, 60, 100, 40);  
+    	
+    	city = new JCheckBox("city"); 
+    	city.setBounds(0, 90, 100, 40);  
+    	
+    	property = new JCheckBox("property damage");
+    	property.setBounds(0,120,150,40);
+    	
+    	eventNar = new JCheckBox("event narrative");
+    	eventNar.setBounds(0,150,150,40);
+    	
+    	beginD = new JCheckBox("begin date"); 
+    	beginD.setBounds(0, 150, 150, 40);
+    	
+    	endD = new JCheckBox("end date"); 
+    	endD.setBounds(60, 150, 150, 40); 
+    	
+    	tScale = new JCheckBox("tornado scale"); 
+    	tScale.setBounds(0, 210, 150, 40);  
     	
     	card.add(stormType);
     	card.add(state);
@@ -205,13 +219,11 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	card.add(tScale);
     	
     	JTextField stateName = new JTextField(15);
-    	stateName.setBounds(100,100,100,100);
-    	
+    	stateName.setBounds(115, 60, 100, 40);
     	card.add(stateName);
     	
     	JTextField cityName = new JTextField(15);
-    	cityName.setBounds(120,120,120,120);
-    	
+    	cityName.setBounds(115, 120, 120, 120);
     	card.add(cityName);
     	
     	JCheckBox fatal = new JCheckBox("fatal (check if yes, leave blank if not)"); 
