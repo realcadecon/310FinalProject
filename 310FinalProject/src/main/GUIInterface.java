@@ -823,23 +823,14 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			String line[] = output.split("\n");
 			String headers[] = line[1].split(",");
 			
-			System.out.println(DatabaseManager.handleSQLCommand(contents));
-			System.out.println("---------------------");
-			System.out.println(line[0]);
-			System.out.println(headers[0]);
-			System.out.println(headers[1]);
-			System.out.println(headers[2]);
-			System.out.println(headers.length);
 
-			System.out.println("---------------------");
+
 			for(int i=0; i<headers.length; i++) {
 				if(headers[i].indexOf("=") != -1) {
-					System.out.println(headers[i].substring(0, headers[i].indexOf("=")));
 					model.addColumn(headers[i].substring(0, headers[i].indexOf("=")));
 				}
 			}
 			sp.setPreferredSize(new Dimension(headers.length * 70, 300));
-			System.out.println("---------------------");
 			
 			for (String token : line) {
 				if(!token.isEmpty()) {
@@ -850,8 +841,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 					for (String rowToken : row) {
 						String elem[] = rowToken.split("=");
 						if (elem.length == 2) {
-							System.out.println(elem[0]);
-							System.out.println(elem[1]);
 							single_row.add(elem[1]);
 						}
 						else {
