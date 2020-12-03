@@ -289,6 +289,28 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	card.add(dmgLB);
     	card.add(dmgLowTB);
     	card.add(dmgHighTB);
+    	
+    	JCheckBox fatal = new JCheckBox("Fatal (check for storms that resulted in 1 or more deaths)");
+    	fatal.setBounds(320, 210, 350, 30);
+    	card.add(fatal);
+    	
+    	JLabel date = new JLabel("Start Date - End Date (yyyy-mm-dd): ");
+    	date.setBounds(10, 250, 200, 30);
+    	JTextField beginDate = new JTextField(15);
+    	beginDate.setBounds(215, 250, 80, 30);
+    	JLabel dash2LB = new JLabel("-");
+    	dash2LB.setBounds(300, 250, 10, 30);
+    	JTextField endDate = new JTextField(15);
+    	endDate.setBounds(310, 250, 80, 30);
+    	card.add(date);
+    	card.add(beginDate);
+    	card.add(endDate);
+    	card.add(dash2LB);
+    	
+    	JLabel tornadoDetails = new JLabel("Tornado Details (these will only be used if StormType = Tornado):");
+    	tornadoDetails.setBounds(10, 290, 400, 30);
+    	card.add(tornadoDetails);
+    	
     	/* -------------------end details section--------------------------------- */
     	
     	card.setLayout(null);
