@@ -2,8 +2,9 @@
 /bin/
 /bin/main
 *.class
-*.class
 310FinalProjct/.classpath
+.classpath
+
 310FinalProject/.metadata/.lock
 310FinalProject/.metadata/.log
 310FinalProject/.metadata/.mylyn/.taskListIndex/segments_1
@@ -70,3 +71,14 @@
 310FinalProject/.metadata/.plugins/org.eclipse.ui.workbench/workingsets.xml
 310FinalProject/.metadata/.plugins/org.eclipse.wst.sse.core/task-tags.properties
 310FinalProject/.metadata/version.ini
+.classpath
+.project
+*.class
+*.class
+bin/database/DatabaseManager.class
+bin/main/CommandInterface.class
+bin/main/GUIInterface$1.class
+bin/main/GUIInterface$2.class
+bin/main/GUIInterface.class
+*.class
+bin/main/CommandInterface.class
