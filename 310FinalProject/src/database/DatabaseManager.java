@@ -88,32 +88,31 @@ public final class DatabaseManager {
 	public static String handleStormSearch(ArrayList<String> columns, HashMap<String, String> parameters) {
 		String query = "";
 		String columnsList = "";
-		
-		// flag to check if location has been joined yet
-		boolean locationAdded = false;
 		String tableList = "storm ";
 		
 		for(int i=0; i< columns.size(); i++) {
 			// special case for city, must join location table and use 'town' instead of 'city'
-//			if(columns.get(i).equalsIgnoreCase("city")) {
-//				tableList += "natural join location";
-//				locationAdded = true;
-//				columnsList+= "Town, ";
-//			}else {
-			if(i!=columns.size()-1) {
-				columnsList+= columns.get(i)+", ";
+			if(columns.get(i).equalsIgnoreCase("Town")) {
+				tableList += "join location on location.EventID = storm.EventID ";
+			}
+			else if(columns.get(i).equalsIgnoreCase("Town") || columns.get(i).equalsIgnoreCase("Town") || columns.get(i).equalsIgnoreCase("Town")){
+				tableList += "join tornadodetails on tornadodetails.EventID = storm.EventID ";
 			}
 			else {
-				columnsList+= columns.get(i);
+				if(i!=columns.size()-1) {
+					columnsList+= columns.get(i)+", ";
+				}
+				else {
+					columnsList+= columns.get(i);
+				}
 			}
-			//}
 		}
 				
 		String parameterList = "";
 		boolean paramFound = false;
 		
 		//State Parameter
-		if(!parameters.get("State").equalsIgnoreCase("N/A")) {
+		if(parameters.get("State") != null) {
 			parameterList += "State = \'" + parameters.get("State")+"\' AND ";
 			paramFound = true;
 		}
@@ -135,9 +134,6 @@ public final class DatabaseManager {
 		String townParams;
 		if((townParams = parameters.get("Town")) != null) {
 			parameterList += "Town = " + "\'" + townParams + "\'" + " AND ";
-			if(!locationAdded) {
-				tableList += "join location on location.EventID = storm.EventID";
-			}
 			paramFound = true;
 		}
 		
@@ -280,9 +276,8 @@ public final class DatabaseManager {
 	
 	public static void openConnection() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance(); 
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			System.out.println("Connection Opened.");
-			//db = DriverManager.getConnection("jdbc:mysql://localhost:3308/?user=root&password=" + System.getenv("MYSQL_PASSWORD"));
 			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password="); //TODO: make sure this url is right
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
