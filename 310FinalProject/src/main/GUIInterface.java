@@ -77,9 +77,9 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		
 		
 	// "Fatalities" Fields
-	private static JLabel adminFatFatalityIDLabel = new JLabel("FatalityID");
+	private static JLabel adminFatFatalityIDLabel = new JLabel("FatalityID (PK)");
 	private static JTextField adminFatFatalityID = new JTextField();
-	private static JLabel adminFatEventIDLabel = new JLabel("EventID");
+	private static JLabel adminFatEventIDLabel = new JLabel("EventID (PK/FK)");
 	private static JTextField adminFatEventID = new JTextField();
 	private static JLabel adminFatAgeLabel = new JLabel("Age");
 	private static JTextField adminFatAge = new JTextField();
@@ -115,9 +115,9 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	
 	
 	// "Location" Fields
-	private static JLabel adminLocEventIDLabel = new JLabel("EventID");
+	private static JLabel adminLocEventIDLabel = new JLabel("EventID (PK/FK)");
 	private static JTextField adminLocEventID = new JTextField();;
-	private static JLabel adminLocLocationIndexLabel = new JLabel("LocationIndex");
+	private static JLabel adminLocLocationIndexLabel = new JLabel("LocationIndex (PK)");
 	private static JTextField adminLocLocationIndex = new JTextField();;
 	private static JLabel adminLocEpisodeIDLabel = new JLabel("EpisodeID");
 	private static JTextField adminLocEpisodeID = new JTextField();;
@@ -149,7 +149,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	
 	
 	// "Storm" Fields
-	private static JLabel adminStormEventIDLabel = new JLabel("EventID");
+	private static JLabel adminStormEventIDLabel = new JLabel("EventID (PK)");
 	private static JTextField adminStormEventID = new JTextField();
 	private static JLabel adminStormEpisodeIDLabel = new JLabel("EpisodeID");
 	private static JTextField adminStormEpisodeID = new JTextField();
@@ -215,7 +215,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	
 	
 	// Storm Path Fields
-	private static JLabel adminPathEventIDLabel = new JLabel("EventID");
+	private static JLabel adminPathEventIDLabel = new JLabel("EventID (PK/FK)");
 	private static JTextField adminPathEventID = new JTextField();
 	private static JLabel adminPathRangeLabel = new JLabel("begin_range");
 	private static JTextField adminPathRange = new JTextField();
@@ -257,7 +257,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	
 	
 	// Tornado Details Fields
-	private static JLabel adminTornadoEventIDLabel = new JLabel("EventID");
+	private static JLabel adminTornadoEventIDLabel = new JLabel("EventID (PK/FK)");
 	private static JTextField adminTornadoEventID = new JTextField();
 	private static JLabel adminTornadoFScaleLabel = new JLabel("tor_f_scale");
 	private static JTextField adminTornadoFScale = new JTextField();
@@ -812,9 +812,35 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		
 		else if (mouse.getSource() == adminInsertButton) {
 			System.out.println("FIXME: formulate insert query");
+			if (adminDDBox.getSelectedItem() == "fatalities") {
+    			insertItem(adminFatalityLabels, adminFatalityTextFields);
+    		}
+    		else if (adminDDBox.getSelectedItem() == "location") {
+    			insertItem(adminLocationLabels, adminLocationTextFields);
+    		}
+    		else if (adminDDBox.getSelectedItem() == "storm") {
+    			insertItem(adminStormLabels, adminStormTextFields);
+    		}
+    		else if (adminDDBox.getSelectedItem() == "stormpath") {
+    			insertItem(adminStormPathLabels, adminStormPathTextFields);
+    		}
+    		else if (adminDDBox.getSelectedItem() == "tornadodetails") {
+    			insertItem(adminTornadoDetailsLabels, adminTornadoDetailsTextFields);
+    		}
 		}
 	
 	}
+	
+	public void insertItem(JLabel[] labels, JTextField[] textFields) {
+		/*
+    	for (int i = 0; i < labels.length; i++) {
+    		labels[i].setVisible(false);
+    		textFields[i].setVisible(false);
+    	}
+    	*/
+    }
+	
+	
 
 	@Override
 	public void mouseEntered(MouseEvent mouse) {}
