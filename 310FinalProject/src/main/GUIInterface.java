@@ -246,8 +246,8 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
          
         //Create the panel that contains the "cards".
         cards = new JPanel(new CardLayout());
-        cards.add(card1, ADMIN);
-        cards.add(card2, USER);
+        cards.add(card1, USER);
+        cards.add(card2, ADMIN);
          
         pane.add(menu, BorderLayout.PAGE_START);
         pane.add(cards, BorderLayout.CENTER);
