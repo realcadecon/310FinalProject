@@ -373,11 +373,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	tLength = new JCheckBox("tornado length"); 
     	tLength.setBounds(220, 80, 120, 30); 
     	
-    	JButton submitButton = new JButton("submit");
-		submitButton.setBounds(130, 350, 200, 25);
-    	
-		
-		card.add(submitButton);
     	card.add(columnsLB);
     	card.add(hr1);
     	card.add(stormType);
@@ -456,35 +451,43 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	card.add(endDate);
     	card.add(dash2LB);
     	
-    	JLabel tornadoDetails = new JLabel("Tornado Details will only be used if StormType = Tornado");
-    	tornadoDetails.setBounds(30, 360, 400, 30);
+    	JLabel tornadoDetails = new JLabel("---------- Tornado Details will only be used if StormType = Tornado ----------");
+    	tornadoDetails.setBounds(170, 380, 400, 30);
     	card.add(tornadoDetails);
     	
     	String[] efScale = {"N/A","EF0","EF1","EF2","EF3","EF4","EF5"};
     	JLabel tornadoMagLB = new JLabel("Tornado Magnitude (EF Scale): ");
-    	tornadoMagLB.setBounds(40, 290, 175, 30);
+    	tornadoMagLB.setBounds(10, 300, 175, 30);
     	JComboBox<String> efScaleDropDown = new JComboBox<String>(efScale);
     	efScaleDropDown.setSelectedIndex(0);
-    	efScaleDropDown.setBounds(215, 290, 100, 30);
+    	efScaleDropDown.setBounds(185, 300, 100, 30);
     	card.add(tornadoMagLB);
     	card.add(efScaleDropDown);
     	
     	JLabel tornadoWidthLB = new JLabel("Tornado Width (e.g. <, >, <=): ");
-    	tornadoWidthLB.setBounds(335, 290, 170, 30);
+    	tornadoWidthLB.setBounds(305, 300, 170, 30);
     	JTextField tornadoWidth = new JTextField();
-    	tornadoWidth.setBounds(505, 290, 100, 30);
+    	tornadoWidth.setBounds(475, 300, 100, 30);
     	card.add(tornadoWidthLB);
     	card.add(tornadoWidth);
     	
     	JLabel tornadoLengthLB = new JLabel("Tornado Length (e.g. <, >, <=): ");
-    	tornadoLengthLB.setBounds(335, 320, 170, 30);
+    	tornadoLengthLB.setBounds(305, 335, 170, 30);
     	JTextField tornadoLength = new JTextField();
-    	tornadoLength.setBounds(505, 320, 100, 30);
+    	tornadoLength.setBounds(475, 335, 100, 30);
     	card.add(tornadoLengthLB);
     	card.add(tornadoLength);
     	
     	
     	/* -------------------end details section--------------------------------- */
+    	
+    	JSeparator hr3 = new JSeparator();
+    	hr3.setBounds(6, 410, 700, 3);
+    	card.add(hr3);
+    	
+    	JButton search = new JButton("Search");
+    	search.setBounds(200, 460, 100, 30);
+    	card.add(search);
     	
     	card.setLayout(null);
     	card.setPreferredSize(new Dimension(810, 650));
