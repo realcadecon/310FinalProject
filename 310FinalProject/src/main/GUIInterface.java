@@ -229,6 +229,11 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	tLength = new JCheckBox("tornado length"); 
     	tLength.setBounds(220, 80, 120, 30); 
     	
+    	JButton submitButton = new JButton("submit");
+		submitButton.setBounds(130, 350, 200, 25);
+    	
+		
+		card.add(submitButton);
     	card.add(columnsLB);
     	card.add(hr1);
     	card.add(stormType);
