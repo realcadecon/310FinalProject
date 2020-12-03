@@ -35,7 +35,8 @@ package main;
 	import javax.swing.JLabel;
 	import javax.swing.JPanel;
 	import javax.swing.JScrollPane;
-	import javax.swing.JTable;
+import javax.swing.JSeparator;
+import javax.swing.JTable;
 	import javax.swing.UIManager;
 	import javax.swing.JTextField;
 	import javax.swing.UIManager;
@@ -155,6 +156,9 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	private static JCheckBox beginD;
 	private static JCheckBox endD;
 	private static JCheckBox tScale;
+	private static JCheckBox fatalities;
+	private static JCheckBox tWidth;
+	private static JCheckBox tLength;
 	
 	JPanel cards; //a panel that uses CardLayout
     final static String FUNCTIONS = "JDBC Functions";
@@ -329,30 +333,53 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     }
     
     public static void createUserPage(JPanel card) {
+    	/* -------------------first section (check boxes)--------------------------------- */
+    	JLabel columnsLB = new JLabel("Select which columns you would like to search for...");
+    	columnsLB.setBounds(5, 10, 300, 40);
+    	
+    	JSeparator hr1 = new JSeparator();
+    	hr1.setBounds(6, 49, 700, 3);
+    	
     	stormType = new JCheckBox("storm type");
-    	stormType.setBounds(0, 30, 100, 40);  
+    	stormType.setBounds(10, 50, 90, 30);
     	
     	state = new JCheckBox("state"); 
-    	state.setBounds(0, 60, 100, 40);  
+    	state.setBounds(100, 50, 60, 30);
     	
     	city = new JCheckBox("city"); 
-    	city.setBounds(0, 90, 100, 40);  
+    	city.setBounds(165, 50, 50, 30);  
     	
-    	property = new JCheckBox("property damage");
-    	property.setBounds(0,120,150,40);
+    	property = new JCheckBox("damage");
+    	property.setBounds(220, 50, 80, 30);
     	
     	eventNar = new JCheckBox("event narrative");
-    	eventNar.setBounds(0,150,150,40);
+    	eventNar.setBounds(305, 50, 120, 30);
     	
     	beginD = new JCheckBox("begin date"); 
-    	beginD.setBounds(0, 150, 150, 40);
+    	beginD.setBounds(430, 50, 90, 30);
     	
     	endD = new JCheckBox("end date"); 
-    	endD.setBounds(60, 150, 150, 40); 
+    	endD.setBounds(525, 50, 80, 30); 
     	
     	tScale = new JCheckBox("tornado scale"); 
-    	tScale.setBounds(0, 210, 150, 40);  
+    	tScale.setBounds(610, 50, 100, 30); 
     	
+    	fatalities = new JCheckBox("No. fatalities");
+    	fatalities.setBounds(10, 80, 100, 30);
+    	
+    	tWidth = new JCheckBox("tornado width"); 
+    	tWidth.setBounds(115, 80, 100, 30); 
+    	
+    	tLength = new JCheckBox("tornado length"); 
+    	tLength.setBounds(220, 80, 120, 30); 
+    	
+    	JButton submitButton = new JButton("submit");
+		submitButton.setBounds(130, 350, 200, 25);
+    	
+		
+		card.add(submitButton);
+    	card.add(columnsLB);
+    	card.add(hr1);
     	card.add(stormType);
     	card.add(state);
     	card.add(city);
@@ -361,28 +388,104 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	card.add(beginD);
     	card.add(endD);
     	card.add(tScale);
+    	card.add(fatalities);
+    	card.add(tWidth);
+    	card.add(tLength);
+    	/* -------------------end first section--------------------------------- */
     	
+    	/* -------------------details section----------------------------------- */
+    	JLabel parameterLB = new JLabel("Select which parameters you would like to search by (leave field blank or select N/A if you don't want to use it)...");
+    	parameterLB.setBounds(5, 120, 700, 40);
+    	card.add(parameterLB);
+    	
+    	JSeparator hr2 = new JSeparator();
+    	hr2.setBounds(6, 150, 700, 3);
+    	card.add(hr2);
+    	
+    	String[] stormT = {"N/A", "Dense Fog", "High Wind", "Flood", "Winter Storm", "Heavy Snow", "Winter Weather", "Strong Wind", "Blizzard", "Marine Thunderstorm Wind", "Thunderstorm Wind",
+    						"Lakeshore Flood", "High Surf", "Flash Flood", "Ice Storm", "Heavy Rain", "Tornado", "Hail", "Avalanche", "Drought", "Frost/Freeze", "Debris Flow"};
+    	JLabel stormTypeLB = new JLabel("Storm Type: ");
+    	stormTypeLB.setBounds(10, 160, 70, 30);
+    	JComboBox<String> stormType = new JComboBox<String>(stormT);
+    	stormType.setSelectedIndex(0);
+    	stormType.setBounds(85, 160, 175, 30);
+    	card.add(stormTypeLB);
+    	card.add(stormType);
+    	
+    	JLabel stateLB = new JLabel("State: ");
+    	stateLB.setBounds(285, 160, 35, 30);
     	JTextField stateName = new JTextField(15);
-    	stateName.setBounds(115, 60, 100, 40);
+    	stateName.setBounds(325, 160, 90, 30);
+    	card.add(stateLB);
     	card.add(stateName);
     	
-    	JTextField cityName = new JTextField(15);
-    	cityName.setBounds(115, 120, 120, 120);
-    	card.add(cityName);
+    	JLabel townLB = new JLabel("Town: ");
+    	townLB.setBounds(425, 160, 40, 30);
+    	JTextField townName = new JTextField(15);
+    	townName.setBounds(465, 160, 100, 30);
+    	card.add(townLB);
+    	card.add(townName);
     	
-    	JCheckBox fatal = new JCheckBox("fatal (check if yes, leave blank if not)"); 
+    	JLabel dmgLB = new JLabel("Damage (low - high): ");
+    	dmgLB.setBounds(10, 210, 120, 30);
+    	JTextField dmgLowTB = new JTextField(15);
+    	dmgLowTB.setBounds(135, 210, 80, 30);
+    	JLabel dashLB = new JLabel("-");
+    	dashLB.setBounds(220, 210, 10, 30);
+    	JTextField dmgHighTB = new JTextField(15);
+    	dmgHighTB.setBounds(230, 210, 80, 30);
+    	card.add(dashLB);
+    	card.add(dmgLB);
+    	card.add(dmgLowTB);
+    	card.add(dmgHighTB);
+    	
+    	JCheckBox fatal = new JCheckBox("Fatal (check for storms that resulted in 1 or more deaths)");
+    	fatal.setBounds(320, 210, 350, 30);
     	card.add(fatal);
     	
+    	JLabel date = new JLabel("Start Date - End Date (yyyy-mm-dd): ");
+    	date.setBounds(10, 250, 200, 30);
+    	JTextField beginDate = new JTextField(15);
+    	beginDate.setBounds(215, 250, 80, 30);
+    	JLabel dash2LB = new JLabel("-");
+    	dash2LB.setBounds(300, 250, 10, 30);
+    	JTextField endDate = new JTextField(15);
+    	endDate.setBounds(310, 250, 80, 30);
+    	card.add(date);
+    	card.add(beginDate);
+    	card.add(endDate);
+    	card.add(dash2LB);
     	
-    	String[] stormT = {"stormType1", "stormType2", "stormType3"};
-    	JComboBox stormTy = new JComboBox(stormT);
-    	stormTy.setSelectedIndex(2);
-    	stormTy.setBounds(0,100,95,30);  
-    	card.add(stormTy);
+    	JLabel tornadoDetails = new JLabel("Tornado Details will only be used if StormType = Tornado");
+    	tornadoDetails.setBounds(30, 360, 400, 30);
+    	card.add(tornadoDetails);
     	
-    	JButton button = new JButton("button");
-    	button.setBounds(50,100,95,30);  
-    	card.add(button);
+    	String[] efScale = {"N/A","EF0","EF1","EF2","EF3","EF4","EF5"};
+    	JLabel tornadoMagLB = new JLabel("Tornado Magnitude (EF Scale): ");
+    	tornadoMagLB.setBounds(40, 290, 175, 30);
+    	JComboBox<String> efScaleDropDown = new JComboBox<String>(efScale);
+    	efScaleDropDown.setSelectedIndex(0);
+    	efScaleDropDown.setBounds(215, 290, 100, 30);
+    	card.add(tornadoMagLB);
+    	card.add(efScaleDropDown);
+    	
+    	JLabel tornadoWidthLB = new JLabel("Tornado Width (e.g. <, >, <=): ");
+    	tornadoWidthLB.setBounds(335, 290, 170, 30);
+    	JTextField tornadoWidth = new JTextField();
+    	tornadoWidth.setBounds(505, 290, 100, 30);
+    	card.add(tornadoWidthLB);
+    	card.add(tornadoWidth);
+    	
+    	JLabel tornadoLengthLB = new JLabel("Tornado Length (e.g. <, >, <=): ");
+    	tornadoLengthLB.setBounds(335, 320, 170, 30);
+    	JTextField tornadoLength = new JTextField();
+    	tornadoLength.setBounds(505, 320, 100, 30);
+    	card.add(tornadoLengthLB);
+    	card.add(tornadoLength);
+    	
+    	
+    	/* -------------------end details section--------------------------------- */
+    	
     	card.setLayout(null);
     	card.setPreferredSize(new Dimension(810, 650));
     }

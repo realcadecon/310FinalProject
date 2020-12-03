@@ -118,7 +118,6 @@ public final class DatabaseManager {
 			paramFound = true;
 		}
 		
-		
 		//Fatal Parameter
 		String fatalParams;
 		if((fatalParams = parameters.get("Fatal")) != null) {
@@ -192,15 +191,13 @@ public final class DatabaseManager {
 		else { // no parameters found -- skip where clause
 			query = "select " + columnsList + " from " + tableList + ";";
 		}
+		
 		System.out.println(query);
-		
-		
 		ArrayList<HashMap<String, Object>> results = interpretResultSet(queryDatabase(query));
 		String output = "";
 		for(int i=0; i<results.size(); i++) {
 			output+= results.get(i) +"\n";
 		}
-		
 		return output;
 	}
 	
@@ -212,7 +209,6 @@ public final class DatabaseManager {
 		if(parsedValues.length == 0) {
 			return "ERROR: Invalid arguments (parsedValues.length = 0)";
 		}
-		
 		out:
 		for(int i=0; i<customCommands.length;i++) {
 			if(parsedValues[0].equals(customCommands[i])) {
@@ -224,7 +220,6 @@ public final class DatabaseManager {
 			return "ERROR: Invalid command \"" + parsedValues[0] + "\"";
 		}
 		String output = "";
-		
 		ResultSet rs;
 		output = "\n";
 		ArrayList<HashMap <String, Object>> results;
@@ -244,7 +239,6 @@ public final class DatabaseManager {
 					hm.put("EndDate", "2020-09-01");
 					hm.put("Damage", "0-100000");
 					hm.put("StormType", "Flash Flood");
-				
 				output += handleStormSearch(arr, hm);
 				break;
 			case "custom2":
@@ -254,7 +248,6 @@ public final class DatabaseManager {
 		}
 		return output;
 	}
-	
 	
 	
 	public static String handleSQLCommand(String command) {
