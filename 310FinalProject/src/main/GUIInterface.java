@@ -548,7 +548,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	state = new JCheckBox("state"); 
     	state.setBounds(100, 50, 60, 30);
     	
-    	city = new JCheckBox("city"); 
+    	city = new JCheckBox("Town"); 
     	city.setBounds(165, 50, 50, 30);  
     	
     	property = new JCheckBox("damage");
@@ -758,7 +758,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			DefaultTableModel model = new DefaultTableModel();
 			frame.setSize(800, 600);
 			frame.add(panel);
-			frame.setTitle("test");
+			frame.setTitle("Query Details");
 			frame.setLocationRelativeTo(null);
 
 			JTable table = new JTable(model);
@@ -836,7 +836,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 				parameters.put("Damage", null);
 			}
 			else {
-				parameters.put("Damage", dmgLowTB.getText().equals("")+"-"+dmgHighTB.getText().equals(""));
+				parameters.put("Damage", dmgLowTB.getText()+"-"+dmgHighTB.getText());
 			}
 		
 			//handle fatal
@@ -848,8 +848,9 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			}
 			
 			//handle date
-			if(beginDate.getText().equals(null) || endDate.getText().equals(null)) {
+			if(beginDate.getText().equals("") || endDate.getText().equals("")) {
 				parameters.put("BeginDate", null);
+				parameters.put("EndDate", null);
 			}
 			else {
 				parameters.put("BeginDate", beginDate.getText());
@@ -880,8 +881,12 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 				}
 			}
 			
+			System.out.println(parameters.toString());
+			System.out.println(columns.toString());
+			
 			String tableName = "Search Results";
 			String output = DatabaseManager.handleStormSearch(columns, parameters);
+			System.out.println(output);
 			String line[] = output.split("\n");
 			String headers[] = line[1].split(",");
 
