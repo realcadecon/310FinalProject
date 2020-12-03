@@ -168,7 +168,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     public void addComponentToPane(Container pane) {
         //Put the JComboBox in a JPanel to get a nicer look.
         JPanel menu = new JPanel(); //use FlowLayout, could maybe add more things to this
-        String pages[] = {FUNCTIONS, ADMIN, USER };
+        String pages[] = {FUNCTIONS, ADMIN, USER};
         JComboBox cb = new JComboBox(pages);
         cb.setEditable(false);
         cb.addItemListener(this);
@@ -486,7 +486,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	card.add(hr3);
     	
     	JButton search = new JButton("Search");
-    	search.setBounds(200, 460, 100, 30);
+    	search.setBounds(280, 460, 200, 30);
     	card.add(search);
     	
     	card.setLayout(null);
@@ -554,6 +554,11 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			//create ArrayList and HashMap here for the parameters of handleStormSearch
 			ArrayList<String> columns = null;
 			HashMap<String, String> parameters = null;
+			
+			//create columns
+			
+			
+			//create parameters
 			
 			
 			
