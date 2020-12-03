@@ -229,6 +229,11 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	tLength = new JCheckBox("tornado length"); 
     	tLength.setBounds(370, 80, 120, 30); 
     	
+    	JButton submitButton = new JButton("submit");
+		submitButton.setBounds(130, 350, 200, 25);
+    	
+		
+		card.add(submitButton);
     	card.add(columnsLB);
     	card.add(hr1);
     	card.add(stormType);
@@ -248,7 +253,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	/* -------------------details section----------------------------------- */
     	// includes stormType (dd), stateName(tf), cityName(tf), dmgLow(tb) - dmgHigh(tb), 
     	
-    	JLabel parameterLB = new JLabel("Select which parametrs you would like to search by...");
+    	JLabel parameterLB = new JLabel("Select which parameters to search by...");
     	parameterLB.setBounds(5, 120, 300, 40);
     	
     	JSeparator hr2 = new JSeparator();
@@ -259,18 +264,37 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	stormType.setSelectedIndex(2);
     	stormType.setBounds(10, 160, 100, 30);
     	
+    	
+    	
+    	JLabel stateText = new JLabel("Which state?");
+    	stateText.setBounds(130, 175, 100, 30);
     	JTextField stateName = new JTextField(15);
-    	stateName.setBounds(115, 200, 100, 30);
+    	stateName.setBounds(130, 200, 100, 30);
     	
+    	
+    	JLabel cityText = new JLabel("Which city?");
+    	cityText.setBounds(235, 175, 100, 30);
     	JTextField cityName = new JTextField(15);
-    	cityName.setBounds(300, 200, 100, 30);
+    	cityName.setBounds(235, 200, 100, 30);
     	
+    	
+    	JLabel dmgLowText = new JLabel("Low Damage");
+    	dmgLowText.setBounds(130, 275, 100, 30);
     	JTextField dmgLowTB = new JTextField(15);
-    	dmgLowTB.setBounds(115, 400, 100, 30);
+    	dmgLowTB.setBounds(130, 300, 100, 30);
     	
+    	
+    	JLabel dmgHighText = new JLabel("High Damage");
+    	dmgHighText.setBounds(235, 275, 100, 30);
     	JTextField dmgHighTB = new JTextField(15);
-    	dmgHighTB.setBounds(220, 400, 100, 30);
+    	dmgHighTB.setBounds(235, 300, 100, 30);
     	
+    	
+    	
+    	card.add(cityText);
+    	card.add(dmgLowText);
+    	card.add(dmgHighText);
+    	card.add(stateText);
     	card.add(parameterLB);
     	card.add(hr2);
     	card.add(stormType);
