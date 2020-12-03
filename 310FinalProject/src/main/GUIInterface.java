@@ -662,8 +662,68 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		
 		else if (mouse.getSource() == adminQuerySubmit) {
 			String contents = adminQuery.getText();
+			
+			
+			JFrame frame = new JFrame();
+			frame.setVisible(true);
+			GUIInterface panel = new GUIInterface();
+			DefaultTableModel model = new DefaultTableModel();
+			frame.setSize(800, 600);
+			frame.add(panel);
+			frame.setTitle("Admin table");
+			frame.setLocationRelativeTo(null);
+
+			JTable table = new JTable(model);
+			table.setShowGrid(true);
+			table.setGridColor(Color.black);
+			JScrollPane sp = new JScrollPane(table);
+			
+			String tableName = "Admin table";
+			String output = DatabaseManager.handleSQLCommand(contents);
+			String line[] = output.split("\n");
+			String headers[] = line[1].split(",");
+			
 			System.out.println(DatabaseManager.handleSQLCommand(contents));
-			System.out.println(contents);
+			System.out.println("---------------------");
+			System.out.println(line[0]);
+			System.out.println(headers[0]);
+			System.out.println(headers[1]);
+			System.out.println(headers[2]);
+			System.out.println(headers.length);
+
+			System.out.println("---------------------");
+			for(int i=0; i<headers.length; i++) {
+				if(headers[i].indexOf("=") != -1) {
+					System.out.println(headers[i].substring(0, headers[i].indexOf("=")));
+					model.addColumn(headers[i].substring(0, headers[i].indexOf("=")));
+				}
+			}
+			sp.setPreferredSize(new Dimension(headers.length * 70, 300));
+			System.out.println("---------------------");
+			
+			for (String token : line) {
+				if(!token.isEmpty()) {
+					token = token.replace("{", "");
+					token = token.replace("}", "");
+					String row[] = token.split(","); //FIXME: not work for column has , in their data. can fix by split using regex
+					ArrayList<String> single_row = new ArrayList<String>();
+					for (String rowToken : row) {
+						String elem[] = rowToken.split("=");
+						if (elem.length == 2) {
+							System.out.println(elem[0]);
+							System.out.println(elem[1]);
+							single_row.add(elem[1]);
+						}
+						else {
+							single_row.add("-1");
+						}
+					}
+					model.addRow(single_row.toArray());
+				}
+			}
+			panel.add(sp);
+			
+			
 		}
 		
 		else if (mouse.getSource() == adminUpdateButton) {
