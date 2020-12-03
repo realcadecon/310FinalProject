@@ -226,14 +226,13 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	private static JSeparator hr3;
 	
 	JPanel cards; //a panel that uses CardLayout
-    final static String FUNCTIONS = "JDBC Functions";
     final static String ADMIN = "Admin";
     final static String USER = "User";
     
     public void addComponentToPane(Container pane) {
         //Put the JComboBox in a JPanel to get a nicer look.
         JPanel menu = new JPanel(); //use FlowLayout, could maybe add more things to this
-        String pages[] = {FUNCTIONS, ADMIN, USER};
+        String pages[] = {USER, ADMIN};
         JComboBox cb = new JComboBox(pages);
         cb.setEditable(false);
         cb.addItemListener(this);
@@ -241,17 +240,14 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
          
         //Create the "cards". TODO: maybe add a menu card
         JPanel card1 = new JPanel();
-        createFunctionsPage(card1);
-        JPanel card3 = new JPanel();
-        createAdminPage(card3);
-        JPanel card4 = new JPanel();
-        createUserPage(card4);
+        createUserPage(card1);
+        JPanel card2 = new JPanel();
+        createAdminPage(card2);
          
         //Create the panel that contains the "cards".
         cards = new JPanel(new CardLayout());
-        cards.add(card1, FUNCTIONS);
-        cards.add(card3, ADMIN);
-        cards.add(card4, USER);
+        cards.add(card1, ADMIN);
+        cards.add(card2, USER);
          
         pane.add(menu, BorderLayout.PAGE_START);
         pane.add(cards, BorderLayout.CENTER);
@@ -315,18 +311,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-    }
-    
-    public static void createFunctionsPage(JPanel card) {
-    	card.setLayout(null);
-    	card.setPreferredSize(new Dimension(810, 650));
-    	labelLB = new JLabel("jdb-get-view:");
-		labelLB.setBounds(10, 450, 100, 25);
-		buttonEX = new JButton("jdb-get-view");
-		buttonEX.setBounds(10, 480, 200, 25);
-		buttonEX.addMouseListener(new GUIInterface());
-		card.add(labelLB);
-		card.add(buttonEX);
     }
     
     public void createAdminPage(JPanel card) {
