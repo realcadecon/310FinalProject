@@ -296,15 +296,44 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	private static JCheckBox tWidth;
 	private static JCheckBox tLength;
 	
+	//Search parameter variables
+	private static JButton searchButton;
+	private static JLabel parameterLB;
+	private static JLabel columnsLB;
+	private static JSeparator hr1;
+	private static JSeparator hr2;
+	private static JLabel stormTypeLB;
+	private static JComboBox<String> stormTypeDropDown;
+	private static JLabel stateLB;
+	private static JTextField stateName;
+	private static JLabel townLB;
+	private static JTextField townName;
+	private static JLabel dmgLB;
+	private static JTextField dmgLowTB;
+	private static JLabel dashLB;
+	private static JTextField dmgHighTB;
+	private static JCheckBox fatal;
+	private static JLabel date;
+	private static JTextField beginDate;
+	private static JLabel dash2LB;
+	private static JTextField endDate;
+	private static JLabel tornadoDetails;
+	private static JLabel tornadoMagLB;
+	private static JComboBox<String> efScaleDropDown;
+	private static JLabel tornadoWidthLB;
+	private static JTextField tornadoWidth;
+	private static JLabel tornadoLengthLB;
+	private static JTextField tornadoLength;
+	private static JSeparator hr3;
+	
 	JPanel cards; //a panel that uses CardLayout
-    final static String FUNCTIONS = "JDBC Functions";
     final static String ADMIN = "Admin";
     final static String USER = "User";
     
     public void addComponentToPane(Container pane) {
         //Put the JComboBox in a JPanel to get a nicer look.
         JPanel menu = new JPanel(); //use FlowLayout, could maybe add more things to this
-        String pages[] = {FUNCTIONS, ADMIN, USER};
+        String pages[] = {USER, ADMIN};
         JComboBox cb = new JComboBox(pages);
         cb.setEditable(false);
         cb.addItemListener(this);
@@ -312,17 +341,14 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
          
         //Create the "cards". TODO: maybe add a menu card
         JPanel card1 = new JPanel();
-        createFunctionsPage(card1);
-        JPanel card3 = new JPanel();
-        createAdminPage(card3);
-        JPanel card4 = new JPanel();
-        createUserPage(card4);
+        createUserPage(card1);
+        JPanel card2 = new JPanel();
+        createAdminPage(card2);
          
         //Create the panel that contains the "cards".
         cards = new JPanel(new CardLayout());
-        cards.add(card1, FUNCTIONS);
-        cards.add(card3, ADMIN);
-        cards.add(card4, USER);
+        cards.add(card1, USER);
+        cards.add(card2, ADMIN);
          
         pane.add(menu, BorderLayout.PAGE_START);
         pane.add(cards, BorderLayout.CENTER);
@@ -402,18 +428,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-    }
-    
-    public static void createFunctionsPage(JPanel card) {
-    	card.setLayout(null);
-    	card.setPreferredSize(new Dimension(810, 650));
-    	labelLB = new JLabel("jdb-get-view:");
-		labelLB.setBounds(10, 450, 100, 25);
-		buttonEX = new JButton("jdb-get-view");
-		buttonEX.setBounds(10, 480, 200, 25);
-		buttonEX.addMouseListener(new GUIInterface());
-		card.add(labelLB);
-		card.add(buttonEX);
     }
     
     public void createAdminPage(JPanel card) {
@@ -528,10 +542,10 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     
     public static void createUserPage(JPanel card) {
     	/* -------------------first section (check boxes)--------------------------------- */
-    	JLabel columnsLB = new JLabel("Select which columns you would like to search for...");
+    	columnsLB = new JLabel("Select which columns you would like to search for...");
     	columnsLB.setBounds(5, 10, 300, 40);
     	
-    	JSeparator hr1 = new JSeparator();
+    	hr1 = new JSeparator();
     	hr1.setBounds(6, 49, 700, 3);
     	
     	stormType = new JCheckBox("storm type");
@@ -583,91 +597,91 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	/* -------------------end first section--------------------------------- */
     	
     	/* -------------------details section----------------------------------- */
-    	JLabel parameterLB = new JLabel("Select which parameters you would like to search by (leave field blank or select N/A if you don't want to use it)...");
+    	parameterLB = new JLabel("Select which parameters you would like to search by (leave field blank or select N/A if you don't want to use it)...");
     	parameterLB.setBounds(5, 120, 700, 40);
     	card.add(parameterLB);
     	
-    	JSeparator hr2 = new JSeparator();
+    	hr2 = new JSeparator();
     	hr2.setBounds(6, 150, 700, 3);
     	card.add(hr2);
     	
-    	String[] stormT = {"N/A", "Dense Fog", "High Wind", "Flood", "Winter Storm", "Heavy Snow", "Winter Weather", "Strong Wind", "Blizzard", "Marine Thunderstorm Wind", "Thunderstorm Wind",
-    						"Lakeshore Flood", "High Surf", "Flash Flood", "Ice Storm", "Heavy Rain", "Tornado", "Hail", "Avalanche", "Drought", "Frost/Freeze", "Debris Flow"};
-    	JLabel stormTypeLB = new JLabel("Storm Type: ");
+    	stormTypeLB = new JLabel("Storm Type: ");
     	stormTypeLB.setBounds(10, 160, 70, 30);
-    	JComboBox<String> stormType = new JComboBox<String>(stormT);
-    	stormType.setSelectedIndex(0);
-    	stormType.setBounds(85, 160, 175, 30);
+    	String[] stormT = {"N/A", "Dense Fog", "High Wind", "Flood", "Winter Storm", "Heavy Snow", "Winter Weather", "Strong Wind", "Blizzard", "Marine Thunderstorm Wind", "Thunderstorm Wind",
+    			"Lakeshore Flood", "High Surf", "Flash Flood", "Ice Storm", "Heavy Rain", "Tornado", "Hail", "Avalanche", "Drought", "Frost/Freeze", "Debris Flow"};
+    	stormTypeDropDown = new JComboBox<String>(stormT);
+    	stormTypeDropDown.setSelectedIndex(0);
+    	stormTypeDropDown.setBounds(85, 160, 175, 30);
     	card.add(stormTypeLB);
-    	card.add(stormType);
+    	card.add(stormTypeDropDown);
     	
-    	JLabel stateLB = new JLabel("State: ");
+    	stateLB = new JLabel("State: ");
     	stateLB.setBounds(285, 160, 35, 30);
-    	JTextField stateName = new JTextField(15);
+    	stateName = new JTextField(15);
     	stateName.setBounds(325, 160, 90, 30);
     	card.add(stateLB);
     	card.add(stateName);
     	
-    	JLabel townLB = new JLabel("Town: ");
+    	townLB = new JLabel("Town: ");
     	townLB.setBounds(425, 160, 40, 30);
-    	JTextField townName = new JTextField(15);
+    	townName = new JTextField(15);
     	townName.setBounds(465, 160, 100, 30);
     	card.add(townLB);
     	card.add(townName);
     	
-    	JLabel dmgLB = new JLabel("Damage (low - high): ");
+    	dmgLB = new JLabel("Damage (low - high): ");
     	dmgLB.setBounds(10, 210, 120, 30);
-    	JTextField dmgLowTB = new JTextField(15);
+    	dmgLowTB = new JTextField(15);
     	dmgLowTB.setBounds(135, 210, 80, 30);
-    	JLabel dashLB = new JLabel("-");
+    	dashLB = new JLabel("-");
     	dashLB.setBounds(220, 210, 10, 30);
-    	JTextField dmgHighTB = new JTextField(15);
+    	dmgHighTB = new JTextField(15);
     	dmgHighTB.setBounds(230, 210, 80, 30);
     	card.add(dashLB);
     	card.add(dmgLB);
     	card.add(dmgLowTB);
     	card.add(dmgHighTB);
     	
-    	JCheckBox fatal = new JCheckBox("Fatal (check for storms that resulted in 1 or more deaths)");
+    	fatal = new JCheckBox("Fatal (check for storms that resulted in 1 or more deaths)");
     	fatal.setBounds(320, 210, 350, 30);
     	card.add(fatal);
     	
-    	JLabel date = new JLabel("Start Date - End Date (yyyy-mm-dd): ");
+    	date = new JLabel("Start Date - End Date (yyyy-mm-dd): ");
     	date.setBounds(10, 250, 200, 30);
-    	JTextField beginDate = new JTextField(15);
+    	beginDate = new JTextField(15);
     	beginDate.setBounds(215, 250, 80, 30);
-    	JLabel dash2LB = new JLabel("-");
+    	dash2LB = new JLabel("-");
     	dash2LB.setBounds(300, 250, 10, 30);
-    	JTextField endDate = new JTextField(15);
+    	endDate = new JTextField(15);
     	endDate.setBounds(310, 250, 80, 30);
     	card.add(date);
     	card.add(beginDate);
     	card.add(endDate);
     	card.add(dash2LB);
     	
-    	JLabel tornadoDetails = new JLabel("---------- Tornado Details will only be used if StormType = Tornado ----------");
+    	tornadoDetails = new JLabel("---------- Tornado Details will only be used if StormType = Tornado ----------");
     	tornadoDetails.setBounds(170, 380, 400, 30);
     	card.add(tornadoDetails);
     	
     	String[] efScale = {"N/A","EF0","EF1","EF2","EF3","EF4","EF5"};
-    	JLabel tornadoMagLB = new JLabel("Tornado Magnitude (EF Scale): ");
+    	tornadoMagLB = new JLabel("Tornado Magnitude (EF Scale): ");
     	tornadoMagLB.setBounds(10, 300, 175, 30);
-    	JComboBox<String> efScaleDropDown = new JComboBox<String>(efScale);
+    	efScaleDropDown = new JComboBox<String>(efScale);
     	efScaleDropDown.setSelectedIndex(0);
     	efScaleDropDown.setBounds(185, 300, 100, 30);
     	card.add(tornadoMagLB);
     	card.add(efScaleDropDown);
     	
-    	JLabel tornadoWidthLB = new JLabel("Tornado Width (e.g. <, >, <=): ");
+    	tornadoWidthLB = new JLabel("Tornado Width (e.g. <, >, <=): ");
     	tornadoWidthLB.setBounds(305, 300, 170, 30);
-    	JTextField tornadoWidth = new JTextField();
+    	tornadoWidth = new JTextField();
     	tornadoWidth.setBounds(475, 300, 100, 30);
     	card.add(tornadoWidthLB);
     	card.add(tornadoWidth);
     	
-    	JLabel tornadoLengthLB = new JLabel("Tornado Length (e.g. <, >, <=): ");
+    	tornadoLengthLB = new JLabel("Tornado Length (e.g. <, >, <=): ");
     	tornadoLengthLB.setBounds(305, 335, 170, 30);
-    	JTextField tornadoLength = new JTextField();
+    	tornadoLength = new JTextField();
     	tornadoLength.setBounds(475, 335, 100, 30);
     	card.add(tornadoLengthLB);
     	card.add(tornadoLength);
@@ -675,13 +689,13 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	
     	/* -------------------end details section--------------------------------- */
     	
-    	JSeparator hr3 = new JSeparator();
+    	hr3 = new JSeparator();
     	hr3.setBounds(6, 410, 700, 3);
     	card.add(hr3);
     	
-    	JButton search = new JButton("Search");
-    	search.setBounds(280, 460, 200, 30);
-    	card.add(search);
+    	searchButton = new JButton("Search");
+    	searchButton.setBounds(280, 460, 200, 30);
+    	card.add(searchButton);
     	
     	card.setLayout(null);
     	card.setPreferredSize(new Dimension(810, 650));
@@ -730,7 +744,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	@Override
 	public void mouseClicked(MouseEvent mouse) {
 		//this is where we do all functions
-		if (mouse.getSource() == buttonEX) {
+		if (mouse.getSource() == searchButton) {
 			JFrame frame = new JFrame();
 			frame.setVisible(true);
 			GUIInterface panel = new GUIInterface();
