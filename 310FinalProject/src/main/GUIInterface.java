@@ -35,8 +35,8 @@ package main;
 	import javax.swing.JLabel;
 	import javax.swing.JPanel;
 	import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTable;
+	import javax.swing.JSeparator;
+	import javax.swing.JTable;
 	import javax.swing.UIManager;
 	import javax.swing.JTextField;
 	import javax.swing.UIManager;
@@ -53,9 +53,6 @@ import javax.swing.JTable;
 
 
 public class GUIInterface extends JPanel implements MouseListener, MouseWheelListener, KeyListener, ItemListener {
-	//SWING Variables
-	private static JButton buttonEX;
-	private static JLabel labelLB;
 	
 	// Table Names
 	private static String databaseTables[] = {"fatalities", "location", "storm", "stormpath", "tornadodetails"};
@@ -74,7 +71,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		private static JTextArea adminQuery;
 		private static JButton adminQuerySubmit = new JButton("Submit Search");
 	
-		
 		
 	// "Fatalities" Fields
 	private static JLabel adminFatFatalityIDLabel = new JLabel("FatalityID");
@@ -113,7 +109,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	};
 	
 	
-	
 	// "Location" Fields
 	private static JLabel adminLocEventIDLabel = new JLabel("EventID");
 	private static JTextField adminLocEventID = new JTextField();;
@@ -145,7 +140,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		adminLocLatitude,
 		adminLocLongitude
 	};
-	
 	
 	
 	// "Storm" Fields
@@ -282,7 +276,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	};
 	
 
-	
 	// User variables?
 	private static JCheckBox stormType;
 	private static JCheckBox state;
@@ -695,6 +688,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	
     	searchButton = new JButton("Search");
     	searchButton.setBounds(280, 460, 200, 30);
+    	searchButton.addMouseListener(new GUIInterface());
     	card.add(searchButton);
     	
     	card.setLayout(null);
@@ -902,10 +896,8 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			}
 			panel.add(sp);
 		}
-		
 		else if (mouse.getSource() == adminQuerySubmit) {
 			String contents = adminQuery.getText();
-			
 			
 			JFrame frame = new JFrame();
 			frame.setVisible(true);
