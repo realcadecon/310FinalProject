@@ -35,8 +35,8 @@ package main;
 	import javax.swing.JLabel;
 	import javax.swing.JPanel;
 	import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTable;
+	import javax.swing.JSeparator;
+	import javax.swing.JTable;
 	import javax.swing.UIManager;
 	import javax.swing.JTextField;
 	import javax.swing.UIManager;
@@ -53,9 +53,6 @@ import javax.swing.JTable;
 
 
 public class GUIInterface extends JPanel implements MouseListener, MouseWheelListener, KeyListener, ItemListener {
-	//SWING Variables
-	private static JButton buttonEX;
-	private static JLabel labelLB;
 	
 	// Table Names
 	private static String databaseTables[] = {"fatalities", "location", "storm", "stormpath", "tornadodetails"};
@@ -74,7 +71,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		private static JTextArea adminQuery;
 		private static JButton adminQuerySubmit = new JButton("Submit Search");
 	
-		
 		
 	// "Fatalities" Fields
 	private static JLabel adminFatFatalityIDLabel = new JLabel("FatalityID (PK)");
@@ -113,7 +109,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	};
 	
 	
-	
 	// "Location" Fields
 	private static JLabel adminLocEventIDLabel = new JLabel("EventID (PK/FK)");
 	private static JTextField adminLocEventID = new JTextField();;
@@ -145,7 +140,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		adminLocLatitude,
 		adminLocLongitude
 	};
-	
 	
 	
 	// "Storm" Fields
@@ -282,7 +276,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	};
 	
 
-	
 	// User variables?
 	private static JCheckBox stormType;
 	private static JCheckBox state;
@@ -695,6 +688,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	
     	searchButton = new JButton("Search");
     	searchButton.setBounds(280, 460, 200, 30);
+    	searchButton.addMouseListener(new GUIInterface());
     	card.add(searchButton);
     	
     	card.setLayout(null);
@@ -760,17 +754,120 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			JScrollPane sp = new JScrollPane(table);
 			
 			//create ArrayList and HashMap here for the parameters of handleStormSearch
-			ArrayList<String> columns = null;
-			HashMap<String, String> parameters = null;
+			ArrayList<String> columns = new ArrayList<String>();
+			HashMap<String, String> parameters = new HashMap<String, String>();
 			
-			//create columns
+//-------------------------------------------create columns----------------------------------------------------------------------------
+			if(stormType.isSelected()) {
+				columns.add("StormType");
+			}
+			if(state.isSelected()) {
+				columns.add("State");
+			}
+			if(city.isSelected()) {
+				columns.add("Town");
+			}
+			if(property.isSelected()) {
+				columns.add("PropertyDamage");
+				columns.add("CropDamage");
+			}
+			if(eventNar.isSelected()) {
+				columns.add("event_narrative");
+			}
+			if(beginD.isSelected()) {
+				columns.add("BeginDate");
+			}
+			if(endD.isSelected()) {
+				columns.add("EndDate");
+			}
+			if(tScale.isSelected()) {
+				columns.add("tor_f_scale");
+			}
+			if(fatalities.isSelected()) {
+				columns.add("DeathsDirect");
+			}
+			if(tWidth.isSelected()) {
+				columns.add("tor_width");
+			}
+			if(tLength.isSelected()) {
+				columns.add("tor_length");
+			}
 			
+//-----------------------------------------create parameters-----------------------------------------------------------
+			//handle stormType
+			if(!stormTypeDropDown.getSelectedItem().equals("N/A")) {
+				parameters.put("StormType", (String)stormTypeDropDown.getSelectedItem());
+			}
+			else {
+				parameters.put("StormType", null);
+			}
 			
-			//create parameters
+			//handle State
+			if(!stateName.getText().equals("")) {
+				parameters.put("State", stateName.getText());
+			}
+			else {
+				parameters.put("State", null);
+			}
 			
+			//handle Town
+			if(!stateName.getText().equals("")) {
+				parameters.put("Town", townName.getText());
+			}
+			else {
+				parameters.put("State", null);
+			}
 			
+			//handle damage
+			if(dmgLowTB.getText().equals("") || dmgHighTB.getText().equals("")) {
+				parameters.put("Damage", null);
+			}
+			else {
+				parameters.put("Damage", dmgLowTB.getText().equals("")+"-"+dmgHighTB.getText().equals(""));
+			}
+		
+			//handle fatal
+			if(fatal.isSelected()) {
+				parameters.put("Fatal", "yes");
+			}
+			else {
+				parameters.put("Fatal", "no");
+			}
 			
-			String tableName = "test";
+			//handle date
+			if(beginDate.getText().equals(null) || endDate.getText().equals(null)) {
+				parameters.put("BeginDate", null);
+			}
+			else {
+				parameters.put("BeginDate", beginDate.getText());
+				parameters.put("EndDate", endDate.getText());
+			}
+			
+			//handle tornado details
+			if(stormTypeDropDown.getSelectedItem().equals("Tornado")) {
+				if(!efScaleDropDown.getSelectedItem().equals("N/A")) {
+					parameters.put("torScale", (String)efScaleDropDown.getSelectedItem());
+				}
+				else {
+					parameters.put("torScale", null);
+				}
+				
+				if(!tornadoWidth.getText().equals("")) {
+					parameters.put("torWidth", tornadoWidth.getText());
+				}
+				else {
+					parameters.put("torWidth", null);
+				}
+				
+				if(!tornadoLength.getText().equals("")) {
+					parameters.put("torWidth", tornadoLength.getText());
+				}
+				else {
+					parameters.put("torLength", null);
+				}
+			}
+			
+			String tableName = "Search Results";
 			String output = DatabaseManager.handleStormSearch(columns, parameters);
 			String line[] = output.split("\n");
 			String headers[] = line[1].split(",");
@@ -799,11 +896,58 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			}
 			panel.add(sp);
 		}
-		
 		else if (mouse.getSource() == adminQuerySubmit) {
 			String contents = adminQuery.getText();
-			System.out.println(DatabaseManager.handleSQLCommand(contents));
-			System.out.println(contents);
+			
+			JFrame frame = new JFrame();
+			frame.setVisible(true);
+			GUIInterface panel = new GUIInterface();
+			DefaultTableModel model = new DefaultTableModel();
+			frame.setSize(800, 600);
+			frame.add(panel);
+			frame.setTitle("Admin table");
+			frame.setLocationRelativeTo(null);
+
+			JTable table = new JTable(model);
+			table.setShowGrid(true);
+			table.setGridColor(Color.black);
+			JScrollPane sp = new JScrollPane(table);
+			
+			String tableName = "Admin table";
+			String output = DatabaseManager.handleSQLCommand(contents);
+			String line[] = output.split("\n");
+			String headers[] = line[1].split(",");
+			
+
+
+			for(int i=0; i<headers.length; i++) {
+				if(headers[i].indexOf("=") != -1) {
+					model.addColumn(headers[i].substring(0, headers[i].indexOf("=")));
+				}
+			}
+			sp.setPreferredSize(new Dimension(headers.length * 70, 300));
+			
+			for (String token : line) {
+				if(!token.isEmpty()) {
+					token = token.replace("{", "");
+					token = token.replace("}", "");
+					String row[] = token.split(","); //FIXME: not work for column has , in their data. can fix by split using regex
+					ArrayList<String> single_row = new ArrayList<String>();
+					for (String rowToken : row) {
+						String elem[] = rowToken.split("=");
+						if (elem.length == 2) {
+							single_row.add(elem[1]);
+						}
+						else {
+							single_row.add("-1");
+						}
+					}
+					model.addRow(single_row.toArray());
+				}
+			}
+			panel.add(sp);
+			
+			
 		}
 		
 		else if (mouse.getSource() == adminUpdateButton) {
