@@ -289,6 +289,7 @@ public final class DatabaseManager {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance(); 
 			System.out.println("Connection Opened.");
+			//db = DriverManager.getConnection("jdbc:mysql://localhost:3308/?user=root&password=" + System.getenv("MYSQL_PASSWORD"));
 			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password="); //TODO: make sure this url is right
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block

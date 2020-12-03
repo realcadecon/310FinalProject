@@ -56,25 +56,97 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	private static JButton buttonEX;
 	private static JLabel labelLB;
 	
+	// Table Names
+	private static String databaseTables[] = {"fatalities", "location", "storm", "stormpath", "tornadodetails"};
+	
+	// Admin Update/Insert Variables
+	private static JLabel adminLabel = new JLabel("Update or Insert Data - Select Table");
+	private static JButton adminUpdateButton = new JButton("Update Row");
+	private static JButton adminInsertButton = new JButton("Insert Row");
+	private static JComboBox adminDDBox = new JComboBox(databaseTables);
+	
+	// "Fatalities" Fields
+	private static JLabel adminFatFatalityIDLabel = new JLabel("Fatality ID:");
+	private static JTextField adminFatFatalityID = new JTextField();
+	private static JLabel adminFatEventIDLabel = new JLabel("Event ID:");
+	private static JTextField adminFatEventID = new JTextField();
+	private static JLabel adminFatAgeLabel = new JLabel("Age:");
+	private static JTextField adminFatAge = new JTextField();
+	private static JLabel adminFatGenderLabel = new JLabel("Gender:");
+	private static JTextField adminFatGender = new JTextField();
+	private static JLabel adminFatTimeLabel = new JLabel("Fatality Time:");
+	private static JTextField adminFatTime = new JTextField();
+	private static JLabel adminFatLocationLabel = new JLabel("Location:");
+	private static JTextField adminFatLocation = new JTextField();
+	private static JLabel adminFatTypeLabel = new JLabel("Fatality Type:");
+	private static JTextField adminFatType = new JTextField();
+	
+	private static JLabel adminFatalityLabels[] = {
+			adminFatFatalityIDLabel,
+			adminFatEventIDLabel,
+			adminFatAgeLabel,
+			adminFatGenderLabel,
+			adminFatTimeLabel,
+			adminFatLocationLabel,
+			adminFatTypeLabel
+		};
+	
+	private static JTextField adminFatalityTextFields[] = {
+			adminFatFatalityID,
+			adminFatEventID,
+			adminFatAge,
+			adminFatGender,
+			adminFatTime,
+			adminFatLocation,
+			adminFatType
+	};
+	
+	// "Location" Fields
+	private static JLabel adminLocEventIDLabel = new JLabel("Event ID:");
+	private static JTextField adminLocEventID = new JTextField();;
+	private static JLabel adminLocLocationIndexLabel = new JLabel("Location Index:");
+	private static JTextField adminLocLocationIndex = new JTextField();;
+	private static JLabel adminLocEpisodeIDLabel = new JLabel("Episode ID:");
+	private static JTextField adminLocEpisodeID = new JTextField();;
+	private static JLabel adminLocTownLabel = new JLabel("Town:");
+	private static JTextField adminLocTown = new JTextField();;
+	private static JLabel adminLocLatitudeLabel = new JLabel("Latitude:");
+	private static JTextField adminLocLatitude = new JTextField();;
+	private static JLabel adminLocLongitudeLabel = new JLabel("Longitude:");
+	private static JTextField adminLocLongitude = new JTextField();;
+	
+	private static JLabel adminLocationLabels[] = {
+			adminLocEventIDLabel,
+			adminLocLocationIndexLabel,
+			adminLocEpisodeIDLabel,
+			adminLocTownLabel,
+			adminLocLatitudeLabel,
+			adminLocLongitudeLabel
+	};
+	
+	private static JTextField adminLocationTextFields[] = {
+		adminLocEventID,
+		adminLocLocationIndex,
+		adminLocEpisodeID,
+		adminLocTown,
+		adminLocLatitude,
+		adminLocLongitude
+	};
+	
+	// "Storm" Fields
+	private static JLabel adminStormEventIDLabel;
+	private static JTextField adminStormEventID;
+	private static JLabel adminStormEpisodeIDLabel;
+	private static JTextField adminStormEpisodeID;
+	private static JLabel adminStormStormTypeLabel;
+	private static JTextField adminStormStormType;
+	
 	// Admin Search Variables
 	private static JLabel adminQueryLabel;
 	private static JTextArea adminQuery;
 	private static JButton adminQuerySubmit;
 	
-	// Admin Table Select Variables
-	private static ButtonGroup adminTableSelectGroup;
-	private static JRadioButton adminStormTable;
-	private static JRadioButton adminLocationTable;
-	private static JRadioButton adminFatalityTable;
-	private static JRadioButton adminTornadoDetailsTable;
-	private static JRadioButton adminStormPathTable;
-	
-	// Admin Add or Update
-	/*
-	private static JLabel adminEventIdLabel;
-	private static JTextField adminEventId;
-	private static JButton admin
-	*/
+	// User variables?
 	private static JCheckBox stormType;
 	private static JCheckBox state;
 	private static JCheckBox city;
@@ -117,8 +189,42 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     }
     
     public void itemStateChanged(ItemEvent evt) {
-        CardLayout cl = (CardLayout)(cards.getLayout());
-        cl.show(cards, (String)evt.getItem());
+    	if (evt.getSource() == adminDDBox && evt.getStateChange() == ItemEvent.SELECTED) {
+    		System.out.println(adminDDBox.getSelectedItem());
+    		if (evt.getItem() == "fatalities") {
+    			showItems(adminFatalityLabels, adminFatalityTextFields);
+    		}
+    		else if (evt.getItem() == "location") {
+    			showItems(adminLocationLabels, adminLocationTextFields);
+    		}
+    	}
+    	else if (evt.getSource() == adminDDBox && evt.getStateChange() == ItemEvent.DESELECTED) {
+    		System.out.println(evt.getItem());
+    		if (evt.getItem() == "fatalities") {
+    			hideItems(adminFatalityLabels, adminFatalityTextFields);
+    		}
+    		else if (evt.getItem() == "location") {
+    			hideItems(adminLocationLabels, adminLocationTextFields);
+    		}
+    	}
+    	else {
+    		CardLayout cl = (CardLayout)(cards.getLayout());
+    		cl.show(cards, (String)evt.getItem());
+    	}
+    }
+    
+    public void showItems(JLabel[] labels, JTextField[] textFields) {
+    	for (int i = 0; i < labels.length; i++) {
+    		labels[i].setVisible(true);
+    		textFields[i].setVisible(true);
+    	}
+    }
+    
+    public void hideItems(JLabel[] labels, JTextField[] textFields) {
+    	for (int i = 0; i < labels.length; i++) {
+    		labels[i].setVisible(false);
+    		textFields[i].setVisible(false);
+    	}
     }
     
     private static void createAndShowGUI() {
@@ -154,10 +260,57 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		card.add(buttonEX);
     }
     
-    public static void createAdminPage(JPanel card) {
+    public void createAdminPage(JPanel card) {
     	card.setLayout(null);
     	card.setPreferredSize(new Dimension(810, 650));
     	
+    	// Admin Update Label
+    	adminLabel.setBounds(10, 10, 250, 25);
+    	
+    	// Admin Update Dropdown Box
+    	adminDDBox.setBounds(10, 40, 100, 25);
+    	adminDDBox.setEditable(false);
+    	adminDDBox.addItemListener(this);
+    	
+    	// Admin Update Submit Button;
+    	adminUpdateButton.setBounds(125, 40, 125, 25);
+    	adminUpdateButton.addMouseListener(new GUIInterface());
+    	
+    	// Admin Insert Submit Button
+    	adminInsertButton.setBounds(260, 40, 125, 25);
+    	adminInsertButton.addMouseListener(new GUIInterface());
+    	
+    	// Fatality Fields (update + insert)
+    	for (int i = 0; i < adminFatalityLabels.length; i++) {
+    		adminFatalityLabels[i].setBounds(10, 80 + (i * 30), 100, 25);
+    		adminFatalityTextFields[i].setBounds(150, 80 + (i * 30), 100, 25);
+    		
+    		card.add(adminFatalityLabels[i]);
+    		card.add(adminFatalityTextFields[i]);
+    		
+    		//adminUpdateFatalityLabels[i].setVisible(false);
+    		//adminUpdateFatalityTextFields[i].setVisible(false);
+    	}
+    	
+    	for (int i = 0; i < adminLocationLabels.length; i++) {
+    		adminLocationLabels[i].setBounds(10, 80 + (i * 30), 100, 25);
+    		adminLocationTextFields[i].setBounds(150, 80 + (i * 30), 100, 25);
+    		
+    		card.add(adminLocationLabels[i]);
+    		card.add(adminLocationTextFields[i]);
+    		
+    		adminLocationLabels[i].setVisible(false);
+    		adminLocationLabels[i].setVisible(false);
+    	}
+    	
+    	
+    	
+    	card.add(adminLabel);
+    	card.add(adminDDBox);
+    	card.add(adminUpdateButton);
+    	card.add(adminInsertButton);
+    	
+    	/*
     	// Admin Search
     	adminQueryLabel = new JLabel("Search Query");
     	adminQueryLabel.setBounds(10, 10, 100, 25);
@@ -171,16 +324,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	card.add(adminQueryLabel);
     	card.add(adminQuery);
     	card.add(adminQuerySubmit);
-    	
-    	/*
-    	// Admin Table Select Variables
-    	private static ButtonGroup adminTableSelectGroup;
-    	private static JRadioButton adminStormTable;
-    	private static JRadioButton adminLocationTable;
-    	private static JRadioButton adminFatalityTable;
-    	private static JRadioButton adminTornadoDetailsTable;
-    	private static JRadioButton adminStormPathTable;
-		*/
+    	*/
     	
     }
     
@@ -342,6 +486,15 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			System.out.println(DatabaseManager.handleSQLCommand(contents));
 			System.out.println(contents);
 		}
+		
+		else if (mouse.getSource() == adminUpdateButton) {
+			System.out.println("FIXME: formulate update query");
+		}
+		
+		else if (mouse.getSource() == adminInsertButton) {
+			System.out.println("FIXME: formulate insert query");
+		}
+	
 	}
 
 	@Override
