@@ -66,20 +66,28 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	private static JButton adminInsertButton = new JButton("Insert Row");
 	private static JComboBox adminDDBox = new JComboBox(databaseTables);
 	
+	// Update/Insert and Search Separator
+	private static JSeparator adminSeparator = new JSeparator(JSeparator.VERTICAL);
+	
+	// Admin Search Variables
+		private static JLabel adminQueryLabel = new JLabel("Search Query");
+		private static JTextArea adminQuery;
+		private static JButton adminQuerySubmit = new JButton("Submit Search");
+	
 	// "Fatalities" Fields
-	private static JLabel adminFatFatalityIDLabel = new JLabel("Fatality ID:");
+	private static JLabel adminFatFatalityIDLabel = new JLabel("FatalityID");
 	private static JTextField adminFatFatalityID = new JTextField();
-	private static JLabel adminFatEventIDLabel = new JLabel("Event ID:");
+	private static JLabel adminFatEventIDLabel = new JLabel("EventID");
 	private static JTextField adminFatEventID = new JTextField();
-	private static JLabel adminFatAgeLabel = new JLabel("Age:");
+	private static JLabel adminFatAgeLabel = new JLabel("Age");
 	private static JTextField adminFatAge = new JTextField();
-	private static JLabel adminFatGenderLabel = new JLabel("Gender:");
+	private static JLabel adminFatGenderLabel = new JLabel("Gender");
 	private static JTextField adminFatGender = new JTextField();
-	private static JLabel adminFatTimeLabel = new JLabel("Fatality Time:");
+	private static JLabel adminFatTimeLabel = new JLabel("Time");
 	private static JTextField adminFatTime = new JTextField();
-	private static JLabel adminFatLocationLabel = new JLabel("Location:");
+	private static JLabel adminFatLocationLabel = new JLabel("Location");
 	private static JTextField adminFatLocation = new JTextField();
-	private static JLabel adminFatTypeLabel = new JLabel("Fatality Type:");
+	private static JLabel adminFatTypeLabel = new JLabel("Type");
 	private static JTextField adminFatType = new JTextField();
 	
 	private static JLabel adminFatalityLabels[] = {
@@ -103,17 +111,17 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	};
 	
 	// "Location" Fields
-	private static JLabel adminLocEventIDLabel = new JLabel("Event ID:");
+	private static JLabel adminLocEventIDLabel = new JLabel("EventID");
 	private static JTextField adminLocEventID = new JTextField();;
-	private static JLabel adminLocLocationIndexLabel = new JLabel("Location Index:");
+	private static JLabel adminLocLocationIndexLabel = new JLabel("LocationIndex");
 	private static JTextField adminLocLocationIndex = new JTextField();;
-	private static JLabel adminLocEpisodeIDLabel = new JLabel("Episode ID:");
+	private static JLabel adminLocEpisodeIDLabel = new JLabel("EpisodeID");
 	private static JTextField adminLocEpisodeID = new JTextField();;
-	private static JLabel adminLocTownLabel = new JLabel("Town:");
+	private static JLabel adminLocTownLabel = new JLabel("Town");
 	private static JTextField adminLocTown = new JTextField();;
-	private static JLabel adminLocLatitudeLabel = new JLabel("Latitude:");
+	private static JLabel adminLocLatitudeLabel = new JLabel("Latitude");
 	private static JTextField adminLocLatitude = new JTextField();;
-	private static JLabel adminLocLongitudeLabel = new JLabel("Longitude:");
+	private static JLabel adminLocLongitudeLabel = new JLabel("Longitude");
 	private static JTextField adminLocLongitude = new JTextField();;
 	
 	private static JLabel adminLocationLabels[] = {
@@ -135,17 +143,44 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	};
 	
 	// "Storm" Fields
-	private static JLabel adminStormEventIDLabel;
-	private static JTextField adminStormEventID;
-	private static JLabel adminStormEpisodeIDLabel;
-	private static JTextField adminStormEpisodeID;
-	private static JLabel adminStormStormTypeLabel;
-	private static JTextField adminStormStormType;
+	private static JLabel adminStormEventIDLabel = new JLabel("EventID");
+	private static JTextField adminStormEventID = new JTextField();
+	private static JLabel adminStormEpisodeIDLabel = new JLabel("EpisodeID");
+	private static JTextField adminStormEpisodeID = new JTextField();
+	private static JLabel adminStormStormTypeLabel = new JLabel("StormType");
+	private static JTextField adminStormStormType = new JTextField();
 	
-	// Admin Search Variables
-	private static JLabel adminQueryLabel;
-	private static JTextArea adminQuery;
-	private static JButton adminQuerySubmit;
+	private static JLabel adminStormBeginDateLabel = new JLabel("BeginDate");
+	private static JTextField adminStormBeginDate = new JTextField();
+	private static JLabel adminStormEndDateLabel = new JLabel("EpisodeID");
+	private static JTextField adminStormEndDate = new JTextField();
+	/*
+	private static JLabel adminStormStormTypeLabel = new JLabel("StormType");
+	private static JTextField adminStormStormType = new JTextField();
+	
+	private static JLabel adminStormEventIDLabel = new JLabel("EventID");
+	private static JTextField adminStormEventID = new JTextField();
+	private static JLabel adminStormEpisodeIDLabel = new JLabel("EpisodeID");
+	private static JTextField adminStormEpisodeID = new JTextField();
+	private static JLabel adminStormStormTypeLabel = new JLabel("StormType");
+	private static JTextField adminStormStormType = new JTextField();
+	
+	private static JLabel adminStormEventIDLabel = new JLabel("EventID");
+	private static JTextField adminStormEventID = new JTextField();
+	private static JLabel adminStormEpisodeIDLabel = new JLabel("EpisodeID");
+	private static JTextField adminStormEpisodeID = new JTextField();
+	private static JLabel adminStormStormTypeLabel = new JLabel("StormType");
+	private static JTextField adminStormStormType = new JTextField();
+	
+	private static JLabel adminStormEventIDLabel = new JLabel("EventID");
+	private static JTextField adminStormEventID = new JTextField();
+	private static JLabel adminStormEpisodeIDLabel = new JLabel("EpisodeID");
+	private static JTextField adminStormEpisodeID = new JTextField();
+	private static JLabel adminStormStormTypeLabel = new JLabel("StormType");
+	private static JTextField adminStormStormType = new JTextField();
+	*/
+
+	
 	
 	// User variables?
 	private static JCheckBox stormType;
@@ -314,21 +349,24 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	card.add(adminUpdateButton);
     	card.add(adminInsertButton);
     	
-    	/*
+    	// Admin Separator
+    	adminSeparator.setBounds(425, 10, 3, 300);
+    	card.add(adminSeparator);
+    	
     	// Admin Search
-    	adminQueryLabel = new JLabel("Search Query");
-    	adminQueryLabel.setBounds(10, 10, 100, 25);
+    	adminQueryLabel.setBounds(475, 10, 100, 25);
+    	
     	adminQuery = new JTextArea("Enter Valid SQL Query");
-    	adminQuery.setBounds(10, 40, 300, 100);
+    	adminQuery.setBounds(475, 40, 300, 100);
     	adminQuery.setLineWrap(true);
-    	adminQuerySubmit = new JButton("Search Query");
-    	adminQuerySubmit.setBounds(10, 150, 150, 25);
+    	
+    	adminQuerySubmit.setBounds(475, 150, 150, 25);
     	adminQuerySubmit.addMouseListener(new GUIInterface());
     	
     	card.add(adminQueryLabel);
     	card.add(adminQuery);
     	card.add(adminQuerySubmit);
-    	*/
+    	
     	
     }
     
