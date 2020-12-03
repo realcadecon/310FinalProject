@@ -55,6 +55,9 @@ import javax.swing.UIManager;
 
 public class GUIInterface extends JPanel implements MouseListener, MouseWheelListener, KeyListener, ItemListener {
 	
+	// log-in client designation
+	private static boolean client;
+	
 	// Table Names
 	private static String databaseTables[] = {"fatalities", "location", "storm", "stormpath", "tornadodetails"};
 	
@@ -328,10 +331,10 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         //Put the JComboBox in a JPanel to get a nicer look.
         JPanel menu = new JPanel(); //use FlowLayout, could maybe add more things to this
         String pages[] = {USER, ADMIN};
-        JComboBox cb = new JComboBox(pages);
-        cb.setEditable(false);
-        cb.addItemListener(this);
-        menu.add(cb);
+        //JComboBox cb = new JComboBox(pages);
+        //cb.setEditable(false);
+        //cb.addItemListener(this);
+        //menu.add(cb);
          
         //Create the "cards". TODO: maybe add a menu card
         JPanel card1 = new JPanel();
@@ -341,9 +344,11 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
          
         //Create the panel that contains the "cards".
         cards = new JPanel(new CardLayout());
-        cards.add(card1, USER);
-        cards.add(card2, ADMIN);
-         
+        if(client) {
+        	cards.add(card1, USER);
+        } else {
+        	cards.add(card2, ADMIN);
+        }
         pane.add(menu, BorderLayout.PAGE_START);
         pane.add(cards, BorderLayout.CENTER);
     }
@@ -716,7 +721,14 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         // log-in pages
         LogPages log = new LogPages();
         log.landingPage();
-        while (!log.accessGranted) {System.out.println("");}
+        while (!log.accessGranted) { 
+        	try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    	}
+        client = log.client;
         
          
         //Schedule a job for the event dispatch thread:
