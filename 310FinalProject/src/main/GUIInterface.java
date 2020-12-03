@@ -760,17 +760,120 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			JScrollPane sp = new JScrollPane(table);
 			
 			//create ArrayList and HashMap here for the parameters of handleStormSearch
-			ArrayList<String> columns = null;
-			HashMap<String, String> parameters = null;
+			ArrayList<String> columns = new ArrayList<String>();
+			HashMap<String, String> parameters = new HashMap<String, String>();
 			
-			//create columns
+//-------------------------------------------create columns----------------------------------------------------------------------------
+			if(stormType.isSelected()) {
+				columns.add("StormType");
+			}
+			if(state.isSelected()) {
+				columns.add("State");
+			}
+			if(city.isSelected()) {
+				columns.add("Town");
+			}
+			if(property.isSelected()) {
+				columns.add("PropertyDamage");
+				columns.add("CropDamage");
+			}
+			if(eventNar.isSelected()) {
+				columns.add("event_narrative");
+			}
+			if(beginD.isSelected()) {
+				columns.add("BeginDate");
+			}
+			if(endD.isSelected()) {
+				columns.add("EndDate");
+			}
+			if(tScale.isSelected()) {
+				columns.add("tor_f_scale");
+			}
+			if(fatalities.isSelected()) {
+				columns.add("DeathsDirect");
+			}
+			if(tWidth.isSelected()) {
+				columns.add("tor_width");
+			}
+			if(tLength.isSelected()) {
+				columns.add("tor_length");
+			}
 			
+//-----------------------------------------create parameters-----------------------------------------------------------
+			//handle stormType
+			if(!stormTypeDropDown.getSelectedItem().equals("N/A")) {
+				parameters.put("StormType", (String)stormTypeDropDown.getSelectedItem());
+			}
+			else {
+				parameters.put("StormType", null);
+			}
 			
-			//create parameters
+			//handle State
+			if(!stateName.getText().equals("")) {
+				parameters.put("State", stateName.getText());
+			}
+			else {
+				parameters.put("State", null);
+			}
 			
+			//handle Town
+			if(!stateName.getText().equals("")) {
+				parameters.put("Town", townName.getText());
+			}
+			else {
+				parameters.put("State", null);
+			}
 			
+			//handle damage
+			if(dmgLowTB.getText().equals("") || dmgHighTB.getText().equals("")) {
+				parameters.put("Damage", null);
+			}
+			else {
+				parameters.put("Damage", dmgLowTB.getText().equals("")+"-"+dmgHighTB.getText().equals(""));
+			}
+		
+			//handle fatal
+			if(fatal.isSelected()) {
+				parameters.put("Fatal", "yes");
+			}
+			else {
+				parameters.put("Fatal", "no");
+			}
 			
-			String tableName = "test";
+			//handle date
+			if(beginDate.getText().equals(null) || endDate.getText().equals(null)) {
+				parameters.put("BeginDate", null);
+			}
+			else {
+				parameters.put("BeginDate", beginDate.getText());
+				parameters.put("EndDate", endDate.getText());
+			}
+			
+			//handle tornado details
+			if(stormTypeDropDown.getSelectedItem().equals("Tornado")) {
+				if(!efScaleDropDown.getSelectedItem().equals("N/A")) {
+					parameters.put("torScale", (String)efScaleDropDown.getSelectedItem());
+				}
+				else {
+					parameters.put("torScale", null);
+				}
+				
+				if(!tornadoWidth.getText().equals("")) {
+					parameters.put("torWidth", tornadoWidth.getText());
+				}
+				else {
+					parameters.put("torWidth", null);
+				}
+				
+				if(!tornadoLength.getText().equals("")) {
+					parameters.put("torWidth", tornadoLength.getText());
+				}
+				else {
+					parameters.put("torLength", null);
+				}
+			}
+			
+			String tableName = "Search Results";
 			String output = DatabaseManager.handleStormSearch(columns, parameters);
 			String line[] = output.split("\n");
 			String headers[] = line[1].split(",");
