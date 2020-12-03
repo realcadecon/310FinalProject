@@ -716,7 +716,13 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         // log-in pages
         LogPages log = new LogPages();
         log.landingPage();
-        while (!log.accessGranted) {}
+        while (!log.accessGranted) { 
+        	try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    	}
         
          
         //Schedule a job for the event dispatch thread:
