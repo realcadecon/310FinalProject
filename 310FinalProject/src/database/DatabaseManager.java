@@ -29,6 +29,10 @@ public final class DatabaseManager {
 			//FIXME: I really don't think this is a good way to do it, but online tutorials do it?
 			Class.forName("com.mysql.jdbc.Driver").newInstance(); 	
 			System.out.println("DatabaseManager is being called here.");
+<<<<<<< Updated upstream
+=======
+			//db = DriverManager.getConnection("jdbc:mysql://localhost:3308/?user=root&password=" + System.getenv("MYSQL_PASSWORD")); //TODO: make sure this url is right
+>>>>>>> Stashed changes
 			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=facebook17"); //TODO: make sure this url is right
 			
 		} catch (InstantiationException e) {
@@ -166,11 +170,15 @@ public final class DatabaseManager {
 			Class.forName("com.mysql.jdbc.Driver").newInstance(); 
 			System.out.println("Connection Opened.");
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=password"); //TODO: make sure this url is right
 =======
 			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=facebook17"); //TODO: make sure this url is right
 >>>>>>> Stashed changes
 			
+=======
+			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=facebook17"); //TODO: make sure this url is right
+>>>>>>> Stashed changes
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
