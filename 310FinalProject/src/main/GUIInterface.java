@@ -549,7 +549,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	state.setBounds(100, 50, 60, 30);
     	
     	city = new JCheckBox("Town"); 
-    	city.setBounds(165, 50, 50, 30);  
+    	city.setBounds(165, 50, 55, 30);  
     	
     	property = new JCheckBox("damage");
     	property.setBounds(220, 50, 80, 30);
@@ -716,7 +716,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         // log-in pages
         LogPages log = new LogPages();
         log.landingPage();
-        while (!log.accessGranted) {}
+        while (!log.accessGranted) {System.out.println("");}
         
          
         //Schedule a job for the event dispatch thread:
@@ -822,7 +822,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 				parameters.put("Town", townName.getText());
 			}
 			else {
-				parameters.put("State", null);
+				parameters.put("Town", null);
 			}
 			
 			//handle damage
@@ -882,29 +882,35 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			String output = DatabaseManager.handleStormSearch(columns, parameters);
 			System.out.println(output);
 			String line[] = output.split("\n");
-			String headers[] = line[1].split(",");
-
-			System.out.println("---------------------");
-			for(int i=0; i<headers.length; i++) {
-				if(headers[i].indexOf("=") != -1) {
-					System.out.println(headers[i].substring(0, headers[i].indexOf("=")));
-					model.addColumn(headers[i].substring(0, headers[i].indexOf("=")));
-				}
-			}
-			sp.setPreferredSize(new Dimension(headers.length * 70, 300));
-			System.out.println("---------------------");
-			for (String token : line) {
-				if(!token.isEmpty()) {
-					token = token.replace("{", "");
-					token = token.replace("}", "");
-					String row[] = token.split(","); //FIXME: not work for column has , in their data. can fix by split using regex
-					ArrayList<String> single_row = new ArrayList<String>();
-					for (String rowToken : row) {
-						String elem[] = rowToken.split("=");
-						single_row.add(elem[1]);
+			if(line.length!=0) {
+				String headers[] = line[0].split(",");
+				System.out.println("---------------------");
+				for(int i=0; i<headers.length; i++) {
+					if(headers[i].indexOf("=") != -1) {
+						System.out.println(headers[i].substring(0, headers[i].indexOf("=")));
+						model.addColumn(headers[i].substring(0, headers[i].indexOf("=")));
 					}
-					model.addRow(single_row.toArray());
 				}
+				sp.setPreferredSize(new Dimension(headers.length * 70, 300));
+				System.out.println("---------------------");
+				for (String token : line) {
+					if(!token.isEmpty()) {
+						token = token.replace("{", "");
+						token = token.replace("}", "");
+						String row[] = token.split(","); //FIXME: not work for column has , in their data. can fix by split using regex
+						ArrayList<String> single_row = new ArrayList<String>();
+						for (String rowToken : row) {
+							String elem[] = rowToken.split("=");
+							single_row.add(elem[1]);
+						}
+						model.addRow(single_row.toArray());
+					}
+				}	
+			}
+			else {
+				JLabel noResults = new JLabel("No results");
+				noResults.setBounds(30, 30, 100, 30);
+				sp.add(noResults);
 			}
 			panel.add(sp);
 		}
