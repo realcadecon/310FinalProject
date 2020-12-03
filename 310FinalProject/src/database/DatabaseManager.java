@@ -91,20 +91,17 @@ public final class DatabaseManager {
 		String tableList = "storm ";
 		
 		for(int i=0; i< columns.size(); i++) {
-			// special case for city, must join location table and use 'town' instead of 'city'
 			if(columns.get(i).equalsIgnoreCase("Town")) {
 				tableList += "join location on location.EventID = storm.EventID ";
 			}
-			else if(columns.get(i).equalsIgnoreCase("Town") || columns.get(i).equalsIgnoreCase("Town") || columns.get(i).equalsIgnoreCase("Town")){
+			else if(columns.get(i).equalsIgnoreCase("tor_f_scale") || columns.get(i).equalsIgnoreCase("tor_length") || columns.get(i).equalsIgnoreCase("tor_width")){
 				tableList += "join tornadodetails on tornadodetails.EventID = storm.EventID ";
 			}
+			if(i!=columns.size()-1) {
+				columnsList+= columns.get(i)+", ";
+			}
 			else {
-				if(i!=columns.size()-1) {
-					columnsList+= columns.get(i)+", ";
-				}
-				else {
-					columnsList+= columns.get(i);
-				}
+				columnsList+= columns.get(i);
 			}
 		}
 				
@@ -226,7 +223,9 @@ public final class DatabaseManager {
 			case "jdb-searchStorm":
 				//test inputs
 				ArrayList<String> arr = new ArrayList<String>();
-					arr.add("StormType, PropertyDamage, State, Town");
+					arr.add("StormType");
+					arr.add("PropertyDamage");
+					arr.add("Town");
 				HashMap<String, String> hm = new HashMap<String, String>();
 					hm.put("State", "TEXAS");
 					hm.put("Town", "MALTA");
