@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,6 +16,9 @@ import javax.swing.JTextField;
 
 public class LogPages
 {
+	boolean accessGranted = false;
+	boolean client;
+	
 	// frame for all areas
 	JFrame frame = new JFrame();
 	// panel for the landing page
@@ -92,9 +97,9 @@ public class LogPages
 		landing.setBounds(100, 100, 800, 800);
 		
 		// creates title and btns
-		descLabel.setBounds(250, 100, 200, 40);
+		descLabel.setBounds(75, 100, 800, 40);
 		landing.add(descLabel);
-		landingLabel.setBounds(250, 50, 200, 40);
+		landingLabel.setBounds(225, 50, 400, 40);
 		landing.add(landingLabel);
 		clientBtn.setBounds(150, 150, 140, 40);
 		adminBtn.setBounds(350, 150, 140, 40);
@@ -110,14 +115,16 @@ public class LogPages
 		clientBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-        		logIn(true);
+        		client = true;
+        		logIn(client);
             }          
           });
 			
 		adminBtn.addActionListener(new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent arg0) {
-	        	logIn(false);
+	        	client = false;
+        		logIn(client);
 	        }          
 	      });
     }   
@@ -171,15 +178,17 @@ public class LogPages
 	        public void actionPerformed(ActionEvent arg0) {
 	        	if(client) {
 	    			if(clientAuth(userField.getText(), passField.getPassword())) {
-	    				System.out.println("Success");
+	    				accessGranted = true;
+	    				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 	    			} else {
-	    				System.out.println("Fail");
+	    				System.exit(0);
 	    			}
 	    		} else {
 	    			if (adminAuth(userField.getText(), passField.getPassword())) {
-	    				System.out.println("Success");
+	    				accessGranted = true;
+	    				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 	    			} else {
-	    				System.out.println("Fail");
+	    				System.exit(0);
 	    			}
 	    		}
 	        }          
