@@ -307,9 +307,33 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	card.add(endDate);
     	card.add(dash2LB);
     	
-    	JLabel tornadoDetails = new JLabel("Tornado Details (these will only be used if StormType = Tornado):");
-    	tornadoDetails.setBounds(10, 290, 400, 30);
+    	JLabel tornadoDetails = new JLabel("Tornado Details will only be used if StormType = Tornado");
+    	tornadoDetails.setBounds(30, 360, 400, 30);
     	card.add(tornadoDetails);
+    	
+    	String[] efScale = {"N/A","EF0","EF1","EF2","EF3","EF4","EF5"};
+    	JLabel tornadoMagLB = new JLabel("Tornado Magnitude (EF Scale): ");
+    	tornadoMagLB.setBounds(40, 290, 175, 30);
+    	JComboBox<String> efScaleDropDown = new JComboBox<String>(efScale);
+    	efScaleDropDown.setSelectedIndex(0);
+    	efScaleDropDown.setBounds(215, 290, 100, 30);
+    	card.add(tornadoMagLB);
+    	card.add(efScaleDropDown);
+    	
+    	JLabel tornadoWidthLB = new JLabel("Tornado Width (e.g. <, >, <=): ");
+    	tornadoWidthLB.setBounds(335, 290, 170, 30);
+    	JTextField tornadoWidth = new JTextField();
+    	tornadoWidth.setBounds(505, 290, 100, 30);
+    	card.add(tornadoWidthLB);
+    	card.add(tornadoWidth);
+    	
+    	JLabel tornadoLengthLB = new JLabel("Tornado Length (e.g. <, >, <=): ");
+    	tornadoLengthLB.setBounds(335, 320, 170, 30);
+    	JTextField tornadoLength = new JTextField();
+    	tornadoLength.setBounds(505, 320, 100, 30);
+    	card.add(tornadoLengthLB);
+    	card.add(tornadoLength);
+    	
     	
     	/* -------------------end details section--------------------------------- */
     	
