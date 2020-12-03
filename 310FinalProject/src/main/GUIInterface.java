@@ -74,6 +74,8 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		private static JTextArea adminQuery;
 		private static JButton adminQuerySubmit = new JButton("Submit Search");
 	
+		
+		
 	// "Fatalities" Fields
 	private static JLabel adminFatFatalityIDLabel = new JLabel("FatalityID");
 	private static JTextField adminFatFatalityID = new JTextField();
@@ -110,6 +112,8 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			adminFatType
 	};
 	
+	
+	
 	// "Location" Fields
 	private static JLabel adminLocEventIDLabel = new JLabel("EventID");
 	private static JTextField adminLocEventID = new JTextField();;
@@ -142,6 +146,8 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		adminLocLongitude
 	};
 	
+	
+	
 	// "Storm" Fields
 	private static JLabel adminStormEventIDLabel = new JLabel("EventID");
 	private static JTextField adminStormEventID = new JTextField();
@@ -149,38 +155,133 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	private static JTextField adminStormEpisodeID = new JTextField();
 	private static JLabel adminStormStormTypeLabel = new JLabel("StormType");
 	private static JTextField adminStormStormType = new JTextField();
-	
 	private static JLabel adminStormBeginDateLabel = new JLabel("BeginDate");
 	private static JTextField adminStormBeginDate = new JTextField();
-	private static JLabel adminStormEndDateLabel = new JLabel("EpisodeID");
+	private static JLabel adminStormEndDateLabel = new JLabel("EndDate");
 	private static JTextField adminStormEndDate = new JTextField();
-	/*
-	private static JLabel adminStormStormTypeLabel = new JLabel("StormType");
-	private static JTextField adminStormStormType = new JTextField();
+	private static JLabel adminStormStateLabel = new JLabel("State");
+	private static JTextField adminStormState = new JTextField();
+	private static JLabel adminStormPropertyDamageLabel = new JLabel("PropertyDamage");
+	private static JTextField adminStormPropertyDamage = new JTextField();
+	private static JLabel adminStormCropDamageLabel = new JLabel("CropDamage");
+	private static JTextField adminStormCropDamage = new JTextField();
+	private static JLabel adminStormInjuriesDirectLabel = new JLabel("InjuriesDirect");
+	private static JTextField adminStormInjuriesDirect = new JTextField();
+	private static JLabel adminStormDeathsDirectLabel = new JLabel("DeathsDirect");
+	private static JTextField adminStormDeathsDirect = new JTextField();
+	private static JLabel adminStormMagnitudeLabel = new JLabel("Magnitude");
+	private static JTextField adminStormMagnitude = new JTextField();
+	private static JLabel adminStormMagnitudeTypeLabel = new JLabel("MagnitudeType");
+	private static JTextField adminStormMagnitudeType = new JTextField();
+	private static JLabel adminStormEventNarrativeLabel = new JLabel("event_narrative");
+	private static JTextField adminStormEventNarrative = new JTextField();
+	private static JLabel adminStormEpisodeNarrativeLabel = new JLabel("EpisodeID");
+	private static JTextField adminStormEpisodeNarrative = new JTextField();
 	
-	private static JLabel adminStormEventIDLabel = new JLabel("EventID");
-	private static JTextField adminStormEventID = new JTextField();
-	private static JLabel adminStormEpisodeIDLabel = new JLabel("EpisodeID");
-	private static JTextField adminStormEpisodeID = new JTextField();
-	private static JLabel adminStormStormTypeLabel = new JLabel("StormType");
-	private static JTextField adminStormStormType = new JTextField();
+	private static JLabel adminStormLabels[] = {
+		adminStormEventIDLabel,
+		adminStormEpisodeIDLabel,
+		adminStormStormTypeLabel,
+		adminStormBeginDateLabel,
+		adminStormEndDateLabel,
+		adminStormStateLabel,
+		adminStormPropertyDamageLabel,
+		adminStormCropDamageLabel,
+		adminStormInjuriesDirectLabel,
+		adminStormDeathsDirectLabel,
+		adminStormMagnitudeLabel,
+		adminStormMagnitudeTypeLabel,
+		adminStormEventNarrativeLabel,
+		adminStormEpisodeNarrativeLabel
+	};
 	
-	private static JLabel adminStormEventIDLabel = new JLabel("EventID");
-	private static JTextField adminStormEventID = new JTextField();
-	private static JLabel adminStormEpisodeIDLabel = new JLabel("EpisodeID");
-	private static JTextField adminStormEpisodeID = new JTextField();
-	private static JLabel adminStormStormTypeLabel = new JLabel("StormType");
-	private static JTextField adminStormStormType = new JTextField();
+	private static JTextField adminStormTextFields[] = {
+		adminStormEventID,
+		adminStormEpisodeID,
+		adminStormStormType,
+		adminStormBeginDate,
+		adminStormEndDate,
+		adminStormState,
+		adminStormPropertyDamage,
+		adminStormCropDamage,
+		adminStormInjuriesDirect,
+		adminStormDeathsDirect,
+		adminStormMagnitude,
+		adminStormMagnitudeType,
+		adminStormEventNarrative,
+		adminStormEpisodeNarrative
+	};
 	
-	private static JLabel adminStormEventIDLabel = new JLabel("EventID");
-	private static JTextField adminStormEventID = new JTextField();
-	private static JLabel adminStormEpisodeIDLabel = new JLabel("EpisodeID");
-	private static JTextField adminStormEpisodeID = new JTextField();
-	private static JLabel adminStormStormTypeLabel = new JLabel("StormType");
-	private static JTextField adminStormStormType = new JTextField();
-	*/
+	
+	
+	// Storm Path Fields
+	private static JLabel adminPathEventIDLabel = new JLabel("EventID");
+	private static JTextField adminPathEventID = new JTextField();
+	private static JLabel adminPathRangeLabel = new JLabel("begin_range");
+	private static JTextField adminPathRange = new JTextField();
+	private static JLabel adminPathAzimuthLabel = new JLabel("begin_azimuth");
+	private static JTextField adminPathAzimuth = new JTextField();
+	private static JLabel adminPathLocationLabel = new JLabel("begin_location");
+	private static JTextField adminPathLocation = new JTextField();
+	private static JLabel adminPathBeginLatLabel = new JLabel("begin_lat");
+	private static JTextField adminPathBeginLat = new JTextField();
+	private static JLabel adminPathBeginLonLabel = new JLabel("begin_lon");
+	private static JTextField adminPathBeginLon = new JTextField();
+	private static JLabel adminPathEndLatLabel = new JLabel("end_lat");
+	private static JTextField adminPathEndLat = new JTextField();
+	private static JLabel adminPathEndLonLabel = new JLabel("end_lon");
+	private static JTextField adminPathEndLon = new JTextField();
+	
+	private static JLabel adminStormPathLabels[] = {
+			adminPathEventIDLabel,
+			adminPathRangeLabel,
+			adminPathAzimuthLabel,
+			adminPathLocationLabel,
+			adminPathBeginLatLabel,
+			adminPathBeginLonLabel,
+			adminPathEndLatLabel,
+			adminPathEndLonLabel
+	};
+	
+	private static JTextField adminStormPathTextFields[] = {
+			adminPathEventID,
+			adminPathRange,
+			adminPathAzimuth,
+			adminPathLocation,
+			adminPathBeginLat,
+			adminPathBeginLon,
+			adminPathEndLat,
+			adminPathEndLon
+	};
+	
+	
+	
+	// Tornado Details Fields
+	private static JLabel adminTornadoEventIDLabel = new JLabel("EventID");
+	private static JTextField adminTornadoEventID = new JTextField();
+	private static JLabel adminTornadoFScaleLabel = new JLabel("tor_f_scale");
+	private static JTextField adminTornadoFScale = new JTextField();
+	private static JLabel adminTornadoLengthLabel = new JLabel("tor_length");
+	private static JTextField adminTornadoLength = new JTextField();
+	private static JLabel adminTornadoWidthLabel = new JLabel("tor_width");
+	private static JTextField adminTornadoWidth = new JTextField();
+	
 
+	private static JLabel adminTornadoDetailsLabels[] = {
+			adminTornadoEventIDLabel,
+			adminTornadoFScaleLabel,
+			adminTornadoLengthLabel,
+			adminTornadoWidthLabel
+	};
 	
+	private static JTextField adminTornadoDetailsTextFields[] = {
+			adminTornadoEventID,
+			adminTornadoFScale,
+			adminTornadoLength,
+			adminTornadoWidth
+	};
+	
+
 	
 	// User variables?
 	private static JCheckBox stormType;
@@ -229,21 +330,37 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     
     public void itemStateChanged(ItemEvent evt) {
     	if (evt.getSource() == adminDDBox && evt.getStateChange() == ItemEvent.SELECTED) {
-    		System.out.println(adminDDBox.getSelectedItem());
     		if (evt.getItem() == "fatalities") {
     			showItems(adminFatalityLabels, adminFatalityTextFields);
     		}
     		else if (evt.getItem() == "location") {
     			showItems(adminLocationLabels, adminLocationTextFields);
     		}
+    		else if (evt.getItem() == "storm") {
+    			showItems(adminStormLabels, adminStormTextFields);
+    		}
+    		else if (evt.getItem() == "stormpath") {
+    			showItems(adminStormPathLabels, adminStormPathTextFields);
+    		}
+    		else if (evt.getItem() == "tornadodetails") {
+    			showItems(adminTornadoDetailsLabels, adminTornadoDetailsTextFields);
+    		}
     	}
     	else if (evt.getSource() == adminDDBox && evt.getStateChange() == ItemEvent.DESELECTED) {
-    		System.out.println(evt.getItem());
     		if (evt.getItem() == "fatalities") {
     			hideItems(adminFatalityLabels, adminFatalityTextFields);
     		}
     		else if (evt.getItem() == "location") {
     			hideItems(adminLocationLabels, adminLocationTextFields);
+    		}
+    		else if (evt.getItem() == "storm") {
+    			hideItems(adminStormLabels, adminStormTextFields);
+    		}
+    		else if (evt.getItem() == "stormpath") {
+    			hideItems(adminStormPathLabels, adminStormPathTextFields);
+    		}
+    		else if (evt.getItem() == "tornadodetails") {
+    			hideItems(adminTornadoDetailsLabels, adminTornadoDetailsTextFields);
     		}
     	}
     	else {
@@ -319,6 +436,13 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	adminInsertButton.setBounds(260, 40, 125, 25);
     	adminInsertButton.addMouseListener(new GUIInterface());
     	
+    	card.add(adminLabel);
+    	card.add(adminDDBox);
+    	card.add(adminUpdateButton);
+    	card.add(adminInsertButton);
+    	
+    	
+    	
     	// Fatality Fields (update + insert)
     	for (int i = 0; i < adminFatalityLabels.length; i++) {
     		adminFatalityLabels[i].setBounds(10, 80 + (i * 30), 100, 25);
@@ -331,6 +455,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     		//adminUpdateFatalityTextFields[i].setVisible(false);
     	}
     	
+    	// Location Fields
     	for (int i = 0; i < adminLocationLabels.length; i++) {
     		adminLocationLabels[i].setBounds(10, 80 + (i * 30), 100, 25);
     		adminLocationTextFields[i].setBounds(150, 80 + (i * 30), 100, 25);
@@ -339,15 +464,46 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     		card.add(adminLocationTextFields[i]);
     		
     		adminLocationLabels[i].setVisible(false);
-    		adminLocationLabels[i].setVisible(false);
+    		adminLocationTextFields[i].setVisible(false);
+    	}
+    	
+    	// Storm Fields
+    	for (int i = 0; i < adminStormLabels.length; i++) {
+    		adminStormLabels[i].setBounds(10, 80 + (i * 30), 100, 25);
+    		adminStormTextFields[i].setBounds(150, 80 + (i * 30), 100, 25);
+    		
+    		card.add(adminStormLabels[i]);
+    		card.add(adminStormTextFields[i]);
+    		
+    		adminStormLabels[i].setVisible(false);
+    		adminStormTextFields[i].setVisible(false);
+    	}
+    	
+    	// Storm Path Fields
+    	for (int i = 0; i < adminStormPathLabels.length; i++) {
+    		adminStormPathLabels[i].setBounds(10, 80 + (i * 30), 100, 25);
+    		adminStormPathTextFields[i].setBounds(150, 80 + (i * 30), 100, 25);
+    		
+    		card.add(adminStormPathLabels[i]);
+    		card.add(adminStormPathTextFields[i]);
+    		
+    		adminStormPathLabels[i].setVisible(false);
+    		adminStormPathTextFields[i].setVisible(false);
+    	}
+    	
+    	// Storm Path Fields
+    	for (int i = 0; i < adminTornadoDetailsLabels.length; i++) {
+    		adminTornadoDetailsLabels[i].setBounds(10, 80 + (i * 30), 100, 25);
+    		adminTornadoDetailsTextFields[i].setBounds(150, 80 + (i * 30), 100, 25);
+    		
+    		card.add(adminTornadoDetailsLabels[i]);
+    		card.add(adminTornadoDetailsTextFields[i]);
+    		
+    		adminTornadoDetailsLabels[i].setVisible(false);
+    		adminTornadoDetailsTextFields[i].setVisible(false);
     	}
     	
     	
-    	
-    	card.add(adminLabel);
-    	card.add(adminDDBox);
-    	card.add(adminUpdateButton);
-    	card.add(adminInsertButton);
     	
     	// Admin Separator
     	adminSeparator.setBounds(425, 10, 3, 300);
