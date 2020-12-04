@@ -39,7 +39,8 @@ package main;
 	import javax.swing.JTable;
 	import javax.swing.UIManager;
 	import javax.swing.JTextField;
-	import javax.swing.UIManager;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 	import javax.swing.UnsupportedLookAndFeelException;
 	import javax.swing.table.DefaultTableModel;
 	import javax.swing.JTextField;
@@ -54,6 +55,9 @@ package main;
 
 
 public class GUIInterface extends JPanel implements MouseListener, MouseWheelListener, KeyListener, ItemListener {
+	
+	// log-in client designation
+	private static boolean client;
 	
 	// Table Names
 	private static String databaseTables[] = {"fatalities", "location", "storm", "stormpath", "tornadodetails"};
@@ -382,10 +386,10 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         //Put the JComboBox in a JPanel to get a nicer look.
         JPanel menu = new JPanel(); //use FlowLayout, could maybe add more things to this
         String pages[] = {USER, ADMIN};
-        JComboBox cb = new JComboBox(pages);
-        cb.setEditable(false);
-        cb.addItemListener(this);
-        menu.add(cb);
+        //JComboBox cb = new JComboBox(pages);
+        //cb.setEditable(false);
+        //cb.addItemListener(this);
+        //menu.add(cb);
          
         //Create the "cards". TODO: maybe add a menu card
         JPanel card1 = new JPanel();
@@ -395,9 +399,11 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
          
         //Create the panel that contains the "cards".
         cards = new JPanel(new CardLayout());
-        cards.add(card1, USER);
-        cards.add(card2, ADMIN);
-         
+        if(client) {
+        	cards.add(card1, USER);
+        } else {
+        	cards.add(card2, ADMIN);
+        }
         pane.add(menu, BorderLayout.PAGE_START);
         pane.add(cards, BorderLayout.CENTER);
     }
@@ -602,8 +608,8 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	state = new JCheckBox("state"); 
     	state.setBounds(100, 50, 60, 30);
     	
-    	city = new JCheckBox("city"); 
-    	city.setBounds(165, 50, 50, 30);  
+    	city = new JCheckBox("Town"); 
+    	city.setBounds(165, 50, 55, 30);  
     	
     	property = new JCheckBox("damage");
     	property.setBounds(220, 50, 80, 30);
@@ -766,6 +772,19 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
         }
         /* Turn off metal's use of bold fonts */
         UIManager.put("swing.boldMetal", Boolean.FALSE);
+        
+        // log-in pages
+        LogPages log = new LogPages();
+        log.landingPage();
+        while (!log.accessGranted) { 
+        	try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    	}
+        client = log.client;
+        
          
         //Schedule a job for the event dispatch thread:
         //creating and showing this application's GUI.
@@ -800,7 +819,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			DefaultTableModel model = new DefaultTableModel();
 			frame.setSize(800, 600);
 			frame.add(panel);
-			frame.setTitle("test");
+			frame.setTitle("Query Details");
 			frame.setLocationRelativeTo(null);
 
 			JTable table = new JTable(model);
@@ -870,7 +889,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 				parameters.put("Town", townName.getText());
 			}
 			else {
-				parameters.put("State", null);
+				parameters.put("Town", null);
 			}
 			
 			//handle damage
@@ -878,7 +897,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 				parameters.put("Damage", null);
 			}
 			else {
-				parameters.put("Damage", dmgLowTB.getText().equals("")+"-"+dmgHighTB.getText().equals(""));
+				parameters.put("Damage", dmgLowTB.getText()+"-"+dmgHighTB.getText());
 			}
 		
 			//handle fatal
@@ -890,8 +909,9 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			}
 			
 			//handle date
-			if(beginDate.getText().equals(null) || endDate.getText().equals(null)) {
+			if(beginDate.getText().equals("") || endDate.getText().equals("")) {
 				parameters.put("BeginDate", null);
+				parameters.put("EndDate", null);
 			}
 			else {
 				parameters.put("BeginDate", beginDate.getText());
@@ -922,32 +942,42 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 				}
 			}
 			
+			System.out.println(parameters.toString());
+			System.out.println(columns.toString());
+			
 			String tableName = "Search Results";
 			String output = DatabaseManager.handleStormSearch(columns, parameters);
+			System.out.println(output);
 			String line[] = output.split("\n");
-			String headers[] = line[1].split(",");
-
-			System.out.println("---------------------");
-			for(int i=0; i<headers.length; i++) {
-				if(headers[i].indexOf("=") != -1) {
-					System.out.println(headers[i].substring(0, headers[i].indexOf("=")));
-					model.addColumn(headers[i].substring(0, headers[i].indexOf("=")));
-				}
-			}
-			sp.setPreferredSize(new Dimension(headers.length * 70, 300));
-			System.out.println("---------------------");
-			for (String token : line) {
-				if(!token.isEmpty()) {
-					token = token.replace("{", "");
-					token = token.replace("}", "");
-					String row[] = token.split(","); //FIXME: not work for column has , in their data. can fix by split using regex
-					ArrayList<String> single_row = new ArrayList<String>();
-					for (String rowToken : row) {
-						String elem[] = rowToken.split("=");
-						single_row.add(elem[1]);
+			if(line.length!=0) {
+				String headers[] = line[0].split(",");
+				System.out.println("---------------------");
+				for(int i=0; i<headers.length; i++) {
+					if(headers[i].indexOf("=") != -1) {
+						System.out.println(headers[i].substring(0, headers[i].indexOf("=")));
+						model.addColumn(headers[i].substring(0, headers[i].indexOf("=")));
 					}
-					model.addRow(single_row.toArray());
 				}
+				sp.setPreferredSize(new Dimension(headers.length * 70, 300));
+				System.out.println("---------------------");
+				for (String token : line) {
+					if(!token.isEmpty()) {
+						token = token.replace("{", "");
+						token = token.replace("}", "");
+						String row[] = token.split(","); //FIXME: not work for column has , in their data. can fix by split using regex
+						ArrayList<String> single_row = new ArrayList<String>();
+						for (String rowToken : row) {
+							String elem[] = rowToken.split("=");
+							single_row.add(elem[1]);
+						}
+						model.addRow(single_row.toArray());
+					}
+				}	
+			}
+			else {
+				JLabel noResults = new JLabel("No results");
+				noResults.setBounds(30, 30, 100, 30);
+				sp.add(noResults);
 			}
 			panel.add(sp);
 		}
