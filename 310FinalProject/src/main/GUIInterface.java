@@ -731,14 +731,14 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	card.add(tornadoMagLB);
     	card.add(efScaleDropDown);
     	
-    	tornadoWidthLB = new JLabel("Tornado Width (e.g. <, >, <=): ");
+    	tornadoWidthLB = new JLabel("Tornado Width (e.g. <5, >5, <=5): ");
     	tornadoWidthLB.setBounds(305, 300, 170, 30);
     	tornadoWidth = new JTextField();
     	tornadoWidth.setBounds(475, 300, 100, 30);
     	card.add(tornadoWidthLB);
     	card.add(tornadoWidth);
     	
-    	tornadoLengthLB = new JLabel("Tornado Length (e.g. <, >, <=): ");
+    	tornadoLengthLB = new JLabel("Tornado Length (e.g. <5, >5, <=5): ");
     	tornadoLengthLB.setBounds(305, 335, 170, 30);
     	tornadoLength = new JTextField();
     	tornadoLength.setBounds(475, 335, 100, 30);
@@ -950,14 +950,14 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			System.out.println(parameters.toString());
 			System.out.println(columns.toString());
 			
-			String tableName = "Search Results";
 			String output = DatabaseManager.handleStormSearch(columns, parameters);
 			String line[] = output.split("\n");
-			System.out.println(output);
-			if(line.length != 0) {
+			System.out.println("output: " + output);
+			int columnsCount = columns.size();
+			if(output=="") {
 				String headers[] = line[0].split(",");
 				System.out.println("---------------------");
-				for(int i=0; i<headers.length; i++) {
+				for(int i=0; i<columnsCount; i++) {
 					if(headers[i].indexOf("=") != -1) {
 						headers[i] = headers[i].replace("{", "");
 						headers[i] = headers[i].replace("}", "");
@@ -965,7 +965,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 						model.addColumn(headers[i].substring(0, headers[i].indexOf("=")));
 					}
 				}
-				sp.setPreferredSize(new Dimension(headers.length * 70, 300));
+				sp.setPreferredSize(new Dimension(headers.length * 100, 300));
 				System.out.println("---------------------");
 				for (String token : line) {
 					if(!token.isEmpty()) {
@@ -973,9 +973,15 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 						token = token.replace("}", "");
 						String row[] = token.split(","); //FIXME: not work for column has , in their data. can fix by split using regex
 						ArrayList<String> single_row = new ArrayList<String>();
+						System.out.println("row: " + row[0] +" | " + row[1]);
+						int i = 0;
 						for (String rowToken : row) {
 							String elem[] = rowToken.split("=");
-							single_row.add(elem[1]);
+							System.out.println(rowToken);
+							if(i < columnsCount) {
+								single_row.add(elem[1]);
+							}
+							i++;
 						}
 						model.addRow(single_row.toArray());
 					}

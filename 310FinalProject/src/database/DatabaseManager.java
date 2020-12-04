@@ -98,7 +98,7 @@ public final class DatabaseManager {
 				tableList += "join location on location.EventID = storm.EventID ";
 				locationAdded = true;
 			}
-			else if(columns.get(i).equalsIgnoreCase("tor_f_scale") || columns.get(i).equalsIgnoreCase("tor_length") || columns.get(i).equalsIgnoreCase("tor_width")){
+			else if(!tornadoDetailsAdded && (columns.get(i).equalsIgnoreCase("tor_f_scale") || columns.get(i).equalsIgnoreCase("tor_length") || columns.get(i).equalsIgnoreCase("tor_width"))){
 				tableList += "join tornadodetails on tornadodetails.EventID = storm.EventID ";
 				tornadoDetailsAdded = true;
 			}
@@ -139,6 +139,7 @@ public final class DatabaseManager {
 			paramFound = true;
 			if(!locationAdded) {
 				tableList += "join location on location.EventID = storm.EventID ";
+				locationAdded = true;
 			}
 		}
 		
@@ -165,17 +166,18 @@ public final class DatabaseManager {
 				paramFound = true;
 			}
 			String torWidth = parameters.get("torWidth");
-			if(torScale != null) {
-				parameterList += "tor_width = " + torWidth + " AND ";
+			if(torWidth != null) {
+				parameterList += "tor_width " + torWidth + " AND ";
 				paramFound = true;
 			}
 			String torLength = parameters.get("torLength");
-			if(torScale != null) {
-				parameterList += "tor_length = " + torLength + " AND ";
+			if(torLength != null) {
+				parameterList += "tor_length " + torLength + " AND ";
 				paramFound = true;
 			}
 			if(!tornadoDetailsAdded) {
 				tableList += "join tornadodetails on tornadodetails.EventID = storm.EventID ";
+				tornadoDetailsAdded = true;
 			}
 		}
 		
