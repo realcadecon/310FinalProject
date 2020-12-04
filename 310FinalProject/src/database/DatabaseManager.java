@@ -98,7 +98,7 @@ public final class DatabaseManager {
 				tableList += "join location on location.EventID = storm.EventID ";
 				locationAdded = true;
 			}
-			else if(columns.get(i).equalsIgnoreCase("tor_f_scale") || columns.get(i).equalsIgnoreCase("tor_length") || columns.get(i).equalsIgnoreCase("tor_width")){
+			else if(!tornadoDetailsAdded && (columns.get(i).equalsIgnoreCase("tor_f_scale") || columns.get(i).equalsIgnoreCase("tor_length") || columns.get(i).equalsIgnoreCase("tor_width"))){
 				tableList += "join tornadodetails on tornadodetails.EventID = storm.EventID ";
 				tornadoDetailsAdded = true;
 			}
@@ -139,6 +139,7 @@ public final class DatabaseManager {
 			paramFound = true;
 			if(!locationAdded) {
 				tableList += "join location on location.EventID = storm.EventID ";
+				locationAdded = true;
 			}
 		}
 		
@@ -165,17 +166,18 @@ public final class DatabaseManager {
 				paramFound = true;
 			}
 			String torWidth = parameters.get("torWidth");
-			if(torScale != null) {
-				parameterList += "tor_width = " + torWidth + " AND ";
+			if(torWidth != null) {
+				parameterList += "tor_width " + torWidth + " AND ";
 				paramFound = true;
 			}
 			String torLength = parameters.get("torLength");
-			if(torScale != null) {
-				parameterList += "tor_length = " + torLength + " AND ";
+			if(torLength != null) {
+				parameterList += "tor_length " + torLength + " AND ";
 				paramFound = true;
 			}
 			if(!tornadoDetailsAdded) {
 				tableList += "join tornadodetails on tornadodetails.EventID = storm.EventID ";
+				tornadoDetailsAdded = true;
 			}
 		}
 		
@@ -265,7 +267,7 @@ public final class DatabaseManager {
 			}
 			output+= "\tOR you can enter a direct SQL query.";
 		}
-		else if (command.substring(0,6).toUpperCase().equals("INSERT")) {
+		else if (command.substring(0,6).toUpperCase().equals("INSERT") || command.substring(0,6).toUpperCase().equals("UPDATE")) {
 			try {
 				db.createStatement().executeUpdate(command);
 			} catch (SQLException e) {
@@ -296,6 +298,7 @@ public final class DatabaseManager {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			System.out.println("Connection Opened.");
+			//db = DriverManager.getConnection("jdbc:mysql://localhost:3308/?user=root&password=" + System.getenv("MYSQL_PASSWORD")); //TODO: make sure this url is right
 			db = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password="); //TODO: make sure this url is right
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block

@@ -10,9 +10,9 @@ package main;
 	import java.io.File;
 	import java.io.FileWriter;
 	import java.io.IOException;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
+	import java.awt.event.FocusEvent;
+	import java.awt.event.FocusListener;
+	import java.awt.event.ItemEvent;
 	import java.awt.event.ItemListener;
 	
 //Standard Library Imports
@@ -41,8 +41,8 @@ import java.awt.event.ItemEvent;
 	import javax.swing.JTable;
 	import javax.swing.UIManager;
 	import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+	import javax.swing.SwingUtilities;
+	import javax.swing.UIManager;
 	import javax.swing.UnsupportedLookAndFeelException;
 	import javax.swing.table.DefaultTableModel;
 	import javax.swing.JTextField;
@@ -75,6 +75,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	
 	// Admin Search Variables
 		private static JLabel adminQueryLabel = new JLabel("Search Query");
+		private static JLabel adminQueryInstructionLabel;
 		private static JTextArea adminQuery;
 		private static JButton adminQuerySubmit = new JButton("Submit Search");
 	
@@ -337,7 +338,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	};
 	
 
-	// User variables?
+	// User variables
 	private static JCheckBox stormType;
 	private static JCheckBox state;
 	private static JCheckBox city;
@@ -579,16 +580,19 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	
     	// Admin Search
     	adminQueryLabel.setBounds(475, 10, 100, 25);
+    	adminQueryInstructionLabel = new JLabel("Enter valid MySQL query below.");
+    	adminQueryInstructionLabel.setBounds(475, 27, 200, 25);
     	
-    	adminQuery = new JTextArea("Enter Valid SQL Query");
-    	adminQuery.setBounds(475, 40, 300, 100);
+    	adminQuery = new JTextArea();
+    	adminQuery.setBounds(475, 60, 300, 100);
     	adminQuery.setLineWrap(true);
     	adminQuery.addFocusListener(new CustomFocusListener());  
     	
-    	adminQuerySubmit.setBounds(475, 150, 150, 25);
+    	adminQuerySubmit.setBounds(475, 170, 150, 25);
     	adminQuerySubmit.addMouseListener(new GUIInterface());
     	
     	card.add(adminQueryLabel);
+    	card.add(adminQueryInstructionLabel);
     	card.add(adminQuery);
     	card.add(adminQuerySubmit);
     	
@@ -727,14 +731,14 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	card.add(tornadoMagLB);
     	card.add(efScaleDropDown);
     	
-    	tornadoWidthLB = new JLabel("Tornado Width (e.g. <, >, <=): ");
+    	tornadoWidthLB = new JLabel("Tornado Width (e.g. <5, >5, <=5): ");
     	tornadoWidthLB.setBounds(305, 300, 170, 30);
     	tornadoWidth = new JTextField();
     	tornadoWidth.setBounds(475, 300, 100, 30);
     	card.add(tornadoWidthLB);
     	card.add(tornadoWidth);
     	
-    	tornadoLengthLB = new JLabel("Tornado Length (e.g. <, >, <=): ");
+    	tornadoLengthLB = new JLabel("Tornado Length (e.g. <5, >5, <=5): ");
     	tornadoLengthLB.setBounds(305, 335, 170, 30);
     	tornadoLength = new JTextField();
     	tornadoLength.setBounds(475, 335, 100, 30);
@@ -946,14 +950,14 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			System.out.println(parameters.toString());
 			System.out.println(columns.toString());
 			
-			String tableName = "Search Results";
 			String output = DatabaseManager.handleStormSearch(columns, parameters);
 			String line[] = output.split("\n");
-			System.out.println(output);
-			if(line.length != 0) {
+			System.out.println("output: " + output);
+			int columnsCount = columns.size();
+			if(!output.equals("")) {
 				String headers[] = line[0].split(",");
 				System.out.println("---------------------");
-				for(int i=0; i<headers.length; i++) {
+				for(int i=0; i<columnsCount; i++) {
 					if(headers[i].indexOf("=") != -1) {
 						headers[i] = headers[i].replace("{", "");
 						headers[i] = headers[i].replace("}", "");
@@ -961,7 +965,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 						model.addColumn(headers[i].substring(0, headers[i].indexOf("=")));
 					}
 				}
-				sp.setPreferredSize(new Dimension(headers.length * 70, 300));
+				sp.setPreferredSize(new Dimension(headers.length * 100, 300));
 				System.out.println("---------------------");
 				for (String token : line) {
 					if(!token.isEmpty()) {
@@ -969,20 +973,26 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 						token = token.replace("}", "");
 						String row[] = token.split(","); //FIXME: not work for column has , in their data. can fix by split using regex
 						ArrayList<String> single_row = new ArrayList<String>();
+						System.out.println("row: " + row[0] +" | " + row[1]);
+						int i = 0;
 						for (String rowToken : row) {
 							String elem[] = rowToken.split("=");
-							single_row.add(elem[1]);
+							System.out.println(rowToken);
+							if(i < columnsCount) {
+								single_row.add(elem[1]);
+							}
+							i++;
 						}
 						model.addRow(single_row.toArray());
 					}
-				}	
+				}
+				panel.add(sp);
 			}
 			else {
-				JLabel noResults = new JLabel("No results");
+				JLabel noResults = new JLabel("No Results...");
 				noResults.setBounds(30, 30, 100, 30);
-				sp.add(noResults);
+				panel.add(noResults);
 			}
-			panel.add(sp);
 		}
 		else if (mouse.getSource() == adminQuerySubmit) {
 			String contents = adminQuery.getText();
@@ -1004,7 +1014,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			String tableName = "Admin table";
 			String output = DatabaseManager.handleSQLCommand(contents);
 			String line[] = output.split("\n");
-			String headers[] = line[1].split(",");
+			String headers[] = line[0].split(",");
 			
 			new JScrollPane(sp, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -1037,8 +1047,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 				}
 			}
 			panel.add(sp);
-			
-			
 		}
 		
 		else if (mouse.getSource() == adminUpdateButton) {
@@ -1168,12 +1176,18 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			
 			// Fatality Table
 			if (adminDDBox.getSelectedItem() == "fatalities") {
+				String primaryKeyChecker = "select * from fatalities where FatalityID=" + adminFatFatalityID.getText() + ";";
 				String foreignKeyChecker = "select * from storm where EventID=" + adminFatEventID.getText() + ";";
 				
 				// check for primary and foreign keys
 				if (adminFatEventID.getText().equals("") || adminFatFatalityID.getText().equals("")) {
     				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK) and foreign keys (FK).", "ERROR: Missing PKs or FKs", JOptionPane.ERROR_MESSAGE);
     			}
+				
+				// if providing a primary key, check primary key doesn't exist
+				else if (!DatabaseManager.handleSQLCommand(primaryKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Primary key (PK) cannot exist to insert row.", "ERROR: PK Already Exists", JOptionPane.ERROR_MESSAGE);
+				}
 				
 				// check that foreign key exists
 				else if (DatabaseManager.handleSQLCommand(foreignKeyChecker).equals("")) {
@@ -1187,12 +1201,18 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			
 			// Location Table
     		else if (adminDDBox.getSelectedItem() == "location") {
+    			String primaryKeyChecker = "select * from location where EventID=" + adminLocEventID.getText() + " AND LocationIndex=" + adminLocLocationIndex + ";";
     			String foreignKeyChecker = "select * from storm where EventID=" + adminLocEventID.getText() + ";";
     			
     			// check that primary and foreign keys are filled out
 				if (adminLocEventID.getText().equals("") || adminLocLocationIndex.getText().equals("")) {
     				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK) and foreign keys (FK).", "ERROR: Missing PKs or FKs", JOptionPane.ERROR_MESSAGE);
     			}
+				
+				// if providing a primary key, check primary key doesn't exist
+				else if (!DatabaseManager.handleSQLCommand(primaryKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Primary key (PK) cannot exist to insert row.", "ERROR: PK Already Exists", JOptionPane.ERROR_MESSAGE);
+				}
 				
 				// check that foreign key exists
 				else if (DatabaseManager.handleSQLCommand(foreignKeyChecker).equals("")) {
@@ -1205,11 +1225,18 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     		}
 			
 			// Storm Table
-    		else if (adminDDBox.getSelectedItem() == "storm") {    			
+    		else if (adminDDBox.getSelectedItem() == "storm") {
+    			String primaryKeyChecker = "select * from storm where EventID=" + adminStormEventID.getText() + ";";
+    			
     			// check that primary and foreign keys are filled out
 				if (adminStormEventID.getText().equals("")) {
     				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK) and foreign keys (FK).", "ERROR: Missing PKs or FKs", JOptionPane.ERROR_MESSAGE);
     			}
+				
+				// if providing a primary key, check primary key doesn't exist
+				else if (!DatabaseManager.handleSQLCommand(primaryKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Primary key (PK) cannot exist to insert row.", "ERROR: PK Already Exists", JOptionPane.ERROR_MESSAGE);
+				}
 				
 				else {
 					insertItem(adminStormLabels, adminStormTextFields, adminStormDataTypes);
@@ -1218,12 +1245,18 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			
 			// Storm Path Table
     		else if (adminDDBox.getSelectedItem() == "stormpath") {
+    			String primaryKeyChecker = "select * from stormpath where EventID=" + adminPathEventID.getText() + ";";
     			String foreignKeyChecker = "select * from storm where EventID=" + adminPathEventID.getText() + ";";
     			
     			// check that primary and foreign keys are filled out
 				if (adminPathEventID.getText().equals("")) {
     				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK) and foreign keys (FK).", "ERROR: Missing PKs or FKs", JOptionPane.ERROR_MESSAGE);
     			}
+				
+				// if providing a primary key, check primary key doesn't exist
+				else if (!DatabaseManager.handleSQLCommand(primaryKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Primary key (PK) cannot exist to insert row.", "ERROR: PK Already Exists", JOptionPane.ERROR_MESSAGE);
+				}
 				
 				// check that foreign key exists
 				else if (DatabaseManager.handleSQLCommand(foreignKeyChecker).equals("")) {
@@ -1237,12 +1270,18 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			
 			// Tornado Details Table
     		else if (adminDDBox.getSelectedItem() == "tornadodetails") {
+    			String primaryKeyChecker = "select * from tornadodetails where EventID=" + adminTornadoEventID.getText() + ";";
     			String foreignKeyChecker = "select * from storm where EventID=" + adminTornadoEventID.getText() + ";";
     			
     			// check that primary and foreign keys are filled out
 				if (adminTornadoEventID.getText().equals("")) {
     				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK) and foreign keys (FK).", "ERROR: Missing PKs or FKs", JOptionPane.ERROR_MESSAGE);
     			}
+				
+				// if providing a primary key, check primary key doesn't exist
+				else if (!DatabaseManager.handleSQLCommand(primaryKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Primary key (PK) cannot exist to insert row.", "ERROR: PK Already Exists", JOptionPane.ERROR_MESSAGE);
+				}
 				
 				// check that foreign key exists
 				else if (DatabaseManager.handleSQLCommand(foreignKeyChecker).equals("")) {
@@ -1293,7 +1332,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		
 		System.out.println(updateQuery);
 		
-		//DatabaseManager.handleSQLCommand(insertQuery);
+		DatabaseManager.handleSQLCommand(updateQuery);
     }
 	
 	public void insertItem(JLabel[] labels, JTextField[] textFields, String[] dataTypes) {
