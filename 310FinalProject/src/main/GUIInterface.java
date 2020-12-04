@@ -883,7 +883,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			}
 			
 			//handle Town
-			if(!stateName.getText().equals("")) {
+			if(!townName.getText().equals("")) {
 				parameters.put("Town", townName.getText());
 			}
 			else {
@@ -945,13 +945,15 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			
 			String tableName = "Search Results";
 			String output = DatabaseManager.handleStormSearch(columns, parameters);
-			System.out.println(output);
 			String line[] = output.split("\n");
-			if(line.length!=0) {
+			System.out.println(output);
+			if(line.length != 0) {
 				String headers[] = line[0].split(",");
 				System.out.println("---------------------");
 				for(int i=0; i<headers.length; i++) {
 					if(headers[i].indexOf("=") != -1) {
+						headers[i] = headers[i].replace("{", "");
+						headers[i] = headers[i].replace("}", "");
 						System.out.println(headers[i].substring(0, headers[i].indexOf("=")));
 						model.addColumn(headers[i].substring(0, headers[i].indexOf("=")));
 					}
