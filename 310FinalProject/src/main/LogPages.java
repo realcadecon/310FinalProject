@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
@@ -130,6 +132,7 @@ public class LogPages
         		logIn(client);
 	        }          
 	      });
+		
     }   
 	
 	public void logIn(boolean client) {
@@ -197,6 +200,31 @@ public class LogPages
 	    		}
 	        }          
 	      });
+		
+		passField.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	            	if(client) {
+		    			if(clientAuth(userField.getText(), passField.getPassword())) {
+		    				accessGranted = true;
+		    				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+		    			} else {
+		    				System.exit(0);
+		    			}
+		    		} else {
+		    			if (adminAuth(userField.getText(), passField.getPassword())) {
+		    				accessGranted = true;
+		    				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+		    			} else {
+		    				System.exit(0);
+		    			}
+		    		}
+	            }
+	        }
+
+	    });
+		
 		
 		// cancel btn for exiting program
 		cancelBtn.addActionListener(new ActionListener() {

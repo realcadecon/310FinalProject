@@ -10,7 +10,9 @@ package main;
 	import java.io.File;
 	import java.io.FileWriter;
 	import java.io.IOException;
-	import java.awt.event.ItemEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
 	import java.awt.event.ItemListener;
 	
 //Standard Library Imports
@@ -584,6 +586,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	adminQuery = new JTextArea();
     	adminQuery.setBounds(475, 60, 300, 100);
     	adminQuery.setLineWrap(true);
+    	adminQuery.addFocusListener(new CustomFocusListener());  
     	
     	adminQuerySubmit.setBounds(475, 170, 150, 25);
     	adminQuerySubmit.addMouseListener(new GUIInterface());
@@ -887,7 +890,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			}
 			
 			//handle Town
-			if(!stateName.getText().equals("")) {
+			if(!townName.getText().equals("")) {
 				parameters.put("Town", townName.getText());
 			}
 			else {
@@ -949,13 +952,15 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			
 			String tableName = "Search Results";
 			String output = DatabaseManager.handleStormSearch(columns, parameters);
-			System.out.println(output);
 			String line[] = output.split("\n");
-			if(line.length!=0) {
+			System.out.println(output);
+			if(line.length != 0) {
 				String headers[] = line[0].split(",");
 				System.out.println("---------------------");
 				for(int i=0; i<headers.length; i++) {
 					if(headers[i].indexOf("=") != -1) {
+						headers[i] = headers[i].replace("{", "");
+						headers[i] = headers[i].replace("}", "");
 						System.out.println(headers[i].substring(0, headers[i].indexOf("=")));
 						model.addColumn(headers[i].substring(0, headers[i].indexOf("=")));
 					}
@@ -990,7 +995,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			frame.setVisible(true);
 			GUIInterface panel = new GUIInterface();
 			DefaultTableModel model = new DefaultTableModel();
-			frame.setSize(800, 600);
+			frame.setSize(1000, 600);
 			frame.add(panel);
 			frame.setTitle("Admin table");
 			frame.setLocationRelativeTo(null);
@@ -1004,6 +1009,9 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			String output = DatabaseManager.handleSQLCommand(contents);
 			String line[] = output.split("\n");
 			String headers[] = line[1].split(",");
+			
+			new JScrollPane(sp, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			
 
 
@@ -1373,4 +1381,18 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent mousewheel) {}
+
+
+class CustomFocusListener implements FocusListener{
+	boolean once = false;
+    public void focusGained(FocusEvent e) {
+    	if(!once) {
+    		adminQuery.setText("");
+	       once = true;
+    	}
+    }
+    public void focusLost(FocusEvent e) {
+    	return;
+    }
+ }
 }

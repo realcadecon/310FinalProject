@@ -90,12 +90,17 @@ public final class DatabaseManager {
 		String columnsList = "";
 		String tableList = "storm ";
 		
+		boolean locationAdded = false;
+		boolean tornadoDetailsAdded = false;
+		
 		for(int i=0; i< columns.size(); i++) {
 			if(columns.get(i).equalsIgnoreCase("Town")) {
 				tableList += "join location on location.EventID = storm.EventID ";
+				locationAdded = true;
 			}
 			else if(columns.get(i).equalsIgnoreCase("tor_f_scale") || columns.get(i).equalsIgnoreCase("tor_length") || columns.get(i).equalsIgnoreCase("tor_width")){
 				tableList += "join tornadodetails on tornadodetails.EventID = storm.EventID ";
+				tornadoDetailsAdded = true;
 			}
 			if(i!=columns.size()-1) {
 				columnsList+= columns.get(i)+", ";
@@ -132,6 +137,9 @@ public final class DatabaseManager {
 		if((townParams = parameters.get("Town")) != null) {
 			parameterList += "Town = " + "\'" + townParams + "\'" + " AND ";
 			paramFound = true;
+			if(!locationAdded) {
+				tableList += "join location on location.EventID = storm.EventID ";
+			}
 		}
 		
 		//Storm Type Parameter
@@ -165,6 +173,9 @@ public final class DatabaseManager {
 			if(torScale != null) {
 				parameterList += "tor_length = " + torLength + " AND ";
 				paramFound = true;
+			}
+			if(!tornadoDetailsAdded) {
+				tableList += "join tornadodetails on tornadodetails.EventID = storm.EventID ";
 			}
 		}
 		
