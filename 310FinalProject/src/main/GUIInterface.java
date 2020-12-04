@@ -986,7 +986,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			frame.setVisible(true);
 			GUIInterface panel = new GUIInterface();
 			DefaultTableModel model = new DefaultTableModel();
-			frame.setSize(800, 600);
+			frame.setSize(1000, 600);
 			frame.add(panel);
 			frame.setTitle("Admin table");
 			frame.setLocationRelativeTo(null);
@@ -1000,6 +1000,9 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			String output = DatabaseManager.handleSQLCommand(contents);
 			String line[] = output.split("\n");
 			String headers[] = line[1].split(",");
+			
+			new JScrollPane(sp, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			
 
 
