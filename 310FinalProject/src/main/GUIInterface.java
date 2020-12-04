@@ -1349,8 +1349,12 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 
 
 class CustomFocusListener implements FocusListener{
+	boolean once = false;
     public void focusGained(FocusEvent e) {
-       adminQuery.setText("");
+    	if(!once) {
+    		adminQuery.setText("");
+	       once = true;
+    	}
     }
     public void focusLost(FocusEvent e) {
     	return;
