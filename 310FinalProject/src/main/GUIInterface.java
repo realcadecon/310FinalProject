@@ -460,6 +460,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	for (int i = 0; i < labels.length; i++) {
     		labels[i].setVisible(false);
     		textFields[i].setVisible(false);
+    		textFields[i].setText("");
     	}
     }
     
@@ -518,9 +519,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     		
     		card.add(adminFatalityLabels[i]);
     		card.add(adminFatalityTextFields[i]);
-    		
-    		//adminUpdateFatalityLabels[i].setVisible(false);
-    		//adminUpdateFatalityTextFields[i].setVisible(false);
     	}
     	
     	// Location Fields
@@ -1037,6 +1035,125 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		
 		else if (mouse.getSource() == adminUpdateButton) {
 			System.out.println("FIXME: formulate update query");
+			
+			// Fatality Table
+			if (adminDDBox.getSelectedItem() == "fatalities") {
+				String primaryKeyChecker = "select * from fatalities where FatalityID=" + adminFatFatalityID.getText() + ";";
+				String foreignKeyChecker = "select * from storm where EventID=" + adminFatEventID.getText() + ";";
+				
+				// check primary key is given (for WHERE clause)
+				if (adminFatFatalityID.getText().equals("")) {
+    				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK).", "ERROR: Missing PKs", JOptionPane.ERROR_MESSAGE);
+    			}
+				
+				// if providing a primary key, check primary key exists
+				else if (DatabaseManager.handleSQLCommand(primaryKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Primary key (PK) must exist to update row.", "ERROR: PK Must Exist", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				// check that foreign key exists
+				else if (!adminFatEventID.getText().equals("") && DatabaseManager.handleSQLCommand(foreignKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Foreign Key does not exist.", "ERROR: No Matching FK", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				else {
+					updateItem(adminFatalityLabels, adminFatalityTextFields, adminFatalityDataTypes);
+				}
+    		}
+			
+			// Location Table
+    		else if (adminDDBox.getSelectedItem() == "location") {
+    			String primaryKeyChecker = "select * from location where EventID=" + adminLocEventID.getText() + " AND LocationIndex=" + adminLocLocationIndex + ";";
+				String foreignKeyChecker = "select * from storm where EventID=" + adminLocEventID.getText() + ";";
+				
+				// check primary key is given (for WHERE clause)
+				if (adminLocEventID.getText().equals("") && adminLocLocationIndex.getText().equals("")) {
+    				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK).", "ERROR: Missing PKs", JOptionPane.ERROR_MESSAGE);
+    			}
+				
+				// check primary key exists
+				else if (DatabaseManager.handleSQLCommand(primaryKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Primary key (PK) must exist to update row.", "ERROR: PK Must Exist", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				// check that foreign key exists
+				else if (!adminLocEventID.getText().equals("") && DatabaseManager.handleSQLCommand(foreignKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Foreign Key does not exist.", "ERROR: No Matching FK", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				else {
+					updateItem(adminLocationLabels, adminLocationTextFields, adminLocationDataTypes);
+				}
+    		}
+			
+			// Storm Table
+    		else if (adminDDBox.getSelectedItem() == "storm") {
+    			String primaryKeyChecker = "select * from storm where EventID=" + adminStormEventID.getText() + ";";
+    			
+    			// check that primary key is given (for WHERE clause)
+				if (adminStormEventID.getText().equals("")) {
+    				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK).", "ERROR: Missing PKs or FKs", JOptionPane.ERROR_MESSAGE);
+    			}
+				
+				// check primary key exists
+				else if (DatabaseManager.handleSQLCommand(primaryKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Primary key (PK) must exist to update row.", "ERROR: PK Must Exist", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				else {
+					updateItem(adminStormLabels, adminStormTextFields, adminStormDataTypes);
+				}
+    		}
+			
+			// Storm Path Table
+    		else if (adminDDBox.getSelectedItem() == "stormpath") {
+    			String primaryKeyChecker = "select * from stormpath where EventID=" + adminPathEventID.getText() + ";";
+    			String foreignKeyChecker = "select * from storm where EventID=" + adminPathEventID.getText() + ";";
+    			
+    			// check that primary key is given (for WHERE clause)
+				if (adminPathEventID.getText().equals("")) {
+    				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK).", "ERROR: Missing PKs or FKs", JOptionPane.ERROR_MESSAGE);
+    			}
+						
+				// check primary key exists
+				else if (DatabaseManager.handleSQLCommand(primaryKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Primary key (PK) must exist to update row.", "ERROR: PK Must Exist", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				// check that foreign key exists
+				else if (!adminPathEventID.getText().equals("") && DatabaseManager.handleSQLCommand(foreignKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Foreign Key does not exist.", "ERROR: No Matching FK", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				else {
+					updateItem(adminStormPathLabels, adminStormPathTextFields, adminStormPathDataTypes);
+				}
+    		}
+			
+			// Tornado Details Table
+    		else if (adminDDBox.getSelectedItem() == "tornadodetails") {
+    			String primaryKeyChecker = "select * from tornadodetails where EventID=" + adminTornadoEventID.getText() + ";";
+    			String foreignKeyChecker = "select * from storm where EventID=" + adminTornadoEventID.getText() + ";";
+    			
+    			// check that primary key is given (for WHERE clause)
+				if (adminTornadoEventID.getText().equals("")) {
+    				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK).", "ERROR: Missing PKs or FKs", JOptionPane.ERROR_MESSAGE);
+    			}
+							
+				// check primary key exists
+				else if (DatabaseManager.handleSQLCommand(primaryKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Primary key (PK) must exist to update row.", "ERROR: PK Must Exist", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				// check that foreign key exists
+				else if (!adminTornadoEventID.getText().equals("") && DatabaseManager.handleSQLCommand(foreignKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Foreign Key does not exist.", "ERROR: No Matching FK", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				else {
+					updateItem(adminTornadoDetailsLabels, adminTornadoDetailsTextFields, adminTornadoDetailsDataTypes);
+				}
+    		}
 		}
 		
 		else if (mouse.getSource() == adminInsertButton) {
@@ -1132,6 +1249,45 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	
 	}
 	
+	public void updateItem(JLabel[] labels, JTextField[] textFields, String[] dataTypes) {
+		String update = "UPDATE " + adminDDBox.getSelectedItem();
+		String setValues = "SET ";
+		String where = "WHERE ";
+		
+		// form query with column names and values
+		for (int i = 0; i < labels.length; i++) {
+			if (!textFields[i].getText().equals("")) {
+				// add column names
+				setValues += labels[i].getText().split(" ")[0] + " = ";
+				
+				// if it's number, add just value
+				if (dataTypes[i].equals("number")) {
+					setValues += textFields[i].getText() + ", ";
+				}
+				// if it's a string or date, add single quote around value
+				else {
+					setValues += "'" + textFields[i].getText() + "', ";
+				}
+				
+				if (labels[i].getText().contains("PK")) {
+					where += labels[i].getText().split(" ")[0] + " = " + textFields[i].getText() + ", ";
+				}
+			}
+			textFields[i].setText("");
+		}
+		
+		// remove extra comma and space, close parentheses
+		setValues = setValues.substring(0, setValues.length() - 2);
+		where = where.substring(0, where.length() - 2);
+		
+		// add two query parts
+		String updateQuery = update + " " + setValues + " " + where + ";";
+		
+		System.out.println(updateQuery);
+		
+		//DatabaseManager.handleSQLCommand(insertQuery);
+    }
+	
 	public void insertItem(JLabel[] labels, JTextField[] textFields, String[] dataTypes) {
 		String insertInto = "INSERT INTO " + adminDDBox.getSelectedItem() + " (";
 		String values = "VALUES (";
@@ -1151,6 +1307,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 					values += "'" + textFields[i].getText() + "', ";
 				}
 			}
+			textFields[i].setText("");
 		}
 		
 		// remove extra comma and space, close parentheses
