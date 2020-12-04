@@ -10,9 +10,9 @@ package main;
 	import java.io.File;
 	import java.io.FileWriter;
 	import java.io.IOException;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
+	import java.awt.event.FocusEvent;
+	import java.awt.event.FocusListener;
+	import java.awt.event.ItemEvent;
 	import java.awt.event.ItemListener;
 	
 //Standard Library Imports
@@ -41,8 +41,8 @@ import java.awt.event.ItemEvent;
 	import javax.swing.JTable;
 	import javax.swing.UIManager;
 	import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+	import javax.swing.SwingUtilities;
+	import javax.swing.UIManager;
 	import javax.swing.UnsupportedLookAndFeelException;
 	import javax.swing.table.DefaultTableModel;
 	import javax.swing.JTextField;
@@ -338,7 +338,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	};
 	
 
-	// User variables?
+	// User variables
 	private static JCheckBox stormType;
 	private static JCheckBox state;
 	private static JCheckBox city;
@@ -985,14 +985,14 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 						}
 						model.addRow(single_row.toArray());
 					}
-				}	
+				}
+				panel.add(sp);
 			}
 			else {
-				JLabel noResults = new JLabel("No results");
+				JLabel noResults = new JLabel("No Results...");
 				noResults.setBounds(30, 30, 100, 30);
-				sp.add(noResults);
+				panel.add(noResults);
 			}
-			panel.add(sp);
 		}
 		else if (mouse.getSource() == adminQuerySubmit) {
 			String contents = adminQuery.getText();
@@ -1047,8 +1047,6 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 				}
 			}
 			panel.add(sp);
-			
-			
 		}
 		
 		else if (mouse.getSource() == adminUpdateButton) {
