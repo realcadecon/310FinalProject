@@ -254,7 +254,7 @@ public final class DatabaseManager {
 			}
 			output+= "\tOR you can enter a direct SQL query.";
 		}
-		else if (command.substring(0,6).toUpperCase().equals("INSERT")) {
+		else if (command.substring(0,6).toUpperCase().equals("INSERT") || command.substring(0,6).toUpperCase().equals("UPDATE")) {
 			try {
 				db.createStatement().executeUpdate(command);
 			} catch (SQLException e) {
