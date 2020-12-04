@@ -259,6 +259,14 @@ public final class DatabaseManager {
 			}
 			output+= "\tOR you can enter a direct SQL query.";
 		}
+		else if (command.substring(0,6).toUpperCase().equals("INSERT")) {
+			try {
+				db.createStatement().executeUpdate(command);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		else {
 			ArrayList<HashMap <String, Object>> rsList = interpretResultSet(queryDatabase(command));
 			for(int i=0; i<rsList.size(); i++) {

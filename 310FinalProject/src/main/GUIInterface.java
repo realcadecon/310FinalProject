@@ -46,6 +46,7 @@ package main;
 	import javax.swing.JTextArea;
 	import javax.swing.ButtonGroup;
 	import javax.swing.JRadioButton;
+	import javax.swing.JOptionPane;
 
 //Manager Imports
 	import database.DatabaseManager;
@@ -81,7 +82,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	private static JTextField adminFatAge = new JTextField();
 	private static JLabel adminFatGenderLabel = new JLabel("Gender");
 	private static JTextField adminFatGender = new JTextField();
-	private static JLabel adminFatTimeLabel = new JLabel("Time");
+	private static JLabel adminFatTimeLabel = new JLabel("Time (yyyy-mm-dd)");
 	private static JTextField adminFatTime = new JTextField();
 	private static JLabel adminFatLocationLabel = new JLabel("Location");
 	private static JTextField adminFatLocation = new JTextField();
@@ -106,6 +107,16 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			adminFatTime,
 			adminFatLocation,
 			adminFatType
+	};
+	
+	private static String adminFatalityDataTypes[] = {
+			"number",
+			"number",
+			"number",
+			"string",
+			"date",
+			"string",
+			"string"
 	};
 	
 	
@@ -141,6 +152,15 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		adminLocLongitude
 	};
 	
+	private static String adminLocationDataTypes[] = {
+		"number",
+		"number",
+		"number",
+		"string",
+		"number",
+		"number"
+	};
+
 	
 	// "Storm" Fields
 	private static JLabel adminStormEventIDLabel = new JLabel("EventID (PK)");
@@ -149,9 +169,9 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	private static JTextField adminStormEpisodeID = new JTextField();
 	private static JLabel adminStormStormTypeLabel = new JLabel("StormType");
 	private static JTextField adminStormStormType = new JTextField();
-	private static JLabel adminStormBeginDateLabel = new JLabel("BeginDate");
+	private static JLabel adminStormBeginDateLabel = new JLabel("BeginDate (yyyy-mm-dd)");
 	private static JTextField adminStormBeginDate = new JTextField();
-	private static JLabel adminStormEndDateLabel = new JLabel("EndDate");
+	private static JLabel adminStormEndDateLabel = new JLabel("EndDate (yyyy-mm-dd)");
 	private static JTextField adminStormEndDate = new JTextField();
 	private static JLabel adminStormStateLabel = new JLabel("State");
 	private static JTextField adminStormState = new JTextField();
@@ -169,7 +189,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 	private static JTextField adminStormMagnitudeType = new JTextField();
 	private static JLabel adminStormEventNarrativeLabel = new JLabel("event_narrative");
 	private static JTextField adminStormEventNarrative = new JTextField();
-	private static JLabel adminStormEpisodeNarrativeLabel = new JLabel("EpisodeID");
+	private static JLabel adminStormEpisodeNarrativeLabel = new JLabel("episode_narrative");
 	private static JTextField adminStormEpisodeNarrative = new JTextField();
 	
 	private static JLabel adminStormLabels[] = {
@@ -205,6 +225,23 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		adminStormEventNarrative,
 		adminStormEpisodeNarrative
 	};
+	
+	private static String adminStormDataTypes[] = {
+			"number",
+			"number",
+			"string",
+			"date",
+			"date",
+			"string",
+			"number",
+			"number",
+			"number",
+			"number",
+			"number",
+			"string",
+			"string",
+			"string"
+		};
 	
 	
 	
@@ -248,6 +285,17 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			adminPathEndLon
 	};
 	
+	private static String adminStormPathDataTypes[] = {
+			"number",
+			"number",
+			"string",
+			"string",
+			"number",
+			"number",
+			"number",
+			"number"
+	};
+	
 	
 	
 	// Tornado Details Fields
@@ -273,6 +321,13 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			adminTornadoFScale,
 			adminTornadoLength,
 			adminTornadoWidth
+	};
+	
+	private static String adminTornadoDetailsDataTypes[] = {
+			"number",
+			"string",
+			"number",
+			"number"
 	};
 	
 
@@ -452,7 +507,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	
     	// Fatality Fields (update + insert)
     	for (int i = 0; i < adminFatalityLabels.length; i++) {
-    		adminFatalityLabels[i].setBounds(10, 80 + (i * 30), 100, 25);
+    		adminFatalityLabels[i].setBounds(10, 80 + (i * 30), 150, 25);
     		adminFatalityTextFields[i].setBounds(150, 80 + (i * 30), 100, 25);
     		
     		card.add(adminFatalityLabels[i]);
@@ -464,7 +519,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	
     	// Location Fields
     	for (int i = 0; i < adminLocationLabels.length; i++) {
-    		adminLocationLabels[i].setBounds(10, 80 + (i * 30), 100, 25);
+    		adminLocationLabels[i].setBounds(10, 80 + (i * 30), 150, 25);
     		adminLocationTextFields[i].setBounds(150, 80 + (i * 30), 100, 25);
     		
     		card.add(adminLocationLabels[i]);
@@ -476,7 +531,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	
     	// Storm Fields
     	for (int i = 0; i < adminStormLabels.length; i++) {
-    		adminStormLabels[i].setBounds(10, 80 + (i * 30), 100, 25);
+    		adminStormLabels[i].setBounds(10, 80 + (i * 30), 150, 25);
     		adminStormTextFields[i].setBounds(150, 80 + (i * 30), 100, 25);
     		
     		card.add(adminStormLabels[i]);
@@ -488,7 +543,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	
     	// Storm Path Fields
     	for (int i = 0; i < adminStormPathLabels.length; i++) {
-    		adminStormPathLabels[i].setBounds(10, 80 + (i * 30), 100, 25);
+    		adminStormPathLabels[i].setBounds(10, 80 + (i * 30), 150, 25);
     		adminStormPathTextFields[i].setBounds(150, 80 + (i * 30), 100, 25);
     		
     		card.add(adminStormPathLabels[i]);
@@ -500,7 +555,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	
     	// Storm Path Fields
     	for (int i = 0; i < adminTornadoDetailsLabels.length; i++) {
-    		adminTornadoDetailsLabels[i].setBounds(10, 80 + (i * 30), 100, 25);
+    		adminTornadoDetailsLabels[i].setBounds(10, 80 + (i * 30), 150, 25);
     		adminTornadoDetailsTextFields[i].setBounds(150, 80 + (i * 30), 100, 25);
     		
     		card.add(adminTornadoDetailsLabels[i]);
@@ -955,33 +1010,129 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 		}
 		
 		else if (mouse.getSource() == adminInsertButton) {
-			System.out.println("FIXME: formulate insert query");
+			
+			// Fatality Table
 			if (adminDDBox.getSelectedItem() == "fatalities") {
-    			insertItem(adminFatalityLabels, adminFatalityTextFields);
+				String foreignKeyChecker = "select * from storm where EventID=" + adminFatEventID.getText() + ";";
+				
+				// check for primary and foreign keys
+				if (adminFatEventID.getText().equals("") || adminFatFatalityID.getText().equals("")) {
+    				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK) and foreign keys (FK).", "ERROR: Missing PKs or FKs", JOptionPane.ERROR_MESSAGE);
+    			}
+				
+				// check that foreign key exists
+				else if (DatabaseManager.handleSQLCommand(foreignKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Foreign Key does not exist.", "ERROR: No Matching FK", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				else {
+					insertItem(adminFatalityLabels, adminFatalityTextFields, adminFatalityDataTypes);
+				}
     		}
+			
+			// Location Table
     		else if (adminDDBox.getSelectedItem() == "location") {
-    			insertItem(adminLocationLabels, adminLocationTextFields);
+    			String foreignKeyChecker = "select * from storm where EventID=" + adminLocEventID.getText() + ";";
+    			
+    			// check that primary and foreign keys are filled out
+				if (adminLocEventID.getText().equals("") || adminLocLocationIndex.getText().equals("")) {
+    				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK) and foreign keys (FK).", "ERROR: Missing PKs or FKs", JOptionPane.ERROR_MESSAGE);
+    			}
+				
+				// check that foreign key exists
+				else if (DatabaseManager.handleSQLCommand(foreignKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Foreign Key does not exist.", "ERROR: No Matching FK", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				else {
+					insertItem(adminLocationLabels, adminLocationTextFields, adminLocationDataTypes);
+				}
     		}
-    		else if (adminDDBox.getSelectedItem() == "storm") {
-    			insertItem(adminStormLabels, adminStormTextFields);
+			
+			// Storm Table
+    		else if (adminDDBox.getSelectedItem() == "storm") {    			
+    			// check that primary and foreign keys are filled out
+				if (adminStormEventID.getText().equals("")) {
+    				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK) and foreign keys (FK).", "ERROR: Missing PKs or FKs", JOptionPane.ERROR_MESSAGE);
+    			}
+				
+				else {
+					insertItem(adminStormLabels, adminStormTextFields, adminStormDataTypes);
+				}
     		}
+			
+			// Storm Path Table
     		else if (adminDDBox.getSelectedItem() == "stormpath") {
-    			insertItem(adminStormPathLabels, adminStormPathTextFields);
+    			String foreignKeyChecker = "select * from storm where EventID=" + adminPathEventID.getText() + ";";
+    			
+    			// check that primary and foreign keys are filled out
+				if (adminPathEventID.getText().equals("")) {
+    				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK) and foreign keys (FK).", "ERROR: Missing PKs or FKs", JOptionPane.ERROR_MESSAGE);
+    			}
+				
+				// check that foreign key exists
+				else if (DatabaseManager.handleSQLCommand(foreignKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Foreign Key does not exist.", "ERROR: No Matching FK", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				else {
+					insertItem(adminStormPathLabels, adminStormPathTextFields, adminStormPathDataTypes);
+				}
     		}
+			
+			// Tornado Details Table
     		else if (adminDDBox.getSelectedItem() == "tornadodetails") {
-    			insertItem(adminTornadoDetailsLabels, adminTornadoDetailsTextFields);
+    			String foreignKeyChecker = "select * from storm where EventID=" + adminTornadoEventID.getText() + ";";
+    			
+    			// check that primary and foreign keys are filled out
+				if (adminTornadoEventID.getText().equals("")) {
+    				JOptionPane.showMessageDialog(null, "Must fill out primary keys (PK) and foreign keys (FK).", "ERROR: Missing PKs or FKs", JOptionPane.ERROR_MESSAGE);
+    			}
+				
+				// check that foreign key exists
+				else if (DatabaseManager.handleSQLCommand(foreignKeyChecker).equals("")) {
+					JOptionPane.showMessageDialog(null, "Foreign Key does not exist.", "ERROR: No Matching FK", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				else {
+					insertItem(adminTornadoDetailsLabels, adminTornadoDetailsTextFields, adminTornadoDetailsDataTypes);
+				}
     		}
 		}
 	
 	}
 	
-	public void insertItem(JLabel[] labels, JTextField[] textFields) {
-		/*
-    	for (int i = 0; i < labels.length; i++) {
-    		labels[i].setVisible(false);
-    		textFields[i].setVisible(false);
-    	}
-    	*/
+	public void insertItem(JLabel[] labels, JTextField[] textFields, String[] dataTypes) {
+		String insertInto = "INSERT INTO " + adminDDBox.getSelectedItem() + " (";
+		String values = "VALUES (";
+		
+		// form query with column names and values
+		for (int i = 0; i < labels.length; i++) {
+			if (!textFields[i].getText().equals("")) {
+				// add column names
+				insertInto += labels[i].getText().split(" ")[0] + ", ";
+				
+				// if it's number, add just value
+				if (dataTypes[i].equals("number")) {
+					values += textFields[i].getText() + ", ";
+				}
+				// if it's a string or date, add single quote around value
+				else {
+					values += "'" + textFields[i].getText() + "', ";
+				}
+			}
+		}
+		
+		// remove extra comma and space, close parentheses
+		insertInto = insertInto.substring(0, insertInto.length() - 2) + ")";
+		values = values.substring(0, values.length() - 2) + ")";
+		
+		// add two query parts
+		String insertQuery = insertInto + " " + values + ";";
+		
+		System.out.println(insertQuery);
+		
+		DatabaseManager.handleSQLCommand(insertQuery);
     }
 	
 	
