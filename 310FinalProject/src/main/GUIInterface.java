@@ -954,7 +954,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 			String line[] = output.split("\n");
 			System.out.println("output: " + output);
 			int columnsCount = columns.size();
-			if(output=="") {
+			if(!output.equals("")) {
 				String headers[] = line[0].split(",");
 				System.out.println("---------------------");
 				for(int i=0; i<columnsCount; i++) {
