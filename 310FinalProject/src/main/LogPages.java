@@ -34,7 +34,8 @@ public class LogPages
 	
 	// all labels
 	JLabel landingLabel = new JLabel("Welcome to the Data Simps' Storm Page");
-	JLabel descLabel = new JLabel("Here you will be able to browse, update, and display storm data through a variety of attributes");
+	JLabel descLabel = new JLabel("Here you will be able to browse, update, and ");
+	JLabel desc2Label = new JLabel("display storm data through a variety of attributes");
 	JLabel userLabel = new JLabel("Username: ");
 	JLabel passLabel = new JLabel("Password: ");
 	JLabel titleLabel;
@@ -94,21 +95,23 @@ public class LogPages
 	public void landingPage() {
 		// sets panel settings
 		landing.setLayout(null);
-		landing.setBounds(100, 100, 800, 800);
+		landing.setBounds(0, 0, 500, 500);
 		
 		// creates title and btns
-		descLabel.setBounds(75, 100, 800, 40);
+		descLabel.setBounds(120, 110, 800, 20);
+		desc2Label.setBounds(115, 130, 800, 20);
 		landing.add(descLabel);
-		landingLabel.setBounds(225, 50, 400, 40);
+		landing.add(desc2Label);
+		landingLabel.setBounds(125, 50, 400, 40);
 		landing.add(landingLabel);
-		clientBtn.setBounds(150, 150, 140, 40);
-		adminBtn.setBounds(350, 150, 140, 40);
+		clientBtn.setBounds(50, 200, 150, 30);
+		adminBtn.setBounds(250, 200, 150, 30);
 		landing.add(adminBtn);
 		landing.add(clientBtn);
 		
 		// adds panel and sets frame properties
 		frame.add(landing);
-		frame.setSize(1000, 1000);
+		frame.setBounds(300,300,500,500);
 		frame.setLayout(null);
 		frame.setVisible(true);
 		
@@ -134,10 +137,11 @@ public class LogPages
 		frame.remove(landing);
 		frame.revalidate();
 		frame.repaint();
+		frame.setLayout(null);
 		
 		// sets panel settings
 		log.setLayout(null);
-		log.setBounds(100, 100, 800, 800);
+		log.setBounds(0,0,500,500);
 		
 		// sets title
 		if(client) {
@@ -147,7 +151,7 @@ public class LogPages
 			titleLabel = new JLabel("Admin Log-In");
 			admin_proc();
 		}
-		titleLabel.setBounds(250, 50, 100, 40);
+		titleLabel.setBounds(225, 40, 100, 40);
 		log.add(titleLabel);
 		
 		// creates login prompt and fields
@@ -161,14 +165,14 @@ public class LogPages
 		log.add(passField);
 		
 		// creates btns
-		submitBtn.setBounds(350, 300, 140, 40);
-		cancelBtn.setBounds(150, 300, 140, 40);
+		submitBtn.setBounds(250, 300, 140, 40);
+		cancelBtn.setBounds(75, 300, 140, 40);
 		log.add(submitBtn);
 		log.add(cancelBtn);
 		
 		// adds panel and sets frame properties
 		frame.add(log);
-		frame.setSize(1000, 1000);
+		frame.setBounds(300,300,500,500);
 		frame.setLayout(null);
 		frame.setVisible(true);
 		
