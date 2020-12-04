@@ -10,7 +10,9 @@ package main;
 	import java.io.File;
 	import java.io.FileWriter;
 	import java.io.IOException;
-	import java.awt.event.ItemEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
 	import java.awt.event.ItemListener;
 	
 //Standard Library Imports
@@ -581,6 +583,7 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
     	adminQuery = new JTextArea("Enter Valid SQL Query");
     	adminQuery.setBounds(475, 40, 300, 100);
     	adminQuery.setLineWrap(true);
+    	adminQuery.addFocusListener(new CustomFocusListener());  
     	
     	adminQuerySubmit.setBounds(475, 150, 150, 25);
     	adminQuerySubmit.addMouseListener(new GUIInterface());
@@ -1343,4 +1346,14 @@ public class GUIInterface extends JPanel implements MouseListener, MouseWheelLis
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent mousewheel) {}
+
+
+class CustomFocusListener implements FocusListener{
+    public void focusGained(FocusEvent e) {
+       adminQuery.setText("");
+    }
+    public void focusLost(FocusEvent e) {
+    	return;
+    }
+ }
 }
